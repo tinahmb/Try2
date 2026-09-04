@@ -37,16 +37,23 @@
   .quad {
     position: absolute;
     width: 50%;
-    height: 50%;
+    height: calc(100% - var(--split-y));
     cursor: pointer;
     /* Uncomment the line below while testing, to see the quadrant
        boundaries. Delete it once you're happy with the zoom areas. */
     /* outline: 2px dashed red; */
   }
-  .quad[data-quad="1"] { top: 0;   left: 0; }    /* top-left */
-  .quad[data-quad="2"] { top: 0;   left: 50%; }  /* top-right */
-  .quad[data-quad="3"] { top: 50%; left: 50%; }  /* bottom-right */
-  .quad[data-quad="4"] { top: 50%; left: 0; }    /* bottom-left */
+  /* The horizontal line between the top and bottom quadrants — one
+     variable controls it everywhere. Lower % = line moves up (bottom
+     row gets taller, top row gets shorter). Raise the % to push the
+     line back down. Currently nudged up from the default 50%. */
+  :root { --split-y: 44%; }
+
+  .quad[data-quad="1"], .quad[data-quad="2"] { height: var(--split-y); }
+  .quad[data-quad="1"] { top: 0;              left: 0; }    /* top-left */
+  .quad[data-quad="2"] { top: 0;              left: 50%; }  /* top-right */
+  .quad[data-quad="3"] { top: var(--split-y); left: 50%; }  /* bottom-right */
+  .quad[data-quad="4"] { top: var(--split-y); left: 0; }    /* bottom-left */
 
   /* Every element image is quadrant-sized (Photoshop-exported to match
      the quad exactly), so each one just fills its .quad edge-to-edge.
@@ -104,7 +111,7 @@
       <img src="images/slide1-torn-paper-notebook.PNG" alt="">
       <img src="images/slide1-pin-blue.PNG" alt="">
       <img src="images/slide1-torn-paper-anim1.PNG" alt="">
-      <img src="images/slide1-anim1.GIF" alt="">
+      <img src="animations/slide1-anim1.GIF" alt="">
       <img src="images/slide1-torn-paper-photo.PNG" alt="">
       <img src="images/slide1-photo.PNG" alt="">
       <img src="images/slide1-pin-yellow.PNG" alt="">
@@ -113,7 +120,7 @@
     </div>
     <div class="quad" data-quad="2">
       <img src="images/slide2-torn-paper-anim2.PNG" alt="">
-      <img src="images/slide2-anim2.GIF" alt="">
+      <img src="animations/slide2-anim2.GIF" alt="">
       <img src="images/slide2-tape.PNG" alt="">
       <img src="images/slide2-sticky-pink-back.PNG" alt="">
       <img src="images/slide2-sticky-pink-front.PNG" alt="">
