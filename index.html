@@ -115,10 +115,44 @@
     text-align: center;
   }
 
-  /* Generic default placement for every hit-zone — override per quad
-     below only where the arrow actually sits somewhere else. */
+  /* Generic default placement — only used now by the two whole-view
+     arrows (quad 1 left, quad 4 left), since we don't have their real
+     artwork positions yet. Everything else below is measured from the
+     actual arrow images and overridden per quad/side. */
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
+
+  /* ---- Measured positions for the 6 labeled arrows ----
+     Percentages are relative to each arrow's own .quad box. Nudge these
+     numbers directly once you see the live page against your real
+     corkboard/images assets. */
+  .quad[data-quad="1"] .arrow-hit[data-side="right"] {
+    left: 74%; top: 4%; width: 23%; height: 13%; right: auto;
+  }
+  .quad[data-quad="2"] .arrow-hit[data-side="left"] {
+    left: 10%; top: 7%; width: 22%; height: 11%;
+  }
+  .quad[data-quad="2"] .arrow-hit[data-side="right"] {
+    left: 84%; top: 57%; width: 6%; height: 40%; right: auto;
+  }
+  .quad[data-quad="3"] .arrow-hit[data-side="right"] {
+    left: 60%; top: 5%; width: 22%; height: 13%; right: auto;
+  }
+  .quad[data-quad="3"] .arrow-hit[data-side="left"] {
+    left: 4%; top: 3%; width: 24%; height: 11%;
+  }
+  .quad[data-quad="4"] .arrow-hit[data-side="right"] {
+    left: 67%; top: 3%; width: 24%; height: 12%; right: auto;
+  }
+
+  /* The quad-2 right arrow is a vertical downward strip, not a
+     horizontal ribbon like the others — its label needs to run
+     top-to-bottom along the strip instead of sitting horizontally. */
+  .quad[data-quad="2"] .arrow-hit[data-side="right"] .arrow-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 16px;
+  }
 </style>
 </head>
 <body>
