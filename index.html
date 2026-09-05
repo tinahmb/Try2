@@ -166,29 +166,26 @@
     100% { transform: translateY(140%) rotate(35deg); opacity: 0; }
   }
 
-  /* ---- Quad 2 pink sticky roll-up ----
-     Both pink stickies move as one unit, anchored at the top edge, and
-     "roll up" like a blind/scroll when tapped — shrinking vertically
-     with a slight skew to sell the curling-paper look, then staying
-     rolled up and un-tappable, revealing whatever sits behind them. */
+  /* ---- Quad 2 pink sticky peel ----
+     Each sticky is independently toggleable: tap to peel it up (curls
+     toward the top edge and stays there, still visible as a curled
+     strip), tap again to smooth it back down flat. Uses a transition
+     between two fixed states rather than a one-way animation, so it's
+     reversible any number of times. */
   .roll-unit {
     position: absolute;
     inset: 0;
     cursor: pointer;
     pointer-events: auto;
     transform-origin: 50% 0%;
+    transform: scaleY(1) skewX(0deg);
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
   }
   .roll-unit img {
     pointer-events: none;
   }
-  .roll-unit.is-rolled {
-    animation: sticky-roll-up 0.6s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
-    pointer-events: none;
-  }
-  @keyframes sticky-roll-up {
-    0%   { transform: scaleY(1) skewX(0deg); opacity: 1; }
-    60%  { transform: scaleY(0.25) skewX(-4deg); opacity: 1; }
-    100% { transform: scaleY(0) skewX(-2deg); opacity: 0; }
+  .roll-unit.is-peeled {
+    transform: scaleY(0.18) skewX(-6deg);
   }
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
@@ -386,15 +383,14 @@
     }
   });
 
-  // Quad 2 pink stickies: front one peels off first (it's on top), then
-  // a second tap peels the back one — each is its own independent
-  // roll-unit, so once the front one rolls away and stops accepting
-  // clicks, the next tap naturally lands on the back one underneath.
+  // Quad 2 pink stickies: front one peels first (it's on top), tap
+  // again to smooth it back down; same for the back one once it's
+  // reachable. Each toggles independently and stays interactive.
   document.getElementById('slide2PinkFront').addEventListener('click', function () {
-    this.classList.add('is-rolled');
+    this.classList.toggle('is-peeled');
   });
   document.getElementById('slide2PinkBack').addEventListener('click', function () {
-    this.classList.add('is-rolled');
+    this.classList.toggle('is-peeled');
   });
 
   // Initial load: apply the zoomed-in state for quad 1 directly, with
