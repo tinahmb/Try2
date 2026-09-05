@@ -177,14 +177,17 @@
   inset: 0;
   cursor: pointer;
   pointer-events: auto;
-  transform-origin: 50% 22%; /* CHANGED: from 0% to ~22% to lower the pivot point */
+  /* Pivot from ~22% down to align with the top line of the drawn sticky note */
+  transform-origin: 50% 22%; 
   transform: scaleY(1) skewX(0deg);
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  z-index: 5; /* Ensures the stickies stay above the purple flag */
 }
 .roll-unit img {
   pointer-events: none;
 }
 .roll-unit.is-peeled {
+  /* Scales straight down to 18% height onto the sticky's original top line */
   transform: scaleY(0.18) skewX(-6deg);
 }
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
@@ -246,19 +249,28 @@
       <div class="arrow-hit" data-side="left"><span class="arrow-label is-hidden-label">Board</span></div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
     </div>
-    <div class="quad" data-quad="2">
-      <img src="animations/slide2-anim2.png" alt="">
-      <img src="images/slide2-tape.png" alt="">
-      <div class="roll-unit" id="slide2PinkBack">
-        <img src="images/slide2-sticky-pink-back.png" alt="">
-      </div>
-      <div class="roll-unit" id="slide2PinkFront">
-        <img src="images/slide2-sticky-pink-front.png" alt="">
-      </div>
-      <img src="images/slide2-sticky-blue.png" alt="">
-      <img src="images/slide2-sticky-arrow-left.png" alt="">
-      <img src="images/slide2-sticky-arrow-right.png" alt="">
-      <div class="arrow-hit" data-side="left"><span class="arrow-label">Back</span></div>
+<div class="quad" data-quad="2">
+  <img src="animations/slide2-anim2.png" alt="">
+  <img src="images/slide2-tape.png" alt="">
+
+  <!-- MOVED UP: Placed before stickies so it stays underneath -->
+  <img src="images/slide2-sticky-arrow-right.png" alt="">
+  <div class="arrow-hit" data-side="right" style="z-index: 1;">
+    <span class="arrow-label">Next</span>
+  </div>
+
+  <!-- STICKIES: Rendered on top of the purple flag -->
+  <div class="roll-unit" id="slide2PinkFront">
+    <img src="images/slide2-sticky-pink-front.png" alt="">
+  </div>
+  <div class="roll-unit" id="slide2PinkBack">
+    <img src="images/slide2-sticky-pink-back.png" alt="">
+  </div>
+  <img src="images/slide2-sticky-blue.png" alt="">
+
+  <img src="images/slide2-sticky-arrow-left.png" alt="">
+  <div class="arrow-hit" data-side="left"><span class="arrow-label">Back</span></div>
+</div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
     </div>
     <div class="quad" data-quad="3">
