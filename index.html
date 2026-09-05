@@ -39,7 +39,6 @@
     width: 50%;
     height: 50%;
     cursor: pointer;
-    overflow: hidden; /* clips the bottom row's nudged artwork, below */
     /* Uncomment the line below while testing, to see the quadrant
        boundaries. Delete it once you're happy with the zoom areas. */
     /* outline: 2px dashed red; */
@@ -49,17 +48,14 @@
   .quad[data-quad="3"] { top: 50%; left: 50%; }  /* bottom-right */
   .quad[data-quad="4"] { top: 50%; left: 0; }    /* bottom-left */
 
-  /* Both rows keep their true, even 50/50 boxes — so zoom-in targeting
-     stays pixel-accurate and nothing stretches. To close the visual gap
-     between rows, the bottom row's artwork (not the box) gets a small
-     UNIFORM scale-up + upward shift — uniform scale keeps proportions
-     intact, only non-uniform stretching would distort it. One variable
-     controls it; raise --bottom-row-zoom for a bigger pull-up, lower it
-     for less. */
-  :root { --bottom-row-zoom: 1.15; }
-  .quad[data-quad="3"] img, .quad[data-quad="4"] img {
-    transform: scale(var(--bottom-row-zoom)) translateY(-6%) scale(0.92);
-    transform-origin: top center;
+  /* Both quad boxes stay their true, even 50/50 size — nothing here
+     resizes or scales anything, so your PNGs stay exactly as made.
+     The bottom row is moved up as a group with a plain position shift
+     only. One variable controls how far; raise it to move further up,
+     lower it to move less. */
+  :root { --bottom-row-lift: 8%; }
+  .quad[data-quad="3"], .quad[data-quad="4"] {
+    top: calc(50% - var(--bottom-row-lift));
   }
 
   /* Every element image is quadrant-sized (Photoshop-exported to match
