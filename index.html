@@ -197,14 +197,10 @@
     pointer-events: none;
   }
   .roll-unit.is-peeled {
-    /* slanted ribbon-style edge instead of a flat crop — top stays
-       exactly where it always was (0% 0%, unchanged), only the reveal
-       line is angled like the tape/ribbon graphics elsewhere on the
-       board. The top two points of this polygon are still 0%, so the
-       visible sliver's top edge was always pinned correctly — it was
-       just the WRONG sticky's top (back's) showing, which is what
-       made it look misplaced. */
-    clip-path: polygon(0% 0%, 100% 0%, 100% 22%, 0% 32%);
+    /* Proper parallelogram — slanted left and right edges, full
+       height band, not a thin horizontal sliver. Position is
+       untouched, since that part was already landing correctly. */
+    clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
   }
 
   #slide2PinkFront { z-index: 2; } /* on top initially — first tap hits this one */
