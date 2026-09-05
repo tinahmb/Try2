@@ -189,11 +189,10 @@
     pointer-events: none;
   }
   .roll-unit.is-peeled {
-    /* only masks away the bottom portion — nothing scales, nothing
-       shifts, the visible top strip is pixel-for-pixel where it always
-       was. Tapping again removes this class and it comes right back
-       down (see the toggle() calls below). */
-    clip-path: inset(0% 0% 70% 0%);
+    /* slanted ribbon-style edge instead of a flat crop — top stays
+       exactly where it always was, only the reveal line is angled
+       like the tape/ribbon graphics elsewhere on the board */
+    clip-path: polygon(0% 0%, 100% 0%, 100% 22%, 0% 32%);
   }
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
@@ -257,11 +256,11 @@
     <div class="quad" data-quad="2">
       <img src="animations/slide2-anim2.png" alt="">
       <img src="images/slide2-tape.png" alt="">
-      <div class="roll-unit" id="slide2PinkBack">
-        <img src="images/slide2-sticky-pink-back.png" alt="">
-      </div>
       <div class="roll-unit" id="slide2PinkFront">
         <img src="images/slide2-sticky-pink-front.png" alt="">
+      </div>
+      <div class="roll-unit" id="slide2PinkBack">
+        <img src="images/slide2-sticky-pink-back.png" alt="">
       </div>
       <img src="images/slide2-sticky-blue.png" alt="">
       <img src="images/slide2-sticky-arrow-left.png" alt="">
