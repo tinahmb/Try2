@@ -33,12 +33,12 @@
     transition: transform 0.6s ease;
   }
 
-  /* ---- The 4 clickable quadrants ---- */
+  /* ---- The 4 quadrants (no longer clickable themselves — navigation
+     now happens exclusively through the sticky-arrow images) ---- */
   .quad {
     position: absolute;
     width: 50%;
     height: 50%;
-    cursor: pointer;
     /* Uncomment the line below while testing, to see the quadrant
        boundaries. Delete it once you're happy with the zoom areas. */
     /* outline: 2px dashed red; */
@@ -70,38 +70,19 @@
     height: 100%;
     object-fit: fill; /* switch to "contain" if any PNG isn't an exact
                           pixel match for the quadrant */
-    pointer-events: none; /* let clicks pass through to the .quad's own
-                              zoom-toggle handler, except where noted */
+    pointer-events: none; /* let clicks pass through by default; the
+                              sticky-arrow images override this below */
     transform: scale(0.92); /* shrinks each element a bit so it doesn't
                                 touch the quadrant edges — tweak this one
                                 number to adjust breathing room everywhere
                                 at once */
     transform-origin: center center;
   }
-  /* Nav arrows should stay clickable on their own eventually — for now
-     they're part of the same click-to-zoom quad, so pointer-events
-     stays "none" like the rest until we wire up their own behavior. */
 
-  /* ---- Simple prev/next controls, shown only while zoomed in ---- */
-  .nav-controls {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-    gap: 12px;
-    z-index: 10;
-  }
-  .nav-controls.is-visible { display: flex; }
-
-  .nav-controls button {
-    font-family: sans-serif;
-    font-size: 16px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.65);
-    color: #fff;
+  /* The sticky-arrow images are the entire navigation system now —
+     they're the only images that receive clicks. */
+  .quad img[src*="sticky-arrow"] {
+    pointer-events: auto;
     cursor: pointer;
   }
 </style>
@@ -148,17 +129,7 @@
   </div>
 </div>
 
-<div class="nav-controls" id="navControls">
-  <button id="prevBtn" type="button">&larr; Prev</button>
-  <button id="wholeBtn" type="button">Whole view</button>
-  <button id="nextBtn" type="button">Next &rarr;</button>
-</div>
-
 <script>
-  // Navigation order: 1 top-left → 2 top-right → 3 bottom-right → 4 bottom-left.
-  // Quadrant 3 sitting under quadrant 2 (not under 4) is intentional.
-  const ORDER = [1, 2, 3, 4];
-
   // Where the board should "hinge" from when zooming into each quadrant,
   // so that quadrant fills the whole screen after scaling up.
   //
@@ -184,45 +155,75 @@
     4: `0% ${bottomRowOriginY}%`,   // bottom-left
   };
 
+  // Fixed routing table for every sticky arrow. 'whole' means "go to
+  // whole view" — except for the two arrows whose fixed destination IS
+  // whole view (1-left, 4-left): when the user is already in whole view,
+  // clicking those instead zooms into the quadrant that arrow lives on
+  // (handled as a special case in goToDestination, not listed here).
+  const ARROW_DESTINATION = {
+    '1-left':  'whole',
+    '1-right': 2,
+    '2-left':  1,
+    '2-right': 3,
+    '3-left':  4,
+    '3-right': 2,
+    '4-left':  'whole',
+    '4-right': 3,
+  };
+
   const board = document.getElementById('board');
-  const navControls = document.getElementById('navControls');
-  let currentQuad = null; // null = whole-view (not zoomed into anything)
+  let currentQuad = 1; // site opens already zoomed into quad 1
 
   function zoomTo(quadNumber) {
     currentQuad = quadNumber;
     board.style.transformOrigin = ORIGIN[quadNumber];
     board.style.transform = 'scale(2)';
-    navControls.classList.add('is-visible');
   }
 
   function zoomOut() {
     currentQuad = null;
     board.style.transform = 'scale(1)';
-    navControls.classList.remove('is-visible');
   }
 
-  function step(direction) {
-    if (currentQuad === null) return; // only meaningful while zoomed in
-    const i = ORDER.indexOf(currentQuad);
-    const nextIndex = (i + direction + ORDER.length) % ORDER.length;
-    zoomTo(ORDER[nextIndex]);
-  }
-
-  document.querySelectorAll('.quad').forEach(quad => {
-    quad.addEventListener('click', () => {
-      const quadNumber = parseInt(quad.dataset.quad, 10);
-      // Clicking the already-zoomed quadrant zooms back out.
-      if (currentQuad === quadNumber) {
-        zoomOut();
+  function goToDestination(ownQuad, destination) {
+    if (destination === 'whole') {
+      if (currentQuad === null) {
+        // Already in whole view: this arrow's normal destination is
+        // whole view, so instead zoom into the quadrant it belongs to.
+        zoomTo(ownQuad);
       } else {
-        zoomTo(quadNumber);
+        zoomOut();
       }
+      return;
+    }
+    zoomTo(destination);
+  }
+
+  // Wire up every sticky-arrow image using info already present in the
+  // markup (its parent .quad's data-quad, and left/right from its own
+  // src filename) — no HTML changes needed.
+  document.querySelectorAll('.quad img[src*="sticky-arrow"]').forEach(img => {
+    const quadNumber = parseInt(img.closest('.quad').dataset.quad, 10);
+    const side = img.src.includes('sticky-arrow-left') ? 'left' : 'right';
+    const key = `${quadNumber}-${side}`;
+    const destination = ARROW_DESTINATION[key];
+
+    img.addEventListener('click', () => {
+      goToDestination(quadNumber, destination);
     });
   });
 
-  document.getElementById('nextBtn').addEventListener('click', () => step(1));
-  document.getElementById('prevBtn').addEventListener('click', () => step(-1));
-  document.getElementById('wholeBtn').addEventListener('click', zoomOut);
+  // Initial load: apply the zoomed-in state for quad 1 directly, with
+  // no transition, so there's no flash of whole-view or visible
+  // animation on first paint. The .board transition rule stays intact
+  // for every zoom/zoomOut that happens after this.
+  board.style.transition = 'none';
+  board.style.transformOrigin = ORIGIN[1];
+  board.style.transform = 'scale(2)';
+  // Force the browser to apply the above before re-enabling the
+  // transition, so it doesn't get animated retroactively.
+  board.offsetHeight; // reflow
+  board.style.transition = 'transform 0.6s ease';
 </script>
 
 </body>
