@@ -112,6 +112,15 @@
     75%  { transform: rotate(3deg); }
     100% { transform: rotate(0deg); }
   }
+  .fall-unit {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transform-origin: 50% 8%;
+  }
+  .fall-unit.has-fallen {
+    animation: photo-fall 0.7s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
+  }
   @keyframes photo-fall {
     0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(140%) rotate(35deg); opacity: 0; }
@@ -155,6 +164,11 @@
 
   .roll-unit .roll-hit.is-locked {
     pointer-events: none;
+  }
+
+  .roll-unit .roll-hit,
+  .arrow-hit {
+    outline: 2px dashed red;
   }
 
   #slide3Yellow .roll-hit {
@@ -242,6 +256,8 @@
       </div>
       <div class="photo-unit" id="slide3PaperUnit">
         <img src="images/slide3-torn-paper-scribble.png" alt="">
+      </div>
+      <div class="fall-unit" id="slide3ClipUnit">
         <img src="images/slide3-paperclip.png" alt="">
       </div>
       <img src="images/slide3-sticky-green.png" alt="">
@@ -346,6 +362,7 @@
   });
 
   const paperUnit = document.getElementById('slide3PaperUnit');
+  const clipUnit = document.getElementById('slide3ClipUnit');
   const yellowHit = document.querySelector('#slide3Yellow .roll-hit');
   let paperState = 0;
   paperUnit.addEventListener('click', () => {
@@ -358,6 +375,7 @@
     } else if (paperState === 1) {
       paperState = 2;
       paperUnit.classList.add('has-fallen');
+      clipUnit.classList.add('has-fallen');
       yellowHit.classList.remove('is-locked');
     }
   });
