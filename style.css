@@ -119,19 +119,24 @@ html, body {
 }
 
 /* ============================================================
-   Quad 2 pink sticky peel — REWORKED
+   Quad 2 pink sticky peel — MEASURED, not guessed.
 
-   Old approach: clip-path cut a slanted chunk off the whole
-   .roll-unit (image included), which just hid that area instantly.
-   No sense of paper lifting — a flat crop, not a fold.
+   Every clip-path/transform-origin number below was computed by
+   reading the actual alpha-channel bounding box of each real PNG
+   (slide2-sticky-pink-front.png / -back.png), not estimated:
 
-   New approach: the clip-path now only affects the <img> (hiding the
-   top strip once peeled), while a separate ".fold" layer — a second
-   copy of the same image, cropped to just that top strip — handles
-   the actual fold. It rotates backward around the fold's bottom edge
-   (rotateX, needs "perspective" on the parent for the 3D look) and
-   darkens slightly via "filter: brightness()" to suggest the shaded
-   underside of the curling paper, matching the reference look.
+     front: sticky occupies 51.11%–95.91% horizontally,
+            14.33%–99.53% vertically, within its own canvas
+     back:  52.27%–96.27% horizontally,
+            14.33%–99.21% vertically
+
+   These two images are switched to object-fit: fill (overriding the
+   global "contain" rule) specifically because their canvas aspect
+   ratio (1125×635) doesn't match the quad box's on-screen aspect
+   ratio — with "contain", the browser letterboxes to preserve that
+   mismatch, and the letterbox amount changes with viewport size,
+   silently shifting every percentage. "fill" removes that variable
+   entirely: canvas % always equals box % here, on any screen.
    ============================================================ */
 
 .roll-unit {
@@ -143,34 +148,27 @@ html, body {
                           3D depth instead of just squashing flat */
 }
 
-/* The clip line matches the fold height below (22%) — everything
-   from 0–22% of the sticky's own box is the part that lifts away. */
 .roll-unit img {
+  object-fit: fill; /* overrides .quad img's "contain" — see note above */
   pointer-events: none;
   clip-path: inset(0% 0% 0% 0%);
   transition: clip-path 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
-.roll-unit.is-peeled img {
-  clip-path: polygon(0% 22%, 100% 22%, 100% 100%, 0% 100%);
-}
+
+/* Peeled state hides everything above the fold crease line — a plain
+   horizontal cut is enough here since below that line the sticky's
+   own transparency already handles left/right, no need to re-specify
+   its L/R bounds in the clip. */
+#slide2PinkFront.is-peeled img.main { clip-path: inset(35.63% 0 0 0); }
+#slide2PinkBack.is-peeled  img.main { clip-path: inset(35.55% 0 0 0); }
 
 .roll-unit .fold {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* identical to the main <img> above — this is
-     what guarantees the two copies place the actual sticky artwork in
-     exactly the same spot within the box, so clip-path percentages
-     below line up perfectly with the real pixels, no crop-math guessing */
+  object-fit: fill; /* must match the main <img> above exactly */
   pointer-events: none;
-  /* Same slanted parallelogram shape as the main image's peeled clip,
-     but this one KEEPS only that top strip instead of removing it. */
-  clip-path: polygon(15% 0%, 100% 0%, 85% 22%, 0% 22%);
-  /* Hinges at the 22% line specifically (not the box's bottom edge) —
-     transform-origin is relative to the FULL box, not just the clipped
-     sliver, so this must match the clip line above exactly. */
-  transform-origin: 50% 22%;
   transform: rotateX(0deg);
   filter: brightness(1);
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.28);
@@ -184,6 +182,20 @@ html, body {
   opacity: 1;
   transform: rotateX(165deg) translateY(-4%);
   filter: brightness(0.72); /* darker = the underside of the paper */
+}
+
+/* Front sticky's measured fold region: top edge at 14.33% (where the
+   art actually starts), crease at 35.63% (25% of the way down the
+   visible sticky), slanted sides matching the sticky's own left/right
+   edges — not the full 0–100% box width. */
+#slide2PinkFront .fold {
+  clip-path: polygon(57.83% 14.33%, 95.91% 14.33%, 89.19% 35.63%, 51.11% 35.63%);
+  transform-origin: 73.51% 35.63%;
+}
+/* Back sticky — same logic, its own slightly different measured bounds. */
+#slide2PinkBack .fold {
+  clip-path: polygon(58.87% 14.33%, 96.27% 14.33%, 89.67% 35.55%, 52.27% 35.55%);
+  transform-origin: 74.27% 35.55%;
 }
 
 #slide2PinkFront { z-index: 2; }
