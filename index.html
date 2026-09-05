@@ -134,6 +134,9 @@
      Percentages are relative to each arrow's own .quad box. Nudge these
      numbers directly once you see the live page against your real
      corkboard/images assets. */
+  .quad[data-quad="1"] .arrow-hit[data-side="left"] {
+    left: 23%; top: 14%; width: 21%; height: 9%;
+  }
   .quad[data-quad="1"] .arrow-hit[data-side="right"] {
     left: 74%; top: 15%; width: 23%; height: 13%; right: auto;
   }
@@ -175,7 +178,7 @@
       <img src="images/slide1-pin-yellow.png" alt="">
       <img src="images/slide1-sticky-arrow-left.png" alt="">
       <img src="images/slide1-sticky-arrow-right.png" alt="">
-      <div class="arrow-hit" data-side="left"></div>
+      <div class="arrow-hit" data-side="left"><span class="arrow-label">Board</span></div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
     </div>
     <div class="quad" data-quad="2">
@@ -206,7 +209,7 @@
       <img src="images/slide4-sticky-purple.png" alt="">
       <img src="images/slide4-sticky-arrow-left.png" alt="">
       <img src="images/slide4-sticky-arrow-right.png" alt="">
-      <div class="arrow-hit" data-side="left"></div>
+      <div class="arrow-hit" data-side="left"><span class="arrow-label">Board</span></div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Back</span></div>
     </div>
   </div>
