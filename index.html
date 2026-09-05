@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Corkboard navigation test</title>
 <style>
+  @font-face {
+    font-family: 'BoldMoldHandwriting';
+    src: url('fonts/BoldMoldHandwriting-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -33,8 +40,8 @@
     transition: transform 0.6s ease;
   }
 
-  /* ---- The 4 quadrants (no longer clickable themselves — navigation
-     now happens exclusively through the sticky-arrow images) ---- */
+  /* ---- The 4 quadrants (visual containers only — not clickable
+     themselves; navigation happens via the hit-zone divs below) ---- */
   .quad {
     position: absolute;
     width: 50%;
@@ -70,8 +77,8 @@
     height: 100%;
     object-fit: fill; /* switch to "contain" if any PNG isn't an exact
                           pixel match for the quadrant */
-    pointer-events: none; /* let clicks pass through by default; the
-                              sticky-arrow images override this below */
+    pointer-events: none; /* images are never click targets — the
+                              arrow-hit divs above them handle clicks */
     transform: scale(0.92); /* shrinks each element a bit so it doesn't
                                 touch the quadrant edges — tweak this one
                                 number to adjust breathing room everywhere
@@ -79,12 +86,39 @@
     transform-origin: center center;
   }
 
-  /* The sticky-arrow images are the entire navigation system now —
-     they're the only images that receive clicks. */
-  .quad img[src*="sticky-arrow"] {
-    pointer-events: auto;
+  /* ---- Arrow hit-zones ----
+     These are the ACTUAL click targets — small invisible boxes placed
+     roughly where each arrow graphic sits, instead of the old approach
+     of using the full-quad-sized arrow <img> itself (which overlapped
+     100% with its sibling arrow and swallowed every click).
+
+     Starting position is a rough guess: lower-left third of the quad
+     for "left" arrows, lower-right third for "right" arrows. Nudge the
+     top/left/width/height below per quad once you see it live against
+     your real artwork — nothing else on the page depends on these
+     values, so they're safe to tweak freely. */
+  .arrow-hit {
+    position: absolute;
     cursor: pointer;
+    /* outline: 1px dashed lime; */ /* uncomment while nudging position */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
+  .arrow-hit .arrow-label {
+    font-family: 'BoldMoldHandwriting', sans-serif;
+    font-size: 22px;
+    color: #222;
+    pointer-events: none; /* label never blocks the click, the div does */
+    user-select: none;
+    text-align: center;
+  }
+
+  /* Generic default placement for every hit-zone — override per quad
+     below only where the arrow actually sits somewhere else. */
+  .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
+  .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
 </style>
 </head>
 <body>
@@ -100,6 +134,8 @@
       <img src="images/slide1-pin-yellow.png" alt="">
       <img src="images/slide1-sticky-arrow-left.png" alt="">
       <img src="images/slide1-sticky-arrow-right.png" alt="">
+      <div class="arrow-hit" data-side="left"></div>
+      <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
     </div>
     <div class="quad" data-quad="2">
       <img src="animations/slide2-anim2.png" alt="">
@@ -109,6 +145,8 @@
       <img src="images/slide2-sticky-blue.png" alt="">
       <img src="images/slide2-sticky-arrow-left.png" alt="">
       <img src="images/slide2-sticky-arrow-right.png" alt="">
+      <div class="arrow-hit" data-side="left"><span class="arrow-label">Back</span></div>
+      <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
     </div>
     <div class="quad" data-quad="3">
       <img src="images/slide3-torn-paper-anim4.png" alt="">
@@ -119,12 +157,16 @@
       <img src="images/slide3-sticky-green.png" alt="">
       <img src="images/slide3-sticky-arrow-left.png" alt="">
       <img src="images/slide3-sticky-arrow-right.png" alt="">
+      <div class="arrow-hit" data-side="left"><span class="arrow-label">Next</span></div>
+      <div class="arrow-hit" data-side="right"><span class="arrow-label">Back</span></div>
     </div>
     <div class="quad" data-quad="4">
       <img src="images/slide4-sticky-magenta.png" alt="">
       <img src="images/slide4-sticky-purple.png" alt="">
       <img src="images/slide4-sticky-arrow-left.png" alt="">
       <img src="images/slide4-sticky-arrow-right.png" alt="">
+      <div class="arrow-hit" data-side="left"></div>
+      <div class="arrow-hit" data-side="right"><span class="arrow-label">Back</span></div>
     </div>
   </div>
 </div>
@@ -155,9 +197,9 @@
     4: `0% ${bottomRowOriginY}%`,   // bottom-left
   };
 
-  // Fixed routing table for every sticky arrow. 'whole' means "go to
-  // whole view" — except for the two arrows whose fixed destination IS
-  // whole view (1-left, 4-left): when the user is already in whole view,
+  // Fixed routing table for every arrow. 'whole' means "go to whole
+  // view" — except for the two arrows whose fixed destination IS whole
+  // view (1-left, 4-left): when the user is already in whole view,
   // clicking those instead zooms into the quadrant that arrow lives on
   // (handled as a special case in goToDestination, not listed here).
   const ARROW_DESTINATION = {
@@ -199,16 +241,14 @@
     zoomTo(destination);
   }
 
-  // Wire up every sticky-arrow image using info already present in the
-  // markup (its parent .quad's data-quad, and left/right from its own
-  // src filename) — no HTML changes needed.
-  document.querySelectorAll('.quad img[src*="sticky-arrow"]').forEach(img => {
-    const quadNumber = parseInt(img.closest('.quad').dataset.quad, 10);
-    const side = img.src.includes('sticky-arrow-left') ? 'left' : 'right';
+  // Wire up every arrow hit-zone div (the actual click targets).
+  document.querySelectorAll('.arrow-hit').forEach(hit => {
+    const quadNumber = parseInt(hit.closest('.quad').dataset.quad, 10);
+    const side = hit.dataset.side; // 'left' or 'right'
     const key = `${quadNumber}-${side}`;
     const destination = ARROW_DESTINATION[key];
 
-    img.addEventListener('click', () => {
+    hit.addEventListener('click', () => {
       goToDestination(quadNumber, destination);
     });
   });
