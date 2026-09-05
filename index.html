@@ -28,8 +28,10 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    transform: scale(1);
-    transform-origin: 0% 0%; /* overwritten per-quadrant by JS when zoomed */
+    transform: scale(1) translate(0%, 0%);
+    transform-origin: 0% 0%; /* fixed at top-left always — the sliding
+                                 motion now comes from translate(), not
+                                 from swapping the origin per quadrant */
     transition: transform 0.6s ease;
   }
 
@@ -78,9 +80,16 @@
                                 at once */
     transform-origin: center center;
   }
-  /* Nav arrows should stay clickable on their own eventually — for now
-     they're part of the same click-to-zoom quad, so pointer-events
-     stays "none" like the rest until we wire up their own behavior. */
+
+  /* Nav arrows are now real clickable buttons — matched by filename in
+     JS below (anything with "-left" or "-right" in its src). They get
+     their own pointer-events and sit above everything else in the
+     quad so taps land on them instead of triggering the quad's zoom. */
+  .quad img.nav-btn {
+    pointer-events: auto;
+    z-index: 20;
+    cursor: pointer;
+  }
 
   /* ---- Simple prev/next controls, shown only while zoomed in ---- */
   .nav-controls {
@@ -117,8 +126,8 @@
       <img src="images/slide1-torn-paper-photo.png" alt="">
       <img src="images/slide1-photo.png" alt="">
       <img src="images/slide1-pin-yellow.png" alt="">
-      <img src="images/slide1-sticky-arrow-left.png" alt="">
-      <img src="images/slide1-sticky-arrow-right.png" alt="">
+      <img class="nav-btn" src="images/slide1-sticky-arrow-left.png" alt="">
+      <img class="nav-btn" src="images/slide1-sticky-arrow-right.png" alt="">
     </div>
     <div class="quad" data-quad="2">
       <img src="animations/slide2-anim2.png" alt="">
@@ -126,8 +135,8 @@
       <img src="images/slide2-sticky-pink-back.png" alt="">
       <img src="images/slide2-sticky-pink-front.png" alt="">
       <img src="images/slide2-sticky-blue.png" alt="">
-      <img src="images/slide2-sticky-arrow-left.png" alt="">
-      <img src="images/slide2-sticky-arrow-right.png" alt="">
+      <img class="nav-btn" src="images/slide2-sticky-arrow-left.png" alt="">
+      <img class="nav-btn" src="images/slide2-sticky-arrow-right.png" alt="">
     </div>
     <div class="quad" data-quad="3">
       <img src="images/slide3-torn-paper-anim4.png" alt="">
@@ -136,14 +145,14 @@
       <img src="images/slide3-torn-paper-scribble.png" alt="">
       <img src="images/slide3-paperclip.png" alt="">
       <img src="images/slide3-sticky-green.png" alt="">
-      <img src="images/slide3-sticky-arrow-left.png" alt="">
-      <img src="images/slide3-sticky-arrow-right.png" alt="">
+      <img class="nav-btn" src="images/slide3-sticky-arrow-left.png" alt="">
+      <img class="nav-btn" src="images/slide3-sticky-arrow-right.png" alt="">
     </div>
     <div class="quad" data-quad="4">
       <img src="images/slide4-sticky-magenta.png" alt="">
       <img src="images/slide4-sticky-purple.png" alt="">
-      <img src="images/slide4-sticky-arrow-left.png" alt="">
-      <img src="images/slide4-sticky-arrow-right.png" alt="">
+      <img class="nav-btn" src="images/slide4-sticky-arrow-left.png" alt="">
+      <img class="nav-btn" src="images/slide4-sticky-arrow-right.png" alt="">
     </div>
   </div>
 </div>
@@ -156,48 +165,63 @@
 
 <script>
   // Navigation order: 1 top-left → 2 top-right → 3 bottom-right → 4 bottom-left.
-  // Quadrant 3 sitting under quadrant 2 (not under 4) is intentional.
   const ORDER = [1, 2, 3, 4];
 
-  // Where the board should "hinge" from when zooming into each quadrant,
-  // so that quadrant fills the whole screen after scaling up.
-  //
-  // Quads 3 and 4 are shifted UP from their natural 50% position (see
-  // --bottom-row-lift in the CSS, used to close the gap between rows in
-  // whole-view). That shift means the plain "100%" vertical origin used
-  // for an unshifted quadrant would overshoot — the math below corrects
-  // for it automatically: for a box starting at top = T% with the same
-  // 50% height, the correct origin is 2*T%. Reading --bottom-row-lift
-  // directly from the CSS (instead of hardcoding a second copy of the
-  // number here) means the two can never drift out of sync if that
-  // variable is ever changed.
+  // Per-quadrant, per-side arrow behavior. The physical board has the
+  // bottom row flowing right-to-left to continue the loop, so "forward"
+  // sits on the left for quads 3/4 instead of the right — this table is
+  // just the map of that, read directly off what you specified.
+  const ARROW_ACTIONS = {
+    1: { left: 'whole', right: 'next' },
+    2: { left: 'back',  right: 'next' },
+    3: { left: 'next',  right: 'back' },
+    4: { left: 'whole', right: 'back' },
+  };
+
+  // Reads the quadrant's real top-left position (as a % of the board)
+  // so the zoom can slide the camera there instead of jump-cutting via
+  // transform-origin. Reuses --bottom-row-lift so quads 3/4 line up
+  // with the same shifted position the CSS already applies to them.
   const liftPercent = parseFloat(
     getComputedStyle(document.documentElement).getPropertyValue('--bottom-row-lift')
   ) || 0;
-  const bottomRowTop = 50 - liftPercent;       // actual top %, e.g. 42
-  const bottomRowOriginY = 2 * bottomRowTop;   // correct zoom origin, e.g. 84%
+  const bottomRowTop = 50 - liftPercent; // e.g. 42
 
-  const ORIGIN = {
-    1: '0% 0%',    // top-left
-    2: '100% 0%',  // top-right
-    3: `100% ${bottomRowOriginY}%`, // bottom-right
-    4: `0% ${bottomRowOriginY}%`,   // bottom-left
+  const QUAD_POS = {
+    1: { x: 0,  y: 0 },
+    2: { x: 50, y: 0 },
+    3: { x: 50, y: bottomRowTop },
+    4: { x: 0,  y: bottomRowTop },
   };
+
+  const ZOOM_SCALE = 2;
 
   const board = document.getElementById('board');
   const navControls = document.getElementById('navControls');
   let currentQuad = null; // null = whole-view (not zoomed into anything)
 
+  function applyTransform() {
+    if (currentQuad === null) {
+      board.style.transform = 'scale(1) translate(0%, 0%)';
+      return;
+    }
+    const pos = QUAD_POS[currentQuad];
+    // translate is expressed as a % of the board's own size, and since
+    // the board is always 100vw/100vh, -pos.x% / -pos.y% shifts the
+    // camera by exactly that quadrant's real offset — giving a true
+    // slide toward the corner rather than a jump.
+    board.style.transform = `scale(${ZOOM_SCALE}) translate(${-pos.x}%, ${-pos.y}%)`;
+  }
+
   function zoomTo(quadNumber) {
     currentQuad = quadNumber;
-    board.style.transformOrigin = ORIGIN[quadNumber];
-    board.style.transform = 'scale(2)';
+    applyTransform();
     navControls.classList.add('is-visible');
   }
 
   function zoomOut() {
     currentQuad = null;
-    board.style.transform = 'scale(1)';
+    applyTransform();
     navControls.classList.remove('is-visible');
   }
 
@@ -208,15 +232,40 @@
     zoomTo(ORDER[nextIndex]);
   }
 
+  function runAction(action) {
+    if (action === 'whole') zoomOut();
+    else if (action === 'next') step(1);
+    else if (action === 'back') step(-1);
+  }
+
+  // Wire up each quad's own click-to-zoom (unchanged behavior).
   document.querySelectorAll('.quad').forEach(quad => {
     quad.addEventListener('click', () => {
       const quadNumber = parseInt(quad.dataset.quad, 10);
-      // Clicking the already-zoomed quadrant zooms back out.
       if (currentQuad === quadNumber) {
         zoomOut();
       } else {
         zoomTo(quadNumber);
       }
+    });
+  });
+
+  // Wire up the arrow images themselves — matched by "-left"/"-right"
+  // in their filename, mapped through ARROW_ACTIONS per quad.
+  document.querySelectorAll('.quad img.nav-btn').forEach(img => {
+    const quad = img.closest('.quad');
+    const quadNumber = parseInt(quad.dataset.quad, 10);
+    const side = img.src.includes('-left') ? 'left'
+               : img.src.includes('-right') ? 'right'
+               : null;
+    if (!side) return; // filename didn't match either pattern — skip silently
+
+    const action = ARROW_ACTIONS[quadNumber]?.[side];
+    if (!action) return;
+
+    img.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't also trigger the quad's own zoom-toggle
+      runAction(action);
     });
   });
 
