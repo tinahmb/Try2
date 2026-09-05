@@ -156,27 +156,28 @@ html, body {
 
 .roll-unit .fold {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
-  height: 22%; /* the strip that folds — must match the clip line above */
-  background-repeat: no-repeat;
-  background-position: top center;
-  /* Scales the background so this 22%-tall strip shows exactly the
-     top 22% of the full image, not a squashed/stretched copy. */
-  background-size: 100% calc(100% / 0.22);
-  transform-origin: bottom center; /* hinges at the fold crease */
+  height: 100%;
+  object-fit: contain; /* identical to the main <img> above — this is
+     what guarantees the two copies place the actual sticky artwork in
+     exactly the same spot within the box, so clip-path percentages
+     below line up perfectly with the real pixels, no crop-math guessing */
+  pointer-events: none;
+  /* Same slanted parallelogram shape as the main image's peeled clip,
+     but this one KEEPS only that top strip instead of removing it. */
+  clip-path: polygon(15% 0%, 100% 0%, 85% 22%, 0% 22%);
+  /* Hinges at the 22% line specifically (not the box's bottom edge) —
+     transform-origin is relative to the FULL box, not just the clipped
+     sliver, so this must match the clip line above exactly. */
+  transform-origin: 50% 22%;
   transform: rotateX(0deg);
   filter: brightness(1);
-  clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%); /* the same
-     slanted parallelogram edge as before, so the fold's silhouette
-     still matches the torn/angled look of the sticky corner */
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.28);
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1),
               filter 0.5s cubic-bezier(0.65, 0, 0.35, 1),
               opacity 0.5s ease;
   opacity: 0;
-  pointer-events: none;
   transform-style: preserve-3d;
 }
 .roll-unit.is-peeled .fold {
