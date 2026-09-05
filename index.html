@@ -4,12 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Corkboard navigation test</title>
+<link rel="preload" href="fonts/BoldMoldHandwriting-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <style>
   @font-face {
     font-family: 'BoldMoldHandwriting';
     src: url('fonts/BoldMoldHandwriting-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: block; /* wait briefly for the real font instead of
+                             flashing the fallback sans-serif first —
+                             this is what was causing the "rearrange" */
   }
 
   html, body {
@@ -131,7 +135,7 @@
      numbers directly once you see the live page against your real
      corkboard/images assets. */
   .quad[data-quad="1"] .arrow-hit[data-side="right"] {
-    left: 74%; top: 13%; width: 23%; height: 13%; right: auto;
+    left: 74%; top: 14%; width: 23%; height: 13%; right: auto;
   }
   .quad[data-quad="2"] .arrow-hit[data-side="left"] {
     left: 10%; top: 16%; width: 22%; height: 11%;
