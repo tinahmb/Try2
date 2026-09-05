@@ -121,7 +121,6 @@
       <img src="images/slide1-sticky-arrow-right.PNG" alt="">
     </div>
     <div class="quad" data-quad="2">
-      <img src="images/slide2-torn-paper-anim2.PNG" alt="">
       <img src="animations/slide2-anim2.png" alt="">
       <img src="images/slide2-tape.PNG" alt="">
       <img src="images/slide2-sticky-pink-back.PNG" alt="">
@@ -162,11 +161,27 @@
 
   // Where the board should "hinge" from when zooming into each quadrant,
   // so that quadrant fills the whole screen after scaling up.
+  //
+  // Quads 3 and 4 are shifted UP from their natural 50% position (see
+  // --bottom-row-lift in the CSS, used to close the gap between rows in
+  // whole-view). That shift means the plain "100%" vertical origin used
+  // for an unshifted quadrant would overshoot — the math below corrects
+  // for it automatically: for a box starting at top = T% with the same
+  // 50% height, the correct origin is 2*T%. Reading --bottom-row-lift
+  // directly from the CSS (instead of hardcoding a second copy of the
+  // number here) means the two can never drift out of sync if that
+  // variable is ever changed.
+  const liftPercent = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--bottom-row-lift')
+  ) || 0;
+  const bottomRowTop = 50 - liftPercent;       // actual top %, e.g. 42
+  const bottomRowOriginY = 2 * bottomRowTop;   // correct zoom origin, e.g. 84%
+
   const ORIGIN = {
     1: '0% 0%',    // top-left
     2: '100% 0%',  // top-right
-    3: '100% 100%',// bottom-right
-    4: '0% 100%',  // bottom-left
+    3: `100% ${bottomRowOriginY}%`, // bottom-right
+    4: `0% ${bottomRowOriginY}%`,   // bottom-left
   };
 
   const board = document.getElementById('board');
