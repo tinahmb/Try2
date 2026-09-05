@@ -175,7 +175,15 @@
      toward the top edge and stays there, still visible as a curled
      strip), tap again to smooth it back down flat. Uses a transition
      between two fixed states rather than a one-way animation, so it's
-     reversible any number of times. */
+     reversible any number of times.
+
+     FIX: front and back were both position:absolute/inset:0 with no
+     z-index, so DOM order alone decided paint order — and back was
+     listed second, meaning it was rendering (and receiving taps) ON
+     TOP of front the whole time. That's why the first tap peeled the
+     wrong sticky, and why the peeled shape showed up in back's
+     position instead of front's. The z-index rules below fix the
+     stacking so front is always on top until it's peeled away. */
   .roll-unit {
     position: absolute;
     inset: 0;
@@ -190,10 +198,18 @@
   }
   .roll-unit.is-peeled {
     /* slanted ribbon-style edge instead of a flat crop — top stays
-       exactly where it always was, only the reveal line is angled
-       like the tape/ribbon graphics elsewhere on the board */
+       exactly where it always was (0% 0%, unchanged), only the reveal
+       line is angled like the tape/ribbon graphics elsewhere on the
+       board. The top two points of this polygon are still 0%, so the
+       visible sliver's top edge was always pinned correctly — it was
+       just the WRONG sticky's top (back's) showing, which is what
+       made it look misplaced. */
     clip-path: polygon(0% 0%, 100% 0%, 100% 22%, 0% 32%);
   }
+
+  #slide2PinkFront { z-index: 2; } /* on top initially — first tap hits this one */
+  #slide2PinkBack  { z-index: 1; } /* only reachable once front is peeled out of the way */
+
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
 
