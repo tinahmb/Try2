@@ -41,10 +41,9 @@
     position: relative;
     transform: scale(1);
     transform-origin: 0% 0%; /* overwritten per-quadrant by JS when zoomed */
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); /* swift
-      slide: fast start, smooth decisive stop — snappier than a plain
-      ease, giving the quad-to-quad transition a sliding feel rather
-      than a slow zoom */
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* swipe-
+      with-momentum: overshoots slightly past the target then settles
+      back — reads as a slide rather than a zoom */
   }
 
   /* ---- The 4 quadrants (visual containers only — not clickable
@@ -166,6 +165,31 @@
     0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(140%) rotate(35deg); opacity: 0; }
   }
+
+  /* ---- Quad 2 pink sticky roll-up ----
+     Both pink stickies move as one unit, anchored at the top edge, and
+     "roll up" like a blind/scroll when tapped — shrinking vertically
+     with a slight skew to sell the curling-paper look, then staying
+     rolled up and un-tappable, revealing whatever sits behind them. */
+  .roll-unit {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    transform-origin: 50% 0%;
+  }
+  .roll-unit img {
+    pointer-events: none;
+  }
+  .roll-unit.is-rolled {
+    animation: sticky-roll-up 0.6s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
+    pointer-events: none;
+  }
+  @keyframes sticky-roll-up {
+    0%   { transform: scaleY(1) skewX(0deg); opacity: 1; }
+    60%  { transform: scaleY(0.25) skewX(-4deg); opacity: 1; }
+    100% { transform: scaleY(0) skewX(-2deg); opacity: 0; }
+  }
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
 
@@ -228,8 +252,12 @@
     <div class="quad" data-quad="2">
       <img src="animations/slide2-anim2.png" alt="">
       <img src="images/slide2-tape.png" alt="">
-      <img src="images/slide2-sticky-pink-back.png" alt="">
-      <img src="images/slide2-sticky-pink-front.png" alt="">
+      <div class="roll-unit" id="slide2PinkBack">
+        <img src="images/slide2-sticky-pink-back.png" alt="">
+      </div>
+      <div class="roll-unit" id="slide2PinkFront">
+        <img src="images/slide2-sticky-pink-front.png" alt="">
+      </div>
       <img src="images/slide2-sticky-blue.png" alt="">
       <img src="images/slide2-sticky-arrow-left.png" alt="">
       <img src="images/slide2-sticky-arrow-right.png" alt="">
@@ -358,6 +386,17 @@
     }
   });
 
+  // Quad 2 pink stickies: front one peels off first (it's on top), then
+  // a second tap peels the back one — each is its own independent
+  // roll-unit, so once the front one rolls away and stops accepting
+  // clicks, the next tap naturally lands on the back one underneath.
+  document.getElementById('slide2PinkFront').addEventListener('click', function () {
+    this.classList.add('is-rolled');
+  });
+  document.getElementById('slide2PinkBack').addEventListener('click', function () {
+    this.classList.add('is-rolled');
+  });
+
   // Initial load: apply the zoomed-in state for quad 1 directly, with
   // no transition, so there's no flash of whole-view or visible
   // animation on first paint. The .board transition rule stays intact
@@ -368,7 +407,7 @@
   // Force the browser to apply the above before re-enabling the
   // transition, so it doesn't get animated retroactively.
   board.offsetHeight; // reflow
-  board.style.transition = 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)';
+  board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
 </script>
 
 </body>
