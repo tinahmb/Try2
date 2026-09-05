@@ -37,23 +37,30 @@
   .quad {
     position: absolute;
     width: 50%;
-    height: calc(100% - var(--split-y));
+    height: 50%;
     cursor: pointer;
+    overflow: hidden; /* clips the bottom row's nudged artwork, below */
     /* Uncomment the line below while testing, to see the quadrant
        boundaries. Delete it once you're happy with the zoom areas. */
     /* outline: 2px dashed red; */
   }
-  /* The horizontal line between the top and bottom quadrants — one
-     variable controls it everywhere. Lower % = line moves up (bottom
-     row gets taller, top row gets shorter). Raise the % to push the
-     line back down. Currently nudged up from the default 50%. */
-  :root { --split-y: 44%; }
+  .quad[data-quad="1"] { top: 0;   left: 0; }    /* top-left */
+  .quad[data-quad="2"] { top: 0;   left: 50%; }  /* top-right */
+  .quad[data-quad="3"] { top: 50%; left: 50%; }  /* bottom-right */
+  .quad[data-quad="4"] { top: 50%; left: 0; }    /* bottom-left */
 
-  .quad[data-quad="1"], .quad[data-quad="2"] { height: var(--split-y); }
-  .quad[data-quad="1"] { top: 0;              left: 0; }    /* top-left */
-  .quad[data-quad="2"] { top: 0;              left: 50%; }  /* top-right */
-  .quad[data-quad="3"] { top: var(--split-y); left: 50%; }  /* bottom-right */
-  .quad[data-quad="4"] { top: var(--split-y); left: 0; }    /* bottom-left */
+  /* Both rows keep their true, even 50/50 boxes — so zoom-in targeting
+     stays pixel-accurate and nothing stretches. To close the visual gap
+     between rows, the bottom row's artwork (not the box) gets a small
+     UNIFORM scale-up + upward shift — uniform scale keeps proportions
+     intact, only non-uniform stretching would distort it. One variable
+     controls it; raise --bottom-row-zoom for a bigger pull-up, lower it
+     for less. */
+  :root { --bottom-row-zoom: 1.15; }
+  .quad[data-quad="3"] img, .quad[data-quad="4"] img {
+    transform: scale(var(--bottom-row-zoom)) translateY(-6%) scale(0.92);
+    transform-origin: top center;
+  }
 
   /* Every element image is quadrant-sized (Photoshop-exported to match
      the quad exactly), so each one just fills its .quad edge-to-edge.
