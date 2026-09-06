@@ -467,11 +467,27 @@
     }
   });
 
-  document.querySelector('#slide2PinkFront .roll-hit').addEventListener('click', function () {
-    document.getElementById('slide2PinkFront').classList.toggle('is-peeled');
+  // Pink stickies: front always opens first (already enforced physically —
+  // it sits on top and covers back's hit-zone until it peels away). But
+  // closing had no equivalent rule, so front could flatten back down on
+  // top of a still-open back sticky. Fix: lock front's hit-zone shut
+  // whenever back is currently peeled, same .is-locked pattern already
+  // used for the quad 3 yellow sticky. Forces close order to back → front.
+  const pinkFrontUnit = document.getElementById('slide2PinkFront');
+  const pinkBackUnit = document.getElementById('slide2PinkBack');
+  const pinkFrontHit = pinkFrontUnit.querySelector('.roll-hit');
+  const pinkBackHit = pinkBackUnit.querySelector('.roll-hit');
+
+  function updatePinkFrontLock() {
+    pinkFrontHit.classList.toggle('is-locked', pinkBackUnit.classList.contains('is-peeled'));
+  }
+
+  pinkFrontHit.addEventListener('click', function () {
+    pinkFrontUnit.classList.toggle('is-peeled');
   });
-  document.querySelector('#slide2PinkBack .roll-hit').addEventListener('click', function () {
-    document.getElementById('slide2PinkBack').classList.toggle('is-peeled');
+  pinkBackHit.addEventListener('click', function () {
+    pinkBackUnit.classList.toggle('is-peeled');
+    updatePinkFrontLock();
   });
 
   const paperUnit = document.getElementById('slide3PaperUnit');
