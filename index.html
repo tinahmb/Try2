@@ -236,6 +236,14 @@
     writing-mode: vertical-rl;
     transform: rotate(180deg);
   }
+
+  /* Photo + Polaroid frame, and the binder holding it — nudged
+     slightly bigger than the default 0.92 scale every other quad
+     image uses, per request. Small bump, not a big resize. */
+  #slide1PhotoUnit img,
+  img[src*="slide1-binder"] {
+    transform: scale(1.0);
+  }
 </style>
 </head>
 <body>
