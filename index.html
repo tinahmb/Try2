@@ -226,9 +226,93 @@
     writing-mode: vertical-rl;
     transform: rotate(180deg);
   }
+
+  /* ============================================================
+     ▼▼▼ TEMPORARY LABEL-EDITOR TOOL — delete this whole block
+     (from here down to the matching "▲▲▲" comment) plus the
+     matching <script> block at the bottom once labels are placed.
+     ============================================================ */
+  body.label-edit-mode .sticky-label {
+    pointer-events: auto;
+    cursor: grab;
+    outline: 2px dashed rgba(255, 0, 150, 0.9);
+    background: rgba(255, 0, 150, 0.08);
+  }
+  body.label-edit-mode .sticky-label:active { cursor: grabbing; }
+
+  .label-resize-handle {
+    position: absolute;
+    right: -9px;
+    bottom: -9px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border: 2px solid rgb(255, 0, 150);
+    border-radius: 50%;
+    cursor: nwse-resize;
+    touch-action: none;
+    display: none;
+  }
+  body.label-edit-mode .label-resize-handle { display: block; }
+
+  #labelEditorToggle {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 999;
+    background: rgb(255, 0, 150);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+  }
+  #labelExportBtn {
+    position: fixed;
+    bottom: 16px;
+    left: 150px;
+    z-index: 999;
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+    display: none;
+  }
+  body.label-edit-mode #labelExportBtn { display: block; }
+
+  #labelExportOutput {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.9);
+    color: #4ade80;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    z-index: 999;
+    display: none;
+  }
+  #labelExportOutput.visible { display: block; }
+  /* ▲▲▲ END TEMPORARY LABEL-EDITOR TOOL CSS ▲▲▲ */
 </style>
 </head>
 <body>
+
+<!-- ▼▼▼ TEMPORARY LABEL-EDITOR TOOL — delete this button + the one
+     below it, and the <div id="labelExportOutput">, once done ▼▼▼ -->
+<button id="labelEditorToggle" type="button">Edit label positions</button>
+<button id="labelExportBtn" type="button">Export positions</button>
+<div id="labelExportOutput"></div>
+<!-- ▲▲▲ END TEMPORARY LABEL-EDITOR TOOL BUTTONS ▲▲▲ -->
 
 <div class="viewport">
   <div class="board" id="board">
@@ -251,12 +335,12 @@
       <img src="images/slide2-tape.png" alt="">
       <img src="images/slide2-sticky-arrow-right.png" alt="">
       <img src="images/slide2-sticky-blue.png" alt="">
-      <div class="sticky-label" style="left:10%; top:22%; width:36%; height:60%;">Book Participation</div>
+      <div class="sticky-label" data-label="Book Participation" style="left:10%; top:22%; width:36%; height:60%;">Book Participation<div class="label-resize-handle"></div></div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
       <div class="roll-unit" id="slide2PinkBack">
         <img src="images/slide2-sticky-pink-back.png" alt="">
         <div class="roll-hit"></div>
-        <div class="sticky-label" style="left:52%; top:25%; width:38%; height:71%;">Brazilian Citizen Labs</div>
+        <div class="sticky-label" data-label="Brazilian Citizen Labs" style="left:52%; top:25%; width:38%; height:71%;">Brazilian Citizen Labs<div class="label-resize-handle"></div></div>
       </div>
       <div class="roll-unit" id="slide2PinkFront">
         <img src="images/slide2-sticky-pink-front.png" alt="">
@@ -271,7 +355,7 @@
       <div class="roll-unit" id="slide3Yellow">
         <img src="images/slide3-sticky-yellow.png" alt="">
         <div class="roll-hit is-locked"></div>
-        <div class="sticky-label" style="left:16%; top:30%; width:34%; height:40%;">Electoral Observation Project</div>
+        <div class="sticky-label" data-label="Electoral Observation Project" style="left:16%; top:30%; width:34%; height:40%;">Electoral Observation Project<div class="label-resize-handle"></div></div>
       </div>
       <div class="photo-unit" id="slide3PaperUnit">
         <img src="images/slide3-torn-paper-scribble.png" alt="">
@@ -280,7 +364,7 @@
         <img src="images/slide3-paperclip.png" alt="">
       </div>
       <img src="images/slide3-sticky-green.png" alt="">
-      <div class="sticky-label" style="left:56%; top:22%; width:36%; height:60%;">Selected Rough Dialogues</div>
+      <div class="sticky-label" data-label="Selected Rough Dialogues" style="left:56%; top:22%; width:36%; height:60%;">Selected Rough Dialogues<div class="label-resize-handle"></div></div>
       <img src="images/slide3-sticky-arrow-left.png" alt="">
       <img src="images/slide3-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label">Next</span></div>
@@ -288,9 +372,9 @@
     </div>
     <div class="quad" data-quad="4">
       <img src="images/slide4-sticky-magenta.png" alt="">
-      <div class="sticky-label" style="left:8%; top:20%; width:36%; height:55%;">MYOOZ Inc</div>
+      <div class="sticky-label" data-label="MYOOZ Inc" style="left:8%; top:20%; width:36%; height:55%;">MYOOZ Inc<div class="label-resize-handle"></div></div>
       <img src="images/slide4-sticky-purple.png" alt="">
-      <div class="sticky-label" style="left:56%; top:20%; width:36%; height:55%;">HR Index</div>
+      <div class="sticky-label" data-label="HR Index" style="left:56%; top:20%; width:36%; height:55%;">HR Index<div class="label-resize-handle"></div></div>
       <img src="images/slide4-sticky-arrow-left.png" alt="">
       <img src="images/slide4-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label is-hidden-label">Board</span></div>
@@ -411,6 +495,81 @@
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
 </script>
+
+<!-- ▼▼▼ TEMPORARY LABEL-EDITOR TOOL SCRIPT — delete this whole
+     <script> block once labels are placed correctly. Nothing above
+     this comment depends on it. ▼▼▼ -->
+<script>
+(function () {
+  const toggleBtn = document.getElementById('labelEditorToggle');
+  const exportBtn = document.getElementById('labelExportBtn');
+  const output = document.getElementById('labelExportOutput');
+
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('label-edit-mode');
+  });
+
+  document.querySelectorAll('.sticky-label').forEach(label => {
+    const handle = label.querySelector('.label-resize-handle');
+    let dragging = false, resizing = false;
+    let startX, startY, startLeft, startTop, startW, startH;
+
+    label.addEventListener('pointerdown', (e) => {
+      if (!document.body.classList.contains('label-edit-mode')) return;
+      if (e.target === handle) return;
+      dragging = true;
+      label.setPointerCapture(e.pointerId);
+      startX = e.clientX; startY = e.clientY;
+      startLeft = parseFloat(label.style.left);
+      startTop = parseFloat(label.style.top);
+    });
+
+    handle.addEventListener('pointerdown', (e) => {
+      if (!document.body.classList.contains('label-edit-mode')) return;
+      e.stopPropagation();
+      resizing = true;
+      handle.setPointerCapture(e.pointerId);
+      startX = e.clientX; startY = e.clientY;
+      startW = parseFloat(label.style.width);
+      startH = parseFloat(label.style.height);
+    });
+
+    label.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const rect = label.parentElement.getBoundingClientRect(); // quad's own box
+      const dxPct = (e.clientX - startX) / rect.width * 100;
+      const dyPct = (e.clientY - startY) / rect.height * 100;
+      label.style.left = (startLeft + dxPct) + '%';
+      label.style.top = (startTop + dyPct) + '%';
+    });
+
+    handle.addEventListener('pointermove', (e) => {
+      if (!resizing) return;
+      const rect = label.parentElement.getBoundingClientRect();
+      const dxPct = (e.clientX - startX) / rect.width * 100;
+      const dyPct = (e.clientY - startY) / rect.height * 100;
+      label.style.width = Math.max(5, startW + dxPct) + '%';
+      label.style.height = Math.max(5, startH + dyPct) + '%';
+    });
+
+    function endDrag() { dragging = false; resizing = false; }
+    label.addEventListener('pointerup', endDrag);
+    label.addEventListener('pointercancel', endDrag);
+    handle.addEventListener('pointerup', endDrag);
+    handle.addEventListener('pointercancel', endDrag);
+  });
+
+  exportBtn.addEventListener('click', () => {
+    const lines = Array.from(document.querySelectorAll('.sticky-label')).map(label => {
+      const name = label.dataset.label || '(unnamed)';
+      return `${name}: left:${label.style.left}; top:${label.style.top}; width:${label.style.width}; height:${label.style.height};`;
+    });
+    output.textContent = lines.join('\n');
+    output.classList.add('visible');
+  });
+})();
+</script>
+<!-- ▲▲▲ END TEMPORARY LABEL-EDITOR TOOL SCRIPT ▲▲▲ -->
 
 </body>
 </html>
