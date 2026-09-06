@@ -5,10 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Corkboard navigation test</title>
 <link rel="preload" href="fonts/BoldMoldHandwriting-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Handwriting2-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <style>
   @font-face {
     font-family: 'BoldMoldHandwriting';
     src: url('fonts/BoldMoldHandwriting-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+
+  /* New font — used only for the text labels on the square stickies
+     (project names). Arrow labels keep using BoldMoldHandwriting,
+     untouched below. */
+  @font-face {
+    font-family: 'Handwriting2';
+    src: url('fonts/Handwriting2-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -126,11 +138,6 @@
     100% { transform: translateY(140%) rotate(35deg); opacity: 0; }
   }
 
-  /* roll-unit: back to inset:0 so the artwork renders full-size and
-     in place, exactly as before. pointer-events is now none on the
-     unit itself — only its .roll-hit child (sized to the real drawn
-     note) receives clicks, so it no longer swallows clicks meant for
-     "Back" or anything else in the quad. */
   .roll-unit {
     position: absolute;
     inset: 0;
@@ -150,9 +157,6 @@
     z-index: 10;
   }
 
-  /* Real click target for each pink sticky — sized/positioned to the
-     drawn note itself, not the whole quad. Nudge these percentages
-     while looking at the live page if they don't line up exactly. */
   .roll-unit .roll-hit {
     position: absolute;
     left: 52%;
@@ -173,13 +177,16 @@
     height: 40%;
   }
 
+  /* Sticky labels — project names on the square stickies — now use
+     Handwriting2 instead of BoldMoldHandwriting. Arrow labels are a
+     separate rule (.arrow-label above) and are untouched. */
   .sticky-label {
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-family: 'BoldMoldHandwriting', sans-serif;
+    font-family: 'Handwriting2', sans-serif;
     font-size: 28px;
     color: rgba(34, 34, 34, 0.85);
     pointer-events: none;
