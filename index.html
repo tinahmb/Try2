@@ -101,8 +101,9 @@
   .photo-unit {
     position: absolute;
     inset: 0;
-    cursor: pointer;
-    pointer-events: auto;
+    pointer-events: none; /* wrapper itself no longer the click target —
+                              see .paper-hit below, sized to the real
+                              paper shape instead of the whole quad */
     transform-origin: 50% 8%;
   }
   .photo-unit img {
@@ -114,6 +115,31 @@
   .photo-unit.has-fallen {
     animation: photo-fall 0.7s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
     pointer-events: none;
+  }
+
+  /* Measured directly from each paper PNG's alpha-channel bounds —
+     not guessed. Slide 1: slide1-torn-paper-photo.png. Slide 3:
+     slide3-torn-paper-scribble.png. Each rectangle is a loose
+     approximation of an irregular torn edge, so it's intentionally
+     inset slightly (2%) from the exact measured box to avoid the
+     hit-zone poking past the paper's jagged silhouette into empty
+     cork background on the corners. */
+  .paper-hit {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    /* outline: 1px dashed lime; */ /* uncomment to see the zone while checking */
+  }
+  .photo-unit.has-fallen .paper-hit {
+    pointer-events: none; /* otherwise this child's own explicit
+                              "auto" would override the parent's
+                              has-fallen "none" and stay clickable */
+  }
+  #slide1PhotoUnit .paper-hit {
+    left: 61.20%; top: 17.43%; width: 36.00%; height: 72.54%;
+  }
+  #slide3PaperUnit .paper-hit {
+    left: 15.87%; top: 19.48%; width: 30.84%; height: 62.77%;
   }
   @keyframes photo-swing {
     0%   { transform: rotate(0deg); }
@@ -330,6 +356,7 @@
       <div class="photo-unit" id="slide1PhotoUnit">
         <img src="images/slide1-torn-paper-photo.png" alt="">
         <img src="images/slide1-photo.png" alt="">
+        <div class="paper-hit"></div>
       </div>
       <img src="images/slide1-pin-yellow.png" alt="">
       <img src="images/slide1-sticky-arrow-left.png" alt="">
@@ -366,6 +393,7 @@
       </div>
       <div class="photo-unit" id="slide3PaperUnit">
         <img src="images/slide3-torn-paper-scribble.png" alt="">
+        <div class="paper-hit"></div>
       </div>
       <div class="fall-unit" id="slide3ClipUnit">
         <img src="images/slide3-paperclip.png" alt="">
@@ -453,8 +481,9 @@
   });
 
   const photoUnit = document.getElementById('slide1PhotoUnit');
+  const photoHit = photoUnit.querySelector('.paper-hit');
   let photoState = 0;
-  photoUnit.addEventListener('click', () => {
+  photoHit.addEventListener('click', () => {
     if (photoState === 0) {
       photoState = 1;
       photoUnit.classList.add('is-swinging');
@@ -491,10 +520,11 @@
   });
 
   const paperUnit = document.getElementById('slide3PaperUnit');
+  const paperHit = paperUnit.querySelector('.paper-hit');
   const clipUnit = document.getElementById('slide3ClipUnit');
   const yellowHit = document.querySelector('#slide3Yellow .roll-hit');
   let paperState = 0;
-  paperUnit.addEventListener('click', () => {
+  paperHit.addEventListener('click', () => {
     if (paperState === 0) {
       paperState = 1;
       paperUnit.classList.add('is-swinging');
