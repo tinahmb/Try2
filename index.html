@@ -239,10 +239,11 @@
 
   /* Photo + Polaroid frame, and the binder holding it — nudged
      slightly bigger than the default 0.92 scale every other quad
-     image uses, per request. Small bump, not a big resize. */
+     image uses, per request. Also shifted left a touch since the
+     Polaroid frame was hanging off the right edge. */
   #slide1PhotoUnit img,
   img[src*="slide1-binder"] {
-    transform: scale(1.0);
+    transform: scale(1.0) translateX(-6%);
   }
 </style>
 </head>
