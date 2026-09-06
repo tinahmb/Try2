@@ -173,6 +173,20 @@
     height: 40%;
   }
 
+  .sticky-label {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'BoldMoldHandwriting', sans-serif;
+    font-size: 28px;
+    color: rgba(34, 34, 34, 0.85);
+    pointer-events: none;
+    user-select: none;
+    line-height: 1.15;
+  }
+
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
 
@@ -230,10 +244,12 @@
       <img src="images/slide2-tape.png" alt="">
       <img src="images/slide2-sticky-arrow-right.png" alt="">
       <img src="images/slide2-sticky-blue.png" alt="">
+      <div class="sticky-label" style="left:10%; top:22%; width:36%; height:60%;">Book Participation</div>
       <div class="arrow-hit" data-side="right"><span class="arrow-label">Next</span></div>
       <div class="roll-unit" id="slide2PinkBack">
         <img src="images/slide2-sticky-pink-back.png" alt="">
         <div class="roll-hit"></div>
+        <div class="sticky-label" style="left:52%; top:25%; width:38%; height:71%;">Brazilian Citizen Labs</div>
       </div>
       <div class="roll-unit" id="slide2PinkFront">
         <img src="images/slide2-sticky-pink-front.png" alt="">
@@ -248,6 +264,7 @@
       <div class="roll-unit" id="slide3Yellow">
         <img src="images/slide3-sticky-yellow.png" alt="">
         <div class="roll-hit is-locked"></div>
+        <div class="sticky-label" style="left:16%; top:30%; width:34%; height:40%;">Electoral Observation Project</div>
       </div>
       <div class="photo-unit" id="slide3PaperUnit">
         <img src="images/slide3-torn-paper-scribble.png" alt="">
@@ -256,6 +273,7 @@
         <img src="images/slide3-paperclip.png" alt="">
       </div>
       <img src="images/slide3-sticky-green.png" alt="">
+      <div class="sticky-label" style="left:56%; top:22%; width:36%; height:60%;">Selected Rough Dialogues</div>
       <img src="images/slide3-sticky-arrow-left.png" alt="">
       <img src="images/slide3-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label">Next</span></div>
@@ -263,7 +281,9 @@
     </div>
     <div class="quad" data-quad="4">
       <img src="images/slide4-sticky-magenta.png" alt="">
+      <div class="sticky-label" style="left:8%; top:20%; width:36%; height:55%;">MYOOZ Inc</div>
       <img src="images/slide4-sticky-purple.png" alt="">
+      <div class="sticky-label" style="left:56%; top:20%; width:36%; height:55%;">HR Index</div>
       <img src="images/slide4-sticky-arrow-left.png" alt="">
       <img src="images/slide4-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label is-hidden-label">Board</span></div>
