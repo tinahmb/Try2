@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Electoral Observation Project</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body { --notebook-bg: url('images/notebook-spiral-left.png'); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electoral Observation Project</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <a class="back-link" href="../index.html">&larr; Board</a>
@@ -21,5 +18,22 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+
+  <script>
+    const spiralLeftPages = [
+      'livro-povos-originarios.html',
+      'book-participation.html',
+      'electoral-observation-project.html',
+      'myooz-inc.html'
+    ];
+
+    const currentPage = window.location.pathname.split('/').pop();
+
+    if (spiralLeftPages.includes(currentPage)) {
+      document.body.classList.add('spiral-left');
+    } else {
+      document.body.classList.add('spiral-right');
+    }
+  </script>
 </body>
 </html>
