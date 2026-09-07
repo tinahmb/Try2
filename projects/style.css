@@ -17,9 +17,8 @@ html, body {
   min-height: 100%;
 }
 
+/* Base page layout */
 body {
-  /* Defaults to spiral right if no variable is specified */
-  background-image: var(--notebook-bg, url('/Try2/images/notebook-spiral-right.png'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -28,6 +27,15 @@ body {
   color: #2a2a2a;
 }
 
+/* Default fallback & Left-side post-its */
+body, body.spiral-right {
+  background-image: url('../images/notebook-spiral-right.png');
+}
+
+/* Right-side post-its */
+body.spiral-left {
+  background-image: url('../images/notebook-spiral-left.png');
+}
 .page {
   max-width: 700px;
   margin: 0 auto;
