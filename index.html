@@ -45,7 +45,7 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    transform: scale(1);
+    transform: scale(2);
     transform-origin: 0% 0%;
     transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -367,51 +367,24 @@
     4: `0% ${bottomRowOriginY}%`,
   };
 
+  // Explicit mappings for navigation arrows
   const ARROW_DESTINATION = {
-    '1-left':  'whole',
+    '1-left':  4, // "Board" button on Quad 1 goes to Quad 4
     '1-right': 2,
     '2-left':  1,
     '2-right': 3,
     '3-left':  4,
     '3-right': 2,
-    '4-left':  'whole',
+    '4-left':  3, // "Board" button on Quad 4 goes to Quad 3
     '4-right': 3,
   };
 
   const board = document.getElementById('board');
-  let currentQuad = null;
-
-  function setHash(quad) {
-    if (quad) {
-      history.replaceState(null, '', `#quad${quad}`);
-    } else {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
-  }
 
   function zoomTo(quadNumber) {
-    currentQuad = quadNumber;
     board.style.transformOrigin = ORIGIN[quadNumber];
     board.style.transform = 'scale(2)';
-    setHash(quadNumber);
-  }
-
-  function zoomOut() {
-    currentQuad = null;
-    board.style.transform = 'scale(1)';
-    setHash(null);
-  }
-
-  function goToDestination(ownQuad, destination) {
-    if (destination === 'whole') {
-      if (currentQuad === null) {
-        zoomTo(ownQuad);
-      } else {
-        zoomOut();
-      }
-      return;
-    }
-    zoomTo(destination);
+    history.replaceState(null, '', `#quad${quadNumber}`);
   }
 
   document.querySelectorAll('.arrow-hit').forEach(hit => {
@@ -421,7 +394,7 @@
     const destination = ARROW_DESTINATION[key];
 
     hit.addEventListener('click', () => {
-      goToDestination(quadNumber, destination);
+      zoomTo(destination);
     });
   });
 
@@ -481,22 +454,13 @@
     document.getElementById('slide3Yellow').classList.toggle('is-peeled');
   });
 
-  // Read hash from URL on page load (e.g. #quad2)
+  // Read hash from URL on page load (defaults to Quad 1 ALWAYS if no hash)
   const hash = window.location.hash.replace('#quad', '');
-  const targetQuad = parseInt(hash, 10);
+  const initialQuad = parseInt(hash, 10) || 1;
 
   // Disable transition momentarily for clean initial placement
   board.style.transition = 'none';
-
-  if (targetQuad && ORIGIN[targetQuad]) {
-    currentQuad = targetQuad;
-    board.style.transformOrigin = ORIGIN[targetQuad];
-    board.style.transform = 'scale(2)';
-  } else {
-    currentQuad = null;
-    board.style.transformOrigin = '0% 0%';
-    board.style.transform = 'scale(1)';
-  }
+  zoomTo(initialQuad);
 
   // Force reflow and re-enable smooth transitions for click navigation
   board.offsetHeight;
