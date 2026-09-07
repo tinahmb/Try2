@@ -220,6 +220,27 @@
                     instead of triggering the peel toggle beneath it */
   }
 
+  /* Intro paragraph on the notebook paper — left-aligned body copy,
+     not a link, so it's a separate rule from .sticky-label-text.
+     Nudge the positioning values below once you see it live against
+     the real notebook-paper artwork. */
+  .intro-text {
+    position: absolute;
+    left: 6%;
+    top: 12%;
+    width: 46%;
+    height: 74%;
+    font-family: 'Handwriting2', sans-serif;
+    font-size: 20px;
+    line-height: 1.5;
+    letter-spacing: -1.5px;
+    color: rgba(34, 34, 34, 0.85);
+    text-align: left;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+  }
+
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
   .arrow-hit[data-side="right"] { top: 70%; right: 8%; width: 18%; height: 14%; }
 
@@ -265,6 +286,7 @@
   <div class="board" id="board">
     <div class="quad" data-quad="1">
       <img src="images/slide1-torn-paper-notebook.png" alt="">
+      <div class="intro-text">Hi, I'm Tina, a researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries. With experience in electoral monitoring and large-scale data collection across Latin America, I focus on translating complex research into insightful reports and driving strategic partnerships. I am also the founder/manager of MYOOZ Inc Music Label, where I oversee artist development and global music distribution.</div>
       <img src="images/slide1-pin-blue.png" alt="">
       <img src="animations/slide1-anim1.png" alt="">
       <div class="photo-unit" id="slide1PhotoUnit">
