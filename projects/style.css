@@ -17,26 +17,17 @@ html, body {
   min-height: 100vh;
 }
 
+/* Base page layout */
 body {
-  background-size: 100% auto; /* Fits image width, allows full height to scroll */
+  background-size: 100% auto;
   background-position: top center;
   background-repeat: no-repeat;
-  background-attachment: scroll; /* Allows scrolling down to see full image */
+  background-attachment: scroll;
   font-family: 'Handwriting2', sans-serif;
   color: #2a2a2a;
 }
 
-/* Spiral Right Background (Default / Left-side sticky notes) */
-body.spiral-right {
-  background-image: url('../images/notebook-spiral-right.png');
-}
-
-/* Spiral Left Background (Right-side sticky notes) */
-body.spiral-left {
-  background-image: url('../images/notebook-spiral-left.png');
-}
-
-/* Default fallback & Left-side post-its */
+/* Default fallback & Left-side post-its (Your working path restored!) */
 body, body.spiral-right {
   background-image: url('../images/notebook-spiral-right.png');
 }
@@ -45,6 +36,7 @@ body, body.spiral-right {
 body.spiral-left {
   background-image: url('../images/notebook-spiral-left.png');
 }
+
 .page {
   max-width: 700px;
   margin: 0 auto;
