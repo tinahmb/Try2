@@ -233,9 +233,10 @@
     font-family: 'Handwriting2', sans-serif;
     font-size: 20px;
     line-height: 1.5;
-    letter-spacing: -1.5px;
+    letter-spacing: -2.2px;
+    word-spacing: 4px;
     color: rgba(34, 34, 34, 0.85);
-    text-align: left;
+    text-align: justify;
     pointer-events: none;
     user-select: none;
     overflow: hidden;
@@ -278,15 +279,112 @@
   img[src*="slide1-binder"] {
     transform: scale(1.0) translateX(-4%);
   }
+
+  /* ============================================================
+     ▼▼▼ TEMPORARY INTRO-TEXT EDITOR — delete this whole block
+     (down to the matching "▲▲▲" comment) plus the matching
+     <script> block at the bottom once the text is placed. ▼▼▼
+     ============================================================ */
+  body.intro-edit-mode .intro-text {
+    pointer-events: auto;
+    outline: 2px dashed rgba(255, 0, 150, 0.9);
+    background: rgba(255, 0, 150, 0.08);
+    user-select: text;
+    cursor: text;
+  }
+
+  .intro-move-handle, .intro-resize-handle {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border: 2px solid rgb(255, 0, 150);
+    border-radius: 50%;
+    display: none;
+    touch-action: none;
+    z-index: 30;
+  }
+  .intro-move-handle {
+    top: -12px;
+    left: -12px;
+    cursor: grab;
+  }
+  .intro-move-handle:active { cursor: grabbing; }
+  .intro-resize-handle {
+    right: -12px;
+    bottom: -12px;
+    cursor: nwse-resize;
+  }
+  body.intro-edit-mode .intro-move-handle,
+  body.intro-edit-mode .intro-resize-handle {
+    display: block;
+    pointer-events: auto;
+  }
+
+  #introEditorToggle {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 999;
+    background: rgb(255, 0, 150);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+  }
+  #introExportBtn {
+    position: fixed;
+    bottom: 16px;
+    left: 190px;
+    z-index: 999;
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+    display: none;
+  }
+  body.intro-edit-mode #introExportBtn { display: block; }
+
+  #introExportOutput {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.9);
+    color: #4ade80;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    z-index: 999;
+    display: none;
+  }
+  #introExportOutput.visible { display: block; }
+  /* ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR CSS ▲▲▲ */
 </style>
 </head>
 <body>
+
+<!-- ▼▼▼ TEMPORARY INTRO-TEXT EDITOR — delete these two buttons and
+     the output div once the text is placed and worded correctly ▼▼▼ -->
+<button id="introEditorToggle" type="button">Edit intro text</button>
+<button id="introExportBtn" type="button">Export intro text</button>
+<div id="introExportOutput"></div>
+<!-- ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR BUTTONS ▲▲▲ -->
 
 <div class="viewport">
   <div class="board" id="board">
     <div class="quad" data-quad="1">
       <img src="images/slide1-torn-paper-notebook.png" alt="">
-      <div class="intro-text">Hi, I'm Tina, a researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries. With experience in electoral monitoring and large-scale data collection across Latin America, I focus on translating complex research into insightful reports and driving strategic partnerships. I am also the founder/manager of MYOOZ Inc Music Label, where I oversee artist development and global music distribution.</div>
+      <div class="intro-text" id="introText">Hi, I'm Tina, a researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries. With experience in electoral monitoring and large-scale data collection across Latin America, I focus on translating complex research into insightful reports and driving strategic partnerships. I am also the founder/manager of MYOOZ Inc Music Label, where I oversee artist development and global music distribution.<div class="intro-move-handle"></div><div class="intro-resize-handle"></div></div>
       <img src="images/slide1-pin-blue.png" alt="">
       <img src="animations/slide1-anim1.png" alt="">
       <div class="photo-unit" id="slide1PhotoUnit">
@@ -480,6 +578,82 @@
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
 </script>
+
+<!-- ▼▼▼ TEMPORARY INTRO-TEXT EDITOR SCRIPT — delete this whole
+     <script> block once the text is placed and worded correctly.
+     Nothing above this depends on it. ▼▼▼ -->
+<script>
+(function () {
+  const toggleBtn = document.getElementById('introEditorToggle');
+  const exportBtn = document.getElementById('introExportBtn');
+  const output = document.getElementById('introExportOutput');
+  const introText = document.getElementById('introText');
+  const moveHandle = introText.querySelector('.intro-move-handle');
+  const resizeHandle = introText.querySelector('.intro-resize-handle');
+
+  toggleBtn.addEventListener('click', () => {
+    const isEditing = document.body.classList.toggle('intro-edit-mode');
+    introText.contentEditable = isEditing ? 'true' : 'false';
+  });
+
+  let dragging = false, resizing = false;
+  let startX, startY, startLeft, startTop, startW, startH;
+
+  moveHandle.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    dragging = true;
+    moveHandle.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    startLeft = parseFloat(introText.style.left);
+    startTop = parseFloat(introText.style.top);
+  });
+
+  resizeHandle.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    resizing = true;
+    resizeHandle.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    startW = parseFloat(introText.style.width);
+    startH = parseFloat(introText.style.height);
+  });
+
+  moveHandle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const rect = introText.parentElement.getBoundingClientRect(); // quad's own box
+    const dxPct = (e.clientX - startX) / rect.width * 100;
+    const dyPct = (e.clientY - startY) / rect.height * 100;
+    introText.style.left = (startLeft + dxPct) + '%';
+    introText.style.top = (startTop + dyPct) + '%';
+  });
+
+  resizeHandle.addEventListener('pointermove', (e) => {
+    if (!resizing) return;
+    const rect = introText.parentElement.getBoundingClientRect();
+    const dxPct = (e.clientX - startX) / rect.width * 100;
+    const dyPct = (e.clientY - startY) / rect.height * 100;
+    introText.style.width = Math.max(10, startW + dxPct) + '%';
+    introText.style.height = Math.max(10, startH + dyPct) + '%';
+  });
+
+  function endDrag() { dragging = false; resizing = false; }
+  moveHandle.addEventListener('pointerup', endDrag);
+  moveHandle.addEventListener('pointercancel', endDrag);
+  resizeHandle.addEventListener('pointerup', endDrag);
+  resizeHandle.addEventListener('pointercancel', endDrag);
+
+  exportBtn.addEventListener('click', () => {
+    // Grab the text content only, excluding the two handle divs.
+    const clone = introText.cloneNode(true);
+    clone.querySelectorAll('.intro-move-handle, .intro-resize-handle').forEach(h => h.remove());
+    const text = clone.textContent.trim();
+
+    output.textContent =
+      `position: left:${introText.style.left}; top:${introText.style.top}; width:${introText.style.width}; height:${introText.style.height};\n\ntext:\n${text}`;
+    output.classList.add('visible');
+  });
+})();
+</script>
+<!-- ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR SCRIPT ▲▲▲ -->
 
 </body>
 </html>
