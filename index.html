@@ -379,17 +379,27 @@
   };
 
   const board = document.getElementById('board');
-  let currentQuad = 1;
+  let currentQuad = null;
+
+  function setHash(quad) {
+    if (quad) {
+      history.replaceState(null, '', `#quad${quad}`);
+    } else {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
 
   function zoomTo(quadNumber) {
     currentQuad = quadNumber;
     board.style.transformOrigin = ORIGIN[quadNumber];
     board.style.transform = 'scale(2)';
+    setHash(quadNumber);
   }
 
   function zoomOut() {
     currentQuad = null;
     board.style.transform = 'scale(1)';
+    setHash(null);
   }
 
   function goToDestination(ownQuad, destination) {
@@ -471,16 +481,22 @@
     document.getElementById('slide3Yellow').classList.toggle('is-peeled');
   });
 
-  // Read hash from URL (e.g., #quad2 -> 2)
+  // Read hash from URL on page load (e.g. #quad2)
   const hash = window.location.hash.replace('#quad', '');
   const targetQuad = parseInt(hash, 10);
-  const startQuad = (targetQuad && ORIGIN[targetQuad]) ? targetQuad : 1;
 
-  // Apply initial zoom state based on targetQuad
-  currentQuad = startQuad;
+  // Disable transition momentarily for clean initial placement
   board.style.transition = 'none';
-  board.style.transformOrigin = ORIGIN[startQuad];
-  board.style.transform = 'scale(2)';
+
+  if (targetQuad && ORIGIN[targetQuad]) {
+    currentQuad = targetQuad;
+    board.style.transformOrigin = ORIGIN[targetQuad];
+    board.style.transform = 'scale(2)';
+  } else {
+    currentQuad = null;
+    board.style.transformOrigin = '0% 0%';
+    board.style.transform = 'scale(1)';
+  }
 
   // Force reflow and re-enable smooth transitions for click navigation
   board.offsetHeight;
