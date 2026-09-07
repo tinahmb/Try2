@@ -473,6 +473,15 @@
     document.getElementById('slide3Yellow').classList.toggle('is-peeled');
   });
 
+  // Check URL hash on load (e.g., #quad2) and auto-zoom to that quadrant
+const hash = window.location.hash.replace('#quad', '');
+const targetQuad = parseInt(hash, 10);
+
+if (targetQuad && ORIGIN[targetQuad]) {
+  zoomTo(targetQuad);
+} else {
+  zoomTo(1); // Default initial zoom if no hash is present
+}
   board.style.transition = 'none';
   board.style.transformOrigin = ORIGIN[1];
   board.style.transform = 'scale(2)';
