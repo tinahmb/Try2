@@ -18,7 +18,8 @@ html, body {
 }
 
 body {
-  background-image: url('../images/notebook-spiral-right.png') !important;
+  /* Defaults to spiral right if no variable is specified */
+  background-image: var(--notebook-bg, url('/Try2/images/notebook-spiral-right.png'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
