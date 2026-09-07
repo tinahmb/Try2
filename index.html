@@ -287,13 +287,6 @@
     background: rgba(255, 0, 150, 0.08);
     user-select: text;
     cursor: text;
-    /* FIX: overflow:hidden (needed normally, to keep long text from
-       spilling out of the box) was also clipping the move/resize
-       handles below, since they're intentionally positioned just
-       outside the box's edges (negative top/left/right/bottom) to
-       sit visibly on the corners. Clipped = invisible = unclickable,
-       which is why dragging did nothing. Only relax this in edit
-       mode; normal display keeps the original clipping behavior. */
     overflow: visible;
   }
 
@@ -613,25 +606,39 @@
     e.stopPropagation();
     dragging = true;
     moveHandle.setPointerCapture(e.pointerId);
-    startX = e.clientX; startY = e.clientY;
-    startLeft = parseFloat(introText.style.left);
-    startTop = parseFloat(introText.style.top);
+    
+    startX = e.clientX; 
+    startY = e.clientY;
+    
+    // Read computed values from CSS if inline styles don't exist yet
+    const rect = introText.parentElement.getBoundingClientRect();
+    const computed = window.getComputedStyle(introText);
+    
+    startLeft = (parseFloat(computed.left) / rect.width) * 100;
+    startTop = (parseFloat(computed.top) / rect.height) * 100;
   });
 
   resizeHandle.addEventListener('pointerdown', (e) => {
     e.stopPropagation();
     resizing = true;
     resizeHandle.setPointerCapture(e.pointerId);
-    startX = e.clientX; startY = e.clientY;
-    startW = parseFloat(introText.style.width);
-    startH = parseFloat(introText.style.height);
+    
+    startX = e.clientX; 
+    startY = e.clientY;
+    
+    // Read computed values from CSS if inline styles don't exist yet
+    const rect = introText.parentElement.getBoundingClientRect();
+    const computed = window.getComputedStyle(introText);
+    
+    startW = (parseFloat(computed.width) / rect.width) * 100;
+    startH = (parseFloat(computed.height) / rect.height) * 100;
   });
 
   moveHandle.addEventListener('pointermove', (e) => {
     if (!dragging) return;
-    const rect = introText.parentElement.getBoundingClientRect(); // quad's own box
-    const dxPct = (e.clientX - startX) / rect.width * 100;
-    const dyPct = (e.clientY - startY) / rect.height * 100;
+    const rect = introText.parentElement.getBoundingClientRect();
+    const dxPct = ((e.clientX - startX) / rect.width) * 100;
+    const dyPct = ((e.clientY - startY) / rect.height) * 100;
     introText.style.left = (startLeft + dxPct) + '%';
     introText.style.top = (startTop + dyPct) + '%';
   });
@@ -639,10 +646,10 @@
   resizeHandle.addEventListener('pointermove', (e) => {
     if (!resizing) return;
     const rect = introText.parentElement.getBoundingClientRect();
-    const dxPct = (e.clientX - startX) / rect.width * 100;
-    const dyPct = (e.clientY - startY) / rect.height * 100;
-    introText.style.width = Math.max(10, startW + dxPct) + '%';
-    introText.style.height = Math.max(10, startH + dyPct) + '%';
+    const dxPct = ((e.clientX - startX) / rect.width) * 100;
+    const dyPct = ((e.clientY - startY) / rect.height) * 100;
+    introText.style.width = Math.max(5, startW + dxPct) + '%';
+    introText.style.height = Math.max(5, startH + dyPct) + '%';
   });
 
   function endDrag() { dragging = false; resizing = false; }
@@ -656,8 +663,16 @@
     clone.querySelectorAll('.intro-move-handle, .intro-resize-handle').forEach(h => h.remove());
     const text = clone.textContent.trim();
 
+    const computed = window.getComputedStyle(introText);
+    const rect = introText.parentElement.getBoundingClientRect();
+
+    const leftPct = introText.style.left || ((parseFloat(computed.left) / rect.width) * 100).toFixed(2) + '%';
+    const topPct = introText.style.top || ((parseFloat(computed.top) / rect.height) * 100).toFixed(2) + '%';
+    const widthPct = introText.style.width || ((parseFloat(computed.width) / rect.width) * 100).toFixed(2) + '%';
+    const heightPct = introText.style.height || ((parseFloat(computed.height) / rect.height) * 100).toFixed(2) + '%';
+
     output.textContent =
-      `position: left:${introText.style.left}; top:${introText.style.top}; width:${introText.style.width}; height:${introText.style.height};\n\ntext:\n${text}`;
+      `position: left: ${leftPct}; top: ${topPct}; width: ${widthPct}; height: ${heightPct};\n\ntext:\n${text}`;
     output.classList.add('visible');
   });
 })();
