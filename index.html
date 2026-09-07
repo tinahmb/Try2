@@ -220,12 +220,15 @@
     width: 46%;
     height: 45%; /* smaller, more horizontal strip (was 74%) */
     font-family: 'Handwriting2', sans-serif;
-    font-size: 20px;
+    font-size: 15px; /* was 20px */
     line-height: 1.5;
-    letter-spacing: -2.2px;
-    word-spacing: 4px;
+    letter-spacing: -1.6px; /* eased slightly to suit the smaller size */
+    word-spacing: 3px;
     color: rgba(34, 34, 34, 0.85);
-    text-align: justify;
+    text-align: left; /* was justify — justify stretches short
+                          standalone lines (like "Hi, I'm Tina,") to
+                          fill the full width, which looks wrong for a
+                          letter format; left keeps natural line breaks */
     pointer-events: auto; /* enabled permanently now, so the user can
                               actually scroll it — was none before */
     user-select: none;
@@ -375,13 +378,9 @@
 <body>
 
 <!-- ▼▼▼ TEMPORARY INTRO-TEXT EDITOR — delete these two buttons and
-     the output div once the text is placed and worded correctly.
-     Currently DISABLED via display:none — the text box is now
-     positioned with plain fixed values and scrolls internally
-     instead, so this drag/resize tool isn't needed day-to-day. Flip
-     display back on below to re-enable it without rebuilding. ▼▼▼ -->
-<button id="introEditorToggle" type="button" style="display:none;">Edit intro text</button>
-<button id="introExportBtn" type="button" style="display:none;">Export intro text</button>
+     the output div once the text is placed and worded correctly ▼▼▼ -->
+<button id="introEditorToggle" type="button">Edit intro text</button>
+<button id="introExportBtn" type="button">Export intro text</button>
 <div id="introExportOutput"></div>
 <!-- ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR BUTTONS ▲▲▲ -->
 
@@ -389,7 +388,7 @@
   <div class="board" id="board">
     <div class="quad" data-quad="1">
       <img src="images/slide1-torn-paper-notebook.png" alt="">
-      <div class="intro-text" id="introText">Hi, I'm Tina, a researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries. With experience in electoral monitoring and large-scale data collection across Latin America, I focus on translating complex research into insightful reports and driving strategic partnerships. I am also the founder/manager of MYOOZ Inc Music Label, where I oversee artist development and global music distribution.<div class="intro-move-handle" contenteditable="false"></div><div class="intro-resize-handle" contenteditable="false"></div></div>
+      <div class="intro-text" id="introText">Hi, I'm Tina,<br><br>A researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries.<br><br>With experience in electoral monitoring and large-scale data collection across Latin America, I focus on translating complex research into insightful reports and driving strategic partnerships.<br><br>I am also the founder/manager of MYOOZ Inc Music Label, where I oversee artist development and global music distribution.<div class="intro-move-handle" contenteditable="false"></div><div class="intro-resize-handle" contenteditable="false"></div></div>
       <img src="images/slide1-pin-blue.png" alt="">
       <img src="animations/slide1-anim1.png" alt="">
       <div class="photo-unit" id="slide1PhotoUnit">
