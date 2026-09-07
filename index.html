@@ -367,15 +367,14 @@
     4: `0% ${bottomRowOriginY}%`,
   };
 
-  // Explicit mappings for navigation arrows
   const ARROW_DESTINATION = {
-    '1-left':  4, // "Board" button on Quad 1 goes to Quad 4
+    '1-left':  'board', // Zoom out to full board view
     '1-right': 2,
     '2-left':  1,
     '2-right': 3,
     '3-left':  4,
     '3-right': 2,
-    '4-left':  3, // "Board" button on Quad 4 goes to Quad 3
+    '4-left':  'board', // Zoom out to full board view
     '4-right': 3,
   };
 
@@ -387,6 +386,11 @@
     history.replaceState(null, '', `#quad${quadNumber}`);
   }
 
+  function zoomOut() {
+    board.style.transform = 'scale(1)';
+    history.replaceState(null, '', '#board');
+  }
+
   document.querySelectorAll('.arrow-hit').forEach(hit => {
     const quadNumber = parseInt(hit.closest('.quad').dataset.quad, 10);
     const side = hit.dataset.side;
@@ -394,7 +398,11 @@
     const destination = ARROW_DESTINATION[key];
 
     hit.addEventListener('click', () => {
-      zoomTo(destination);
+      if (destination === 'board') {
+        zoomOut();
+      } else {
+        zoomTo(destination);
+      }
     });
   });
 
@@ -454,15 +462,19 @@
     document.getElementById('slide3Yellow').classList.toggle('is-peeled');
   });
 
-  // Read hash from URL on page load (defaults to Quad 1 ALWAYS if no hash)
-  const hash = window.location.hash.replace('#quad', '');
-  const initialQuad = parseInt(hash, 10) || 1;
-
-  // Disable transition momentarily for clean initial placement
+  // Handle URL Hash positioning
+  const rawHash = window.location.hash.toLowerCase();
   board.style.transition = 'none';
-  zoomTo(initialQuad);
 
-  // Force reflow and re-enable smooth transitions for click navigation
+  if (rawHash === '#board') {
+    zoomOut();
+  } else {
+    const quadMatch = rawHash.match(/#quad([1-4])/);
+    const targetQuad = quadMatch ? parseInt(quadMatch[1], 10) : 1; // Defaults to Quad 1 ALWAYS if no hash
+    zoomTo(targetQuad);
+  }
+
+  // Force reflow and re-enable smooth transitions
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
 </script>
