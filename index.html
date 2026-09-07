@@ -189,12 +189,6 @@
     height: 40%;
   }
 
-  /* The outer box keeps the same position/size/wrapping as before,
-     but is no longer itself the click target — pointer-events:none
-     here so clicks pass through the empty padding around the text.
-     The inner .sticky-label-text link (added in the HTML) is sized
-     to the actual rendered text via display:inline-block, so only
-     the glyphs themselves are clickable, not the whole box. */
   .sticky-label {
     position: absolute;
     display: flex;
@@ -216,14 +210,9 @@
     user-select: none;
     line-height: 1.15;
     position: relative;
-    z-index: 20; /* sits above roll-hit so tapping the text navigates
-                    instead of triggering the peel toggle beneath it */
+    z-index: 20;
   }
 
-  /* Intro paragraph on the notebook paper — left-aligned body copy,
-     not a link, so it's a separate rule from .sticky-label-text.
-     Nudge the positioning values below once you see it live against
-     the real notebook-paper artwork. */
   .intro-text {
     position: absolute;
     left: 6%;
@@ -291,6 +280,14 @@
     background: rgba(255, 0, 150, 0.08);
     user-select: text;
     cursor: text;
+    /* FIX: overflow:hidden (needed normally, to keep long text from
+       spilling out of the box) was also clipping the move/resize
+       handles below, since they're intentionally positioned just
+       outside the box's edges (negative top/left/right/bottom) to
+       sit visibly on the corners. Clipped = invisible = unclickable,
+       which is why dragging did nothing. Only relax this in edit
+       mode; normal display keeps the original clipping behavior. */
+    overflow: visible;
   }
 
   .intro-move-handle, .intro-resize-handle {
@@ -642,7 +639,6 @@
   resizeHandle.addEventListener('pointercancel', endDrag);
 
   exportBtn.addEventListener('click', () => {
-    // Grab the text content only, excluding the two handle divs.
     const clone = introText.cloneNode(true);
     clone.querySelectorAll('.intro-move-handle, .intro-resize-handle').forEach(h => h.remove());
     const text = clone.textContent.trim();
