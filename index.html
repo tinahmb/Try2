@@ -219,13 +219,10 @@
     font-family: 'Handwriting2', sans-serif;
     font-size: 12px; /* was 20px */
     line-height: 1.5;
-    letter-spacing: -1.5px; /* eased slightly to suit the smaller size */
+    letter-spacing: -1.4px; /* eased slightly to suit the smaller size */
     word-spacing: 3px;
     color: rgba(34, 34, 34, 0.85);
-    text-align: justify; /* was justify — justify stretches short
-                          standalone lines (like "Hi, I'm Tina,") to
-                          fill the full width, which looks wrong for a
-                          letter format; left keeps natural line breaks */
+    text-align: justify;
     pointer-events: auto; /* enabled permanently now, so the user can
                               actually scroll it — was none before */
     user-select: none;
@@ -273,106 +270,9 @@
     transform: scale(1.0) translateX(-4%);
   }
 
-  /* ============================================================
-     ▼▼▼ TEMPORARY INTRO-TEXT EDITOR — delete this whole block
-     (down to the matching "▲▲▲" comment) plus the matching
-     <script> block at the bottom once the text is placed. ▼▼▼
-     ============================================================ */
-  body.intro-edit-mode .intro-text {
-    pointer-events: auto;
-    outline: 2px dashed rgba(255, 0, 150, 0.9);
-    background: rgba(255, 0, 150, 0.08);
-    user-select: text;
-    cursor: text;
-    overflow: visible;
-  }
-
-  .intro-move-handle, .intro-resize-handle {
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    background: #fff;
-    border: 2px solid rgb(255, 0, 150);
-    border-radius: 50%;
-    display: none;
-    touch-action: none;
-    z-index: 30;
-  }
-  .intro-move-handle {
-    top: -12px;
-    left: -12px;
-    cursor: grab;
-  }
-  .intro-move-handle:active { cursor: grabbing; }
-  .intro-resize-handle {
-    right: -12px;
-    bottom: -12px;
-    cursor: nwse-resize;
-  }
-  body.intro-edit-mode .intro-move-handle,
-  body.intro-edit-mode .intro-resize-handle {
-    display: block;
-    pointer-events: auto;
-  }
-
-  #introEditorToggle {
-    position: fixed;
-    bottom: 16px;
-    left: 16px;
-    z-index: 999;
-    background: rgb(255, 0, 150);
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-family: sans-serif;
-    font-size: 14px;
-  }
-  #introExportBtn {
-    position: fixed;
-    bottom: 16px;
-    left: 190px;
-    z-index: 999;
-    background: #222;
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-family: sans-serif;
-    font-size: 14px;
-    display: none;
-  }
-  body.intro-edit-mode #introExportBtn { display: block; }
-
-  #introExportOutput {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    max-height: 60vh;
-    overflow-y: auto;
-    background: rgba(0,0,0,0.9);
-    color: #4ade80;
-    font-family: monospace;
-    font-size: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    white-space: pre-wrap;
-    z-index: 999;
-    display: none;
-  }
-  #introExportOutput.visible { display: block; }
-  /* ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR CSS ▲▲▲ */
 </style>
 </head>
 <body>
-
-<!-- ▼▼▼ TEMPORARY INTRO-TEXT EDITOR — delete these two buttons and
-     the output div once the text is placed and worded correctly ▼▼▼ -->
-<button id="introEditorToggle" type="button">Edit intro text</button>
-<button id="introExportBtn" type="button">Export intro text</button>
-<div id="introExportOutput"></div>
-<!-- ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR BUTTONS ▲▲▲ -->
 
 <div class="viewport">
   <div class="board" id="board">
@@ -578,103 +478,6 @@
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
 </script>
-
-<!-- ▼▼▼ TEMPORARY INTRO-TEXT EDITOR SCRIPT — delete this whole
-     <script> block once the text is placed and worded correctly.
-     Nothing above this depends on it. ▼▼▼ -->
-<script>
-(function () {
-  const toggleBtn = document.getElementById('introEditorToggle');
-  const exportBtn = document.getElementById('introExportBtn');
-  const output = document.getElementById('introExportOutput');
-  const introText = document.getElementById('introText');
-  const moveHandle = introText.querySelector('.intro-move-handle');
-  const resizeHandle = introText.querySelector('.intro-resize-handle');
-
-  toggleBtn.addEventListener('click', () => {
-    const isEditing = document.body.classList.toggle('intro-edit-mode');
-    introText.contentEditable = isEditing ? 'true' : 'false';
-  });
-
-  let dragging = false, resizing = false;
-  let startX, startY, startLeft, startTop, startW, startH;
-
-  moveHandle.addEventListener('pointerdown', (e) => {
-    e.stopPropagation();
-    dragging = true;
-    moveHandle.setPointerCapture(e.pointerId);
-    
-    startX = e.clientX; 
-    startY = e.clientY;
-    
-    // Read computed values from CSS if inline styles don't exist yet
-    const rect = introText.parentElement.getBoundingClientRect();
-    const computed = window.getComputedStyle(introText);
-    
-    startLeft = (parseFloat(computed.left) / rect.width) * 100;
-    startTop = (parseFloat(computed.top) / rect.height) * 100;
-  });
-
-  resizeHandle.addEventListener('pointerdown', (e) => {
-    e.stopPropagation();
-    resizing = true;
-    resizeHandle.setPointerCapture(e.pointerId);
-    
-    startX = e.clientX; 
-    startY = e.clientY;
-    
-    // Read computed values from CSS if inline styles don't exist yet
-    const rect = introText.parentElement.getBoundingClientRect();
-    const computed = window.getComputedStyle(introText);
-    
-    startW = (parseFloat(computed.width) / rect.width) * 100;
-    startH = (parseFloat(computed.height) / rect.height) * 100;
-  });
-
-  moveHandle.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    const rect = introText.parentElement.getBoundingClientRect();
-    const dxPct = ((e.clientX - startX) / rect.width) * 100;
-    const dyPct = ((e.clientY - startY) / rect.height) * 100;
-    introText.style.left = (startLeft + dxPct) + '%';
-    introText.style.top = (startTop + dyPct) + '%';
-  });
-
-  resizeHandle.addEventListener('pointermove', (e) => {
-    if (!resizing) return;
-    const rect = introText.parentElement.getBoundingClientRect();
-    const dxPct = ((e.clientX - startX) / rect.width) * 100;
-    const dyPct = ((e.clientY - startY) / rect.height) * 100;
-    introText.style.width = Math.max(5, startW + dxPct) + '%';
-    introText.style.height = Math.max(5, startH + dyPct) + '%';
-  });
-
-  function endDrag() { dragging = false; resizing = false; }
-  moveHandle.addEventListener('pointerup', endDrag);
-  moveHandle.addEventListener('pointercancel', endDrag);
-  resizeHandle.addEventListener('pointerup', endDrag);
-  resizeHandle.addEventListener('pointercancel', endDrag);
-
-  exportBtn.addEventListener('click', () => {
-    const clone = introText.cloneNode(true);
-    clone.querySelectorAll('.intro-move-handle, .intro-resize-handle').forEach(h => h.remove());
-    const text = clone.textContent.trim();
-
-    const computed = window.getComputedStyle(introText);
-    const rect = introText.parentElement.getBoundingClientRect();
-
-    const leftPct = introText.style.left || ((parseFloat(computed.left) / rect.width) * 100).toFixed(2) + '%';
-    const topPct = introText.style.top || ((parseFloat(computed.top) / rect.height) * 100).toFixed(2) + '%';
-    const widthPct = introText.style.width || ((parseFloat(computed.width) / rect.width) * 100).toFixed(2) + '%';
-    const heightPct = introText.style.height || ((parseFloat(computed.height) / rect.height) * 100).toFixed(2) + '%';
-
-    output.textContent =
-      `position: left: ${leftPct}; top: ${topPct}; width: ${widthPct}; height: ${heightPct};\n\ntext:\n${text}`;
-    output.classList.add('visible');
-  });
-})();
-</script>
-<!-- ▲▲▲ END TEMPORARY INTRO-TEXT EDITOR SCRIPT ▲▲▲ -->
 
 </body>
 </html>
