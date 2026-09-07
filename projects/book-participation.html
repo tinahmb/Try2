@@ -21,5 +21,21 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+  <script>
+    const spiralLeftPages = [
+      'livro-povos-originarios.html',
+      'book-participation.html',
+      'electoral-observation-project.html',
+      'myooz-inc.html'
+    ];
+
+    const currentPage = window.location.pathname.split('/').pop();
+
+    if (spiralLeftPages.includes(currentPage)) {
+      document.body.classList.add('spiral-left');
+    } else {
+      document.body.classList.add('spiral-right');
+    }
+  </script>
 </body>
 </html>
