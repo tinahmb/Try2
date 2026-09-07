@@ -189,12 +189,22 @@
     height: 40%;
   }
 
+  /* The outer box keeps the same position/size/wrapping as before,
+     but is no longer itself the click target — pointer-events:none
+     here so clicks pass through the empty padding around the text.
+     The inner .sticky-label-text link (added in the HTML) is sized
+     to the actual rendered text via display:inline-block, so only
+     the glyphs themselves are clickable, not the whole box. */
   .sticky-label {
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    pointer-events: none;
+  }
+  .sticky-label-text {
+    display: inline-block;
     font-family: 'Handwriting2', sans-serif;
     font-size: 28px;
     letter-spacing: -3.6px;
@@ -205,10 +215,9 @@
     text-decoration: none;
     user-select: none;
     line-height: 1.15;
-    z-index: 20; /* sits above roll-hit so tapping the label text
-                    navigates instead of triggering the peel toggle
-                    beneath it; tapping the sticky OUTSIDE the label's
-                    own box still peels/closes as before */
+    position: relative;
+    z-index: 20; /* sits above roll-hit so tapping the text navigates
+                    instead of triggering the peel toggle beneath it */
   }
 
   .arrow-hit[data-side="left"]  { top: 70%; left: 8%;  width: 18%; height: 14%; }
@@ -275,17 +284,17 @@
       <img src="images/slide2-tape.png" alt="">
       <img src="images/slide2-sticky-arrow-right.png" alt="">
       <img src="images/slide2-sticky-blue.png" alt="">
-      <a class="sticky-label" href="projects/brazilian-citizen-labs.html" data-label="Brazilian Citizen Labs" style="left:13.888889%; top:22.527705%; width:36%; height:60%;">Brazilian Citizen Labs</a>
+      <span class="sticky-label" data-label="Brazilian Citizen Labs" style="left:13.888889%; top:22.527705%; width:36%; height:60%;"><a class="sticky-label-text" href="projects/brazilian-citizen-labs.html">Brazilian Citizen Labs</a></span>
       <div class="arrow-hit" data-side="right"><span class="arrow-label" data-label="Quad2 Next" style="left:10%; top:15%; width:80%; height:70%;">Next</span></div>
       <div class="roll-unit" id="slide2PinkBack">
         <img src="images/slide2-sticky-pink-back.png" alt="">
         <div class="roll-hit"></div>
-        <a class="sticky-label" href="projects/livro-povos-originarios.html" data-label="Livro Povos Originarios" style="left:52.37037%; top:16.952507%; width:38%; height:71%; font-size: 22px; letter-spacing: -1.8px;">Livro:<br>Povos originários<br>do Brasil</a>
+        <span class="sticky-label" data-label="Livro Povos Originarios" style="left:52.37037%; top:16.952507%; width:38%; height:71%;"><a class="sticky-label-text" href="projects/livro-povos-originarios.html" style="font-size: 22px; letter-spacing: -1.8px;">Livro:<br>Povos originários<br>do Brasil</a></span>
       </div>
       <div class="roll-unit" id="slide2PinkFront">
         <img src="images/slide2-sticky-pink-front.png" alt="">
         <div class="roll-hit"></div>
-        <a class="sticky-label" href="projects/book-participation.html" data-label="Book Participation" style="left:52.37037%; top:20%; width:36%; height:55%;">Book Participation</a>
+        <span class="sticky-label" data-label="Book Participation" style="left:52.37037%; top:20%; width:36%; height:55%;"><a class="sticky-label-text" href="projects/book-participation.html">Book Participation</a></span>
       </div>
       <img src="images/slide2-sticky-arrow-left.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label" data-label="Quad2 Back" style="left:10%; top:15%; width:96.625016%; height:77.796102%;">Back</span></div>
@@ -296,7 +305,7 @@
       <div class="roll-unit" id="slide3Yellow">
         <img src="images/slide3-sticky-yellow.png" alt="">
         <div class="roll-hit is-locked"></div>
-        <a class="sticky-label" href="projects/selected-rough-dialogues.html" data-label="Selected Rough Dialogues" style="left:15.444444%; top:34.551451%; width:34%; height:40%;">Selected Rough Dialogues</a>
+        <span class="sticky-label" data-label="Selected Rough Dialogues" style="left:15.444444%; top:34.551451%; width:34%; height:40%;"><a class="sticky-label-text" href="projects/selected-rough-dialogues.html">Selected Rough Dialogues</a></span>
       </div>
       <div class="photo-unit" id="slide3PaperUnit">
         <img src="images/slide3-torn-paper-scribble.png" alt="">
@@ -306,7 +315,7 @@
         <img src="images/slide3-paperclip.png" alt="">
       </div>
       <img src="images/slide3-sticky-green.png" alt="">
-      <a class="sticky-label" href="projects/electoral-observation-project.html" data-label="Electoral Observation Project" style="left:54.055556%; top:24.902375%; width:36%; height:60%;">Electoral Observation Project</a>
+      <span class="sticky-label" data-label="Electoral Observation Project" style="left:54.055556%; top:24.902375%; width:36%; height:60%;"><a class="sticky-label-text" href="projects/electoral-observation-project.html">Electoral Observation Project</a></span>
       <img src="images/slide3-sticky-arrow-left.png" alt="">
       <img src="images/slide3-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label" data-label="Quad3 Next" style="left:10%; top:15%; width:80%; height:70%;">Next</span></div>
@@ -314,9 +323,9 @@
     </div>
     <div class="quad" data-quad="4">
       <img src="images/slide4-sticky-magenta.png" alt="">
-      <a class="sticky-label" href="projects/hr-index.html" data-label="HR Index" style="left:9.944444%; top:27.124011%; width:36%; height:55%;">HR Index</a>
+      <span class="sticky-label" data-label="HR Index" style="left:9.944444%; top:27.124011%; width:36%; height:55%;"><a class="sticky-label-text" href="projects/hr-index.html">HR Index</a></span>
       <img src="images/slide4-sticky-purple.png" alt="">
-      <a class="sticky-label" href="projects/myooz-inc.html" data-label="MYOOZ InC" style="left:54.287037%; top:27.585752%; width:36%; height:55%;">MYOOZ InC</a>
+      <span class="sticky-label" data-label="MYOOZ InC" style="left:54.287037%; top:27.585752%; width:36%; height:55%;"><a class="sticky-label-text" href="projects/myooz-inc.html">MYOOZ InC</a></span>
       <img src="images/slide4-sticky-arrow-left.png" alt="">
       <img src="images/slide4-sticky-arrow-right.png" alt="">
       <div class="arrow-hit" data-side="left"><span class="arrow-label is-hidden-label" data-label="Quad4 Board" style="left:10%; top:15%; width:80%; height:70%;">Board</span></div>
