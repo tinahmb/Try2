@@ -5,6 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brazilian Citizen Labs</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* --- Temporary drag-mode styles, remove once positions are locked in --- */
+    .project-body {
+      position: relative;
+      min-height: 600px; /* gives bubbles room to move around; adjust as needed */
+    }
+    .body-bubble.draggable {
+      position: absolute;
+      cursor: grab;
+      max-width: 320px;
+      background: rgba(255, 255, 0, 0.15); /* light highlight so you can see the box while positioning */
+      padding: 6px 10px;
+      border: 1px dashed rgba(0,0,0,0.3);
+      user-select: none;
+    }
+    .body-bubble.draggable.dragging {
+      cursor: grabbing;
+      z-index: 100;
+    }
+    .bubble-coords {
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-family: monospace;
+      font-size: 11px;
+      background: #222;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 3px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
   <div class="back-flag">
@@ -14,10 +47,10 @@
   <div class="page">
     <h1 class="project-title">Brazilian Citizen Labs</h1>
     <p class="project-subtitle">Project overview</p>
-    <div class="project-body">
-      <p class="body-bubble">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</p>
-      <p class="body-bubble">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.</p>
-      <p class="body-bubble">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.</p>
+    <div class="project-body" id="projectBody">
+      <p class="body-bubble draggable" id="bubble1">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</p>
+      <p class="body-bubble draggable" id="bubble2">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.</p>
+      <p class="body-bubble draggable" id="bubble3">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.</p>
     </div>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
@@ -36,6 +69,59 @@
     } else {
       document.body.classList.add('spiral-right');
     }
-  </script>
-</body>
-</html>
+
+    // --- Drag-to-position logic for text bubbles ---
+    const container = document.getElementById('projectBody');
+
+    function makeDraggable(el) {
+      let offsetX, offsetY, dragging = false;
+
+      // Give each bubble a live coordinate readout
+      const coords = document.createElement('div');
+      coords.className = 'bubble-coords';
+      el.appendChild(coords);
+
+      function updateCoords() {
+        coords.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}`;
+      }
+
+      function startDrag(clientX, clientY) {
+        dragging = true;
+        el.classList.add('dragging');
+        const rect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
+        if (!el.style.left) {
+          el.style.left = (rect.left - containerRect.left) + 'px';
+          el.style.top = (rect.top - containerRect.top) + 'px';
+        }
+      }
+
+      function moveDrag(clientX, clientY) {
+        if (!dragging) return;
+        const containerRect = container.getBoundingClientRect();
+        let newLeft = clientX - containerRect.left - offsetX;
+        let newTop = clientY - containerRect.top - offsetY;
+        el.style.left = newLeft + 'px';
+        el.style.top = newTop + 'px';
+        updateCoords();
+      }
+
+      function endDrag() {
+        dragging = false;
+        el.classList.remove('dragging');
+      }
+
+      // Mouse events
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startDrag(e.clientX, e.clientY);
+      });
+      document.addEventListener('mousemove', (e) => {
+        moveDrag(e.clientX, e.clientY);
+      });
+      document.addEventListener('mouseup', endDrag);
+
+      // Touch events
+      el.addEventListener('touchstart', (e) => {
