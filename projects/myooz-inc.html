@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MYOOZ InC</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYOOZ InC</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="back-link" href="../index.html#quad4">&larr; Board</a>
+  <div class="back-flag">
+    <img src="../images/flag-myooz-inc.png" alt="">
+    <a href="../index.html#quad4" aria-label="Back to board" style="left:77.68%; top:15.25%; width:17.67%; height:3.94%;"></a>
+  </div>
   <div class="page">
     <h1 class="project-title">MYOOZ InC</h1>
     <p class="project-subtitle">Project overview</p>
@@ -18,7 +21,6 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
-
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -26,9 +28,7 @@
       'electoral-observation-project.html',
       'myooz-inc.html'
     ];
-
     const currentPage = window.location.pathname.split('/').pop();
-
     if (spiralLeftPages.includes(currentPage)) {
       document.body.classList.add('spiral-left');
     } else {
