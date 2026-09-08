@@ -6,115 +6,68 @@
   <title>Brazilian Citizen Labs</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* --- Temporary drag/resize-mode styles, remove once positions are locked in --- */
-    html, body {
-      overflow-x: hidden;
-    }
+    html, body { overflow-x: hidden; }
     .page {
       position: relative;
-      min-height: 1000px; /* generous room to drag things anywhere, including above content */
+      min-height: 1000px;
       overflow: visible;
     }
     .draggable {
       position: absolute;
       cursor: grab;
-      width: 320px; /* fixed width so font-size resize doesn't reflow width oddly */
+      width: 320px;
       background: rgba(255, 255, 0, 0.15);
       padding: 6px 10px;
       border: 1px dashed rgba(0,0,0,0.3);
       user-select: none;
       margin: 0;
       box-sizing: border-box;
+      touch-action: none;
     }
-    .draggable.dragging {
-      cursor: grabbing;
-      z-index: 100;
-    }
+    .draggable.dragging { cursor: grabbing; z-index: 100; }
     .bubble-coords {
       position: absolute;
-      top: -20px;
-      left: 0;
+      top: -20px; left: 0;
       font-family: monospace;
       font-size: 11px;
-      background: #222;
-      color: #fff;
-      padding: 2px 5px;
-      border-radius: 3px;
-      pointer-events: none;
-      white-space: nowrap;
+      background: #222; color: #fff;
+      padding: 2px 5px; border-radius: 3px;
+      pointer-events: none; white-space: nowrap;
     }
     .resize-handle {
       position: absolute;
-      right: -6px;
-      bottom: -6px;
-      width: 14px;
-      height: 14px;
-      background: #0f0;
-      border: 1px solid #060;
-      border-radius: 50%;
-      cursor: nwse-resize;
+      right: -6px; bottom: -6px;
+      width: 14px; height: 14px;
+      background: #0f0; border: 1px solid #060;
+      border-radius: 50%; cursor: nwse-resize;
       z-index: 5;
     }
     .font-controls {
-      position: absolute;
-      top: -20px;
-      right: 0;
-      display: flex;
-      gap: 2px;
+      position: absolute; top: -20px; right: 0;
+      display: flex; gap: 2px;
     }
     .font-controls button {
-      font-family: monospace;
-      font-size: 11px;
-      width: 18px;
-      height: 18px;
-      line-height: 1;
-      background: #222;
-      color: #0f0;
-      border: none;
-      border-radius: 2px;
-      cursor: pointer;
-      padding: 0;
+      font-family: monospace; font-size: 11px;
+      width: 18px; height: 18px; line-height: 1;
+      background: #222; color: #0f0; border: none;
+      border-radius: 2px; cursor: pointer; padding: 0;
     }
-
-    /* --- Export panel --- */
     #coordExportPanel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      max-height: 40vh;
-      overflow-y: auto;
-      background: #111;
-      color: #0f0;
-      font-family: monospace;
-      font-size: 13px;
-      padding: 12px;
-      box-sizing: border-box;
-      z-index: 999;
-      border-top: 3px solid #0f0;
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      max-height: 40vh; overflow-y: auto;
+      background: #111; color: #0f0;
+      font-family: monospace; font-size: 13px;
+      padding: 12px; box-sizing: border-box;
+      z-index: 999; border-top: 3px solid #0f0;
     }
-    #coordExportPanel h3 {
-      margin: 0 0 8px 0;
-      color: #fff;
-      font-size: 14px;
-    }
-    #coordExportPanel pre {
-      white-space: pre-wrap;
-      margin: 0 0 10px 0;
-    }
+    #coordExportPanel h3 { margin: 0 0 8px 0; color: #fff; font-size: 14px; }
+    #coordExportPanel pre { white-space: pre-wrap; margin: 0 0 10px 0; }
     #copyCoordsBtn {
-      background: #0f0;
-      color: #111;
-      border: none;
-      padding: 6px 14px;
-      font-family: monospace;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 4px;
+      background: #0f0; color: #111; border: none;
+      padding: 6px 14px; font-family: monospace;
+      font-weight: bold; cursor: pointer; border-radius: 4px;
     }
-    #copyCoordsBtn:active {
-      opacity: 0.7;
-    }
+    #copyCoordsBtn:active { opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -123,19 +76,19 @@
     <a href="../index.html#quad2" aria-label="Back to board" style="left:4.65%; top:2.17%; width:17.98%; height:4.00%;"></a>
   </div>
   <div class="page" id="pageContainer">
-    <h1 class="project-title draggable" id="titleEl">Brazilian Citizen Labs
-      <div class="resize-handle"></div>
+    <h1 class="project-title draggable" id="titleEl" data-drag="1">Brazilian Citizen Labs
+      <div class="resize-handle" data-resize="1"></div>
     </h1>
     <p class="project-subtitle">Project overview</p>
     <div class="project-body" id="projectBody">
-      <p class="body-bubble draggable" id="bubble1">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.
-        <div class="resize-handle"></div>
+      <p class="body-bubble draggable" id="bubble1" data-drag="1">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.
+        <div class="resize-handle" data-resize="1"></div>
       </p>
-      <p class="body-bubble draggable" id="bubble2">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.
-        <div class="resize-handle"></div>
+      <p class="body-bubble draggable" id="bubble2" data-drag="1">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.
+        <div class="resize-handle" data-resize="1"></div>
       </p>
-      <p class="body-bubble draggable" id="bubble3">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.
-        <div class="resize-handle"></div>
+      <p class="body-bubble draggable" id="bubble3" data-drag="1">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.
+        <div class="resize-handle" data-resize="1"></div>
       </p>
     </div>
     <div class="project-links">
@@ -163,154 +116,143 @@
       document.body.classList.add('spiral-right');
     }
 
-    // --- Drag + resize logic ---
     const pageContainer = document.getElementById('pageContainer');
     const coordOutput = document.getElementById('coordOutput');
 
-    function refreshExportPanel() {
-      let lines = [];
-      document.querySelectorAll('.draggable').forEach(el => {
-        const id = el.id;
-        const left = el.style.left || '0px';
-        const top = el.style.top || '0px';
-        const fontSize = window.getComputedStyle(el).fontSize;
-        lines.push(`#${id} { left: ${left}; top: ${top}; font-size: ${fontSize}; }`);
-      });
-      coordOutput.textContent = lines.join('\n');
-    }
-
-    function makeDraggable(el) {
-      let offsetX, offsetY, dragging = false;
-
+    // Add coord readout + font controls to every draggable element up front
+    document.querySelectorAll('.draggable').forEach(el => {
       const coords = document.createElement('div');
       coords.className = 'bubble-coords';
       el.appendChild(coords);
 
-      // Font size +/- controls
       const fontControls = document.createElement('div');
       fontControls.className = 'font-controls';
-      const minusBtn = document.createElement('button');
-      minusBtn.textContent = '−';
-      const plusBtn = document.createElement('button');
-      plusBtn.textContent = '+';
-      fontControls.appendChild(minusBtn);
-      fontControls.appendChild(plusBtn);
+      fontControls.innerHTML = `<button data-action="minus">−</button><button data-action="plus">+</button>`;
       el.appendChild(fontControls);
+    });
 
-      function currentFontSize() {
-        return parseFloat(window.getComputedStyle(el).fontSize);
+    function updateCoordsLabel(el) {
+      const label = el.querySelector('.bubble-coords');
+      if (label) {
+        label.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}, font: ${window.getComputedStyle(el).fontSize}`;
       }
-      minusBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        el.style.fontSize = Math.max(8, currentFontSize() - 1) + 'px';
-        updateCoords();
-        refreshExportPanel();
-      });
-      plusBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        el.style.fontSize = (currentFontSize() + 1) + 'px';
-        updateCoords();
-        refreshExportPanel();
-      });
-
-      function updateCoords() {
-        coords.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}, font: ${window.getComputedStyle(el).fontSize}`;
-      }
-
-      function startDrag(clientX, clientY) {
-        dragging = true;
-        el.classList.add('dragging');
-        const rect = el.getBoundingClientRect();
-        const containerRect = pageContainer.getBoundingClientRect();
-        offsetX = clientX - rect.left;
-        offsetY = clientY - rect.top;
-        if (!el.style.left) {
-          el.style.left = (rect.left - containerRect.left) + 'px';
-          el.style.top = (rect.top - containerRect.top) + 'px';
-        }
-      }
-
-      function moveDrag(clientX, clientY) {
-        if (!dragging) return;
-        const containerRect = pageContainer.getBoundingClientRect();
-        // No clamping - allow negative values so bubbles can go above/left of the page origin
-        let newLeft = clientX - containerRect.left - offsetX;
-        let newTop = clientY - containerRect.top - offsetY;
-        el.style.left = newLeft + 'px';
-        el.style.top = newTop + 'px';
-        updateCoords();
-        refreshExportPanel();
-      }
-
-      function endDrag() {
-        dragging = false;
-        el.classList.remove('dragging');
-      }
-
-      el.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('resize-handle') || e.target.tagName === 'BUTTON') return;
-        e.preventDefault();
-        startDrag(e.clientX, e.clientY);
-      });
-      document.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
-      document.addEventListener('mouseup', endDrag);
-
-      el.addEventListener('touchstart', (e) => {
-        if (e.target.classList.contains('resize-handle') || e.target.tagName === 'BUTTON') return;
-        const touch = e.touches[0];
-        startDrag(touch.clientX, touch.clientY);
-      });
-      document.addEventListener('touchmove', (e) => {
-        if (dragging) e.preventDefault();
-        const touch = e.touches[0];
-        moveDrag(touch.clientX, touch.clientY);
-      });
-      document.addEventListener('touchend', endDrag);
-
-      // --- Resize handle: drag bottom-right dot to scale font-size proportionally to width drag ---
-      const handle = el.querySelector('.resize-handle');
-      let resizing = false;
-      let startX, startFontSize;
-
-      function startResize(clientX) {
-        resizing = true;
-        startX = clientX;
-        startFontSize = currentFontSize();
-      }
-      function moveResize(clientX) {
-        if (!resizing) return;
-        const delta = clientX - startX;
-        const newSize = Math.max(8, startFontSize + delta * 0.15);
-        el.style.fontSize = newSize + 'px';
-        updateCoords();
-        refreshExportPanel();
-      }
-      function endResize() {
-        resizing = false;
-      }
-
-      handle.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        startResize(e.clientX);
-      });
-      document.addEventListener('mousemove', (e) => moveResize(e.clientX));
-      document.addEventListener('mouseup', endResize);
-
-      handle.addEventListener('touchstart', (e) => {
-        e.stopPropagation();
-        startResize(e.touches[0].clientX);
-      });
-      document.addEventListener('touchmove', (e) => {
-        if (resizing) { e.preventDefault(); moveResize(e.touches[0].clientX); }
-      });
-      document.addEventListener('touchend', endResize);
-
-      updateCoords();
     }
 
-    document.querySelectorAll('.draggable').forEach(makeDraggable);
+    function refreshExportPanel() {
+      let lines = [];
+      document.querySelectorAll('.draggable').forEach(el => {
+        lines.push(`#${el.id} { left: ${el.style.left || '0px'}; top: ${el.style.top || '0px'}; font-size: ${window.getComputedStyle(el).fontSize}; }`);
+      });
+      coordOutput.textContent = lines.join('\n');
+    }
+
+    // Initialize left/top for every draggable based on its current rendered position
+    document.querySelectorAll('.draggable').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const containerRect = pageContainer.getBoundingClientRect();
+      el.style.left = (rect.left - containerRect.left) + 'px';
+      el.style.top = (rect.top - containerRect.top) + 'px';
+      updateCoordsLabel(el);
+    });
     refreshExportPanel();
+
+    // --- Single shared drag handler via event delegation ---
+    let activeDrag = null; // { el, offsetX, offsetY }
+    let activeResize = null; // { el, startX, startFontSize }
+
+    pageContainer.addEventListener('mousedown', (e) => {
+      if (e.target.dataset.resize) {
+        e.stopPropagation();
+        e.preventDefault();
+        const el = e.target.closest('.draggable');
+        activeResize = { el, startX: e.clientX, startFontSize: parseFloat(window.getComputedStyle(el).fontSize) };
+        return;
+      }
+      if (e.target.tagName === 'BUTTON') return; // let font +/- buttons work
+      const el = e.target.closest('.draggable');
+      if (!el) return;
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      activeDrag = { el, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
+      el.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (activeDrag) {
+        const containerRect = pageContainer.getBoundingClientRect();
+        const el = activeDrag.el;
+        el.style.left = (e.clientX - containerRect.left - activeDrag.offsetX) + 'px';
+        el.style.top = (e.clientY - containerRect.top - activeDrag.offsetY) + 'px';
+        updateCoordsLabel(el);
+        refreshExportPanel();
+      } else if (activeResize) {
+        const el = activeResize.el;
+        const delta = e.clientX - activeResize.startX;
+        el.style.fontSize = Math.max(8, activeResize.startFontSize + delta * 0.15) + 'px';
+        updateCoordsLabel(el);
+        refreshExportPanel();
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (activeDrag) activeDrag.el.classList.remove('dragging');
+      activeDrag = null;
+      activeResize = null;
+    });
+
+    // Touch support
+    pageContainer.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+      if (target.dataset.resize) {
+        const el = target.closest('.draggable');
+        activeResize = { el, startX: touch.clientX, startFontSize: parseFloat(window.getComputedStyle(el).fontSize) };
+        return;
+      }
+      if (target.tagName === 'BUTTON') return;
+      const el = target.closest('.draggable');
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      activeDrag = { el, offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top };
+      el.classList.add('dragging');
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!activeDrag && !activeResize) return;
+      const touch = e.touches[0];
+      if (activeDrag) {
+        const containerRect = pageContainer.getBoundingClientRect();
+        const el = activeDrag.el;
+        el.style.left = (touch.clientX - containerRect.left - activeDrag.offsetX) + 'px';
+        el.style.top = (touch.clientY - containerRect.top - activeDrag.offsetY) + 'px';
+        updateCoordsLabel(el);
+        refreshExportPanel();
+      } else if (activeResize) {
+        const el = activeResize.el;
+        const delta = touch.clientX - activeResize.startX;
+        el.style.fontSize = Math.max(8, activeResize.startFontSize + delta * 0.15) + 'px';
+        updateCoordsLabel(el);
+        refreshExportPanel();
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      if (activeDrag) activeDrag.el.classList.remove('dragging');
+      activeDrag = null;
+      activeResize = null;
+    });
+
+    // Font +/- buttons via delegation
+    pageContainer.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') return;
+      const el = e.target.closest('.draggable');
+      const current = parseFloat(window.getComputedStyle(el).fontSize);
+      const action = e.target.dataset.action;
+      el.style.fontSize = (action === 'plus' ? current + 1 : Math.max(8, current - 1)) + 'px';
+      updateCoordsLabel(el);
+      refreshExportPanel();
+    });
 
     document.getElementById('copyCoordsBtn').addEventListener('click', () => {
       navigator.clipboard.writeText(coordOutput.textContent).then(() => {
