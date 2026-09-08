@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="back-link" href="../index.html#quad2">&larr; Board</a>
+  <div class="back-flag">
+    <img src="../images/flag-book-participation.png" alt="">
+    <a href="../index.html#quad2" aria-label="Back to board" style="left:79.93%; top:5.07%; width:17.98%; height:3.97%;"></a>
+  </div>
   <div class="page">
     <h1 class="project-title">Book Participation</h1>
     <p class="project-subtitle">Project overview</p>
@@ -18,7 +21,6 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
-
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -26,9 +28,7 @@
       'electoral-observation-project.html',
       'myooz-inc.html'
     ];
-
     const currentPage = window.location.pathname.split('/').pop();
-
     if (spiralLeftPages.includes(currentPage)) {
       document.body.classList.add('spiral-left');
     } else {
