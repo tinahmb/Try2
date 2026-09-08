@@ -81,15 +81,15 @@
     </h1>
     <p class="project-subtitle">Project overview</p>
     <div class="project-body" id="projectBody">
-      <p class="body-bubble draggable" id="bubble1" data-drag="1">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.
+      <div class="body-bubble draggable" id="bubble1" data-drag="1">For my master's thesis I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across platforms like CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.
         <div class="resize-handle" data-resize="1"></div>
-      </p>
-      <p class="body-bubble draggable" id="bubble2" data-drag="1">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.
+      </div>
+      <div class="body-bubble draggable" id="bubble2" data-drag="1">The research explored how these spaces — Citizen Labs, Fab Labs, and Hackerspaces — foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.
         <div class="resize-handle" data-resize="1"></div>
-      </p>
-      <p class="body-bubble draggable" id="bubble3" data-drag="1">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.
+      </div>
+      <div class="body-bubble draggable" id="bubble3" data-drag="1">I also created a few data visualizations and wrote more about this mapping exercise, and the data gathered, on my Substack newsletter.
         <div class="resize-handle" data-resize="1"></div>
-      </p>
+      </div>
     </div>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
@@ -119,7 +119,6 @@
     const pageContainer = document.getElementById('pageContainer');
     const coordOutput = document.getElementById('coordOutput');
 
-    // Add coord readout + font controls to every draggable element up front
     document.querySelectorAll('.draggable').forEach(el => {
       const coords = document.createElement('div');
       coords.className = 'bubble-coords';
@@ -146,7 +145,6 @@
       coordOutput.textContent = lines.join('\n');
     }
 
-    // Initialize left/top for every draggable based on its current rendered position
     document.querySelectorAll('.draggable').forEach(el => {
       const rect = el.getBoundingClientRect();
       const containerRect = pageContainer.getBoundingClientRect();
@@ -156,9 +154,8 @@
     });
     refreshExportPanel();
 
-    // --- Single shared drag handler via event delegation ---
-    let activeDrag = null; // { el, offsetX, offsetY }
-    let activeResize = null; // { el, startX, startFontSize }
+    let activeDrag = null;
+    let activeResize = null;
 
     pageContainer.addEventListener('mousedown', (e) => {
       if (e.target.dataset.resize) {
@@ -168,7 +165,7 @@
         activeResize = { el, startX: e.clientX, startFontSize: parseFloat(window.getComputedStyle(el).fontSize) };
         return;
       }
-      if (e.target.tagName === 'BUTTON') return; // let font +/- buttons work
+      if (e.target.tagName === 'BUTTON') return;
       const el = e.target.closest('.draggable');
       if (!el) return;
       e.preventDefault();
@@ -200,7 +197,6 @@
       activeResize = null;
     });
 
-    // Touch support
     pageContainer.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -243,7 +239,6 @@
       activeResize = null;
     });
 
-    // Font +/- buttons via delegation
     pageContainer.addEventListener('click', (e) => {
       if (e.target.tagName !== 'BUTTON') return;
       const el = e.target.closest('.draggable');
