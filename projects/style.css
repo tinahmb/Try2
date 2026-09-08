@@ -49,12 +49,11 @@ a {
   min-height: 100vh;
   box-sizing: border-box;
 }
-
 /* Back-to-board flag: full-page-ratio decorative overlay + a
    precisely-positioned invisible hit area, same pattern as the
    corkboard's pins/arrows on the main index. */
 .back-flag {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -75,7 +74,6 @@ a {
   pointer-events: auto;
   cursor: pointer;
 }
-
 .project-title {
   font-family: 'BoldMoldHandwriting', sans-serif;
   font-size: 44px;
