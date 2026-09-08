@@ -32,6 +32,12 @@ body, body.spiral-right {
 body.spiral-left {
   background-image: url('../images/notebook-spiral-left.png');
 }
+.body-bubble {
+  margin: 0 0 24px 0;
+}
+.body-bubble:last-child {
+  margin-bottom: 0;
+}
 a {
   -webkit-tap-highlight-color: transparent;
   outline: none;
