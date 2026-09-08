@@ -9,7 +9,6 @@
     .page {
       position: relative;
       min-height: 700px;
-      overflow: visible;
     }
     #titleEl {
       position: absolute;
@@ -47,68 +46,26 @@
       letter-spacing: -2px;
       line-height: 2.2;
     }
-
-    /* --- Drag/resize tool for the link images --- */
-    .draggable-img {
+    .link-button {
       position: absolute;
-      cursor: grab;
-      touch-action: none;
-      border: 1px dashed rgba(0,150,0,0.6);
+      display: block;
+      cursor: pointer;
     }
-    .draggable-img.dragging { cursor: grabbing; z-index: 100; }
-    .draggable-img img {
+    .link-button img {
       width: 100%;
       height: auto;
       display: block;
-      pointer-events: none;
     }
-    .img-coords {
-      position: absolute;
-      top: -20px;
-      left: 0;
-      font-family: monospace;
-      font-size: 11px;
-      background: #222;
-      color: #0f0;
-      padding: 2px 5px;
-      border-radius: 3px;
-      white-space: nowrap;
-      pointer-events: none;
+    #linkSubstack {
+      left: -99px;
+      top: 105px;
+      width: 842px;
     }
-    .img-resize-handle {
-      position: absolute;
-      right: -6px;
-      bottom: -6px;
-      width: 14px;
-      height: 14px;
-      background: #0f0;
-      border: 1px solid #060;
-      border-radius: 50%;
-      cursor: nwse-resize;
-      z-index: 5;
+    #linkThesis {
+      left: 79.5px;
+      top: 50.5px;
+      width: 719px;
     }
-    #coordExportPanel {
-      position: fixed;
-      bottom: 0; left: 0; width: 100%;
-      max-height: 30vh;
-      overflow-y: auto;
-      background: #111;
-      color: #0f0;
-      font-family: monospace;
-      font-size: 13px;
-      padding: 12px;
-      box-sizing: border-box;
-      z-index: 999;
-      border-top: 3px solid #0f0;
-    }
-    #coordExportPanel h3 { margin: 0 0 8px 0; color: #fff; font-size: 14px; }
-    #coordExportPanel pre { white-space: pre-wrap; margin: 0 0 10px 0; }
-    #copyCoordsBtn {
-      background: #0f0; color: #111; border: none;
-      padding: 6px 14px; font-family: monospace;
-      font-weight: bold; cursor: pointer; border-radius: 4px;
-    }
-    #copyCoordsBtn:active { opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -123,27 +80,16 @@
       <div class="body-bubble" id="bubble2">The research explores how these spaces: Citizen Labs, Fab Labs, and Hackerspaces, foster collaborative participation in digital design and contribute to the democratization of technology, looking closely at their organizational dynamics, funding models, and relationships with public policy and community.</div>
       <div class="body-bubble" id="bubble3">I also wrote about this mapping exercise, and the data gathered, on my Substack newsletter.</div>
     </div>
-
-    <div class="draggable-img" id="linkSubstack">
+    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
       <img src="../images/page1-sub-logo.png" alt="Substack article">
-      <div class="img-resize-handle" data-resize="1"></div>
-    </div>
-    <div class="draggable-img" id="linkThesis">
+    </a>
+    <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
       <img src="../images/page1-document1.png" alt="Full thesis document">
-      <div class="img-resize-handle" data-resize="1"></div>
-    </div>
-
+    </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
-
-  <div id="coordExportPanel">
-    <h3>Image placement (drag to move, green dot to resize)</h3>
-    <pre id="coordOutput">Drag or resize an image to start...</pre>
-    <button id="copyCoordsBtn">Copy all values</button>
-  </div>
-
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -157,135 +103,6 @@
     } else {
       document.body.classList.add('spiral-right');
     }
-
-    const pageContainer = document.getElementById('pageContainer');
-    const coordOutput = document.getElementById('coordOutput');
-
-    document.querySelectorAll('.draggable-img').forEach(el => {
-      const coords = document.createElement('div');
-      coords.className = 'img-coords';
-      el.appendChild(coords);
-    });
-
-    function updateCoordsLabel(el) {
-      const label = el.querySelector('.img-coords');
-      if (label) {
-        label.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}, width: ${el.style.width || 'auto'}`;
-      }
-    }
-
-    function refreshExportPanel() {
-      let lines = [];
-      document.querySelectorAll('.draggable-img').forEach(el => {
-        lines.push(`#${el.id} { left: ${el.style.left || '0px'}; top: ${el.style.top || '0px'}; width: ${el.style.width || 'auto'}; }`);
-      });
-      coordOutput.textContent = lines.join('\n');
-    }
-
-    // Initialize starting positions/sizes based on current render
-    document.querySelectorAll('.draggable-img').forEach(el => {
-      const rect = el.getBoundingClientRect();
-      const containerRect = pageContainer.getBoundingClientRect();
-      el.style.left = (rect.left - containerRect.left) + 'px';
-      el.style.top = (rect.top - containerRect.top) + 'px';
-      el.style.width = Math.max(rect.width, 80) + 'px'; // ensure a visible starting size
-      updateCoordsLabel(el);
-    });
-    refreshExportPanel();
-
-    let activeDrag = null;
-    let activeResize = null;
-
-    pageContainer.addEventListener('mousedown', (e) => {
-      if (e.target.dataset.resize) {
-        e.stopPropagation();
-        e.preventDefault();
-        const el = e.target.closest('.draggable-img');
-        activeResize = { el, startX: e.clientX, startWidth: el.getBoundingClientRect().width };
-        return;
-      }
-      const el = e.target.closest('.draggable-img');
-      if (!el) return;
-      e.preventDefault();
-      const rect = el.getBoundingClientRect();
-      activeDrag = { el, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
-      el.classList.add('dragging');
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (activeDrag) {
-        const containerRect = pageContainer.getBoundingClientRect();
-        const el = activeDrag.el;
-        el.style.left = (e.clientX - containerRect.left - activeDrag.offsetX) + 'px';
-        el.style.top = (e.clientY - containerRect.top - activeDrag.offsetY) + 'px';
-        updateCoordsLabel(el);
-        refreshExportPanel();
-      } else if (activeResize) {
-        const el = activeResize.el;
-        const delta = e.clientX - activeResize.startX;
-        const newWidth = Math.max(20, activeResize.startWidth + delta);
-        el.style.width = newWidth + 'px';
-        updateCoordsLabel(el);
-        refreshExportPanel();
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (activeDrag) activeDrag.el.classList.remove('dragging');
-      activeDrag = null;
-      activeResize = null;
-    });
-
-    pageContainer.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY);
-      if (!target) return;
-      if (target.dataset.resize) {
-        const el = target.closest('.draggable-img');
-        activeResize = { el, startX: touch.clientX, startWidth: el.getBoundingClientRect().width };
-        return;
-      }
-      const el = target.closest('.draggable-img');
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      activeDrag = { el, offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top };
-      el.classList.add('dragging');
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (e) => {
-      if (!activeDrag && !activeResize) return;
-      const touch = e.touches[0];
-      if (activeDrag) {
-        const containerRect = pageContainer.getBoundingClientRect();
-        const el = activeDrag.el;
-        el.style.left = (touch.clientX - containerRect.left - activeDrag.offsetX) + 'px';
-        el.style.top = (touch.clientY - containerRect.top - activeDrag.offsetY) + 'px';
-        updateCoordsLabel(el);
-        refreshExportPanel();
-      } else if (activeResize) {
-        const el = activeResize.el;
-        const delta = touch.clientX - activeResize.startX;
-        const newWidth = Math.max(20, activeResize.startWidth + delta);
-        el.style.width = newWidth + 'px';
-        updateCoordsLabel(el);
-        refreshExportPanel();
-      }
-    }, { passive: true });
-
-    document.addEventListener('touchend', () => {
-      if (activeDrag) activeDrag.el.classList.remove('dragging');
-      activeDrag = null;
-      activeResize = null;
-    });
-
-    document.getElementById('copyCoordsBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(coordOutput.textContent).then(() => {
-        const btn = document.getElementById('copyCoordsBtn');
-        const original = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = original; }, 1200);
-      });
-    });
   </script>
 </body>
 </html>
