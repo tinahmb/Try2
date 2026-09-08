@@ -15,7 +15,6 @@
     .draggable {
       position: absolute;
       cursor: grab;
-      width: 320px;
       background: rgba(255, 255, 0, 0.15);
       padding: 6px 10px;
       border: 1px dashed rgba(0,0,0,0.3);
@@ -41,16 +40,6 @@
       background: #0f0; border: 1px solid #060;
       border-radius: 50%; cursor: nwse-resize;
       z-index: 5;
-    }
-    .font-controls {
-      position: absolute; top: -20px; right: 0;
-      display: flex; gap: 2px;
-    }
-    .font-controls button {
-      font-family: monospace; font-size: 11px;
-      width: 18px; height: 18px; line-height: 1;
-      background: #222; color: #0f0; border: none;
-      border-radius: 2px; cursor: pointer; padding: 0;
     }
     #coordExportPanel {
       position: fixed; bottom: 0; left: 0; width: 100%;
@@ -123,24 +112,19 @@
       const coords = document.createElement('div');
       coords.className = 'bubble-coords';
       el.appendChild(coords);
-
-      const fontControls = document.createElement('div');
-      fontControls.className = 'font-controls';
-      fontControls.innerHTML = `<button data-action="minus">−</button><button data-action="plus">+</button>`;
-      el.appendChild(fontControls);
     });
 
     function updateCoordsLabel(el) {
       const label = el.querySelector('.bubble-coords');
       if (label) {
-        label.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}, font: ${window.getComputedStyle(el).fontSize}`;
+        label.textContent = `left: ${el.style.left || '0px'}, top: ${el.style.top || '0px'}, width: ${el.style.width || 'auto'}`;
       }
     }
 
     function refreshExportPanel() {
       let lines = [];
       document.querySelectorAll('.draggable').forEach(el => {
-        lines.push(`#${el.id} { left: ${el.style.left || '0px'}; top: ${el.style.top || '0px'}; font-size: ${window.getComputedStyle(el).fontSize}; }`);
+        lines.push(`#${el.id} { left: ${el.style.left || '0px'}; top: ${el.style.top || '0px'}; width: ${el.style.width || 'auto'}; }`);
       });
       coordOutput.textContent = lines.join('\n');
     }
@@ -150,6 +134,7 @@
       const containerRect = pageContainer.getBoundingClientRect();
       el.style.left = (rect.left - containerRect.left) + 'px';
       el.style.top = (rect.top - containerRect.top) + 'px';
+      el.style.width = rect.width + 'px';
       updateCoordsLabel(el);
     });
     refreshExportPanel();
@@ -162,10 +147,9 @@
         e.stopPropagation();
         e.preventDefault();
         const el = e.target.closest('.draggable');
-        activeResize = { el, startX: e.clientX, startFontSize: parseFloat(window.getComputedStyle(el).fontSize) };
+        activeResize = { el, startX: e.clientX, startWidth: el.getBoundingClientRect().width };
         return;
       }
-      if (e.target.tagName === 'BUTTON') return;
       const el = e.target.closest('.draggable');
       if (!el) return;
       e.preventDefault();
@@ -185,7 +169,8 @@
       } else if (activeResize) {
         const el = activeResize.el;
         const delta = e.clientX - activeResize.startX;
-        el.style.fontSize = Math.max(8, activeResize.startFontSize + delta * 0.15) + 'px';
+        const newWidth = Math.max(60, activeResize.startWidth + delta);
+        el.style.width = newWidth + 'px';
         updateCoordsLabel(el);
         refreshExportPanel();
       }
@@ -203,10 +188,9 @@
       if (!target) return;
       if (target.dataset.resize) {
         const el = target.closest('.draggable');
-        activeResize = { el, startX: touch.clientX, startFontSize: parseFloat(window.getComputedStyle(el).fontSize) };
+        activeResize = { el, startX: touch.clientX, startWidth: el.getBoundingClientRect().width };
         return;
       }
-      if (target.tagName === 'BUTTON') return;
       const el = target.closest('.draggable');
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -227,7 +211,8 @@
       } else if (activeResize) {
         const el = activeResize.el;
         const delta = touch.clientX - activeResize.startX;
-        el.style.fontSize = Math.max(8, activeResize.startFontSize + delta * 0.15) + 'px';
+        const newWidth = Math.max(60, activeResize.startWidth + delta);
+        el.style.width = newWidth + 'px';
         updateCoordsLabel(el);
         refreshExportPanel();
       }
@@ -237,16 +222,6 @@
       if (activeDrag) activeDrag.el.classList.remove('dragging');
       activeDrag = null;
       activeResize = null;
-    });
-
-    pageContainer.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'BUTTON') return;
-      const el = e.target.closest('.draggable');
-      const current = parseFloat(window.getComputedStyle(el).fontSize);
-      const action = e.target.dataset.action;
-      el.style.fontSize = (action === 'plus' ? current + 1 : Math.max(8, current - 1)) + 'px';
-      updateCoordsLabel(el);
-      refreshExportPanel();
     });
 
     document.getElementById('copyCoordsBtn').addEventListener('click', () => {
