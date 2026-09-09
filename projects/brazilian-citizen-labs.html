@@ -88,45 +88,42 @@
       position: absolute;
       display: block;
       max-width: none;
-    }/* --- SUBSTACK (Tulips) --- */
+    }
+/* --- SUBSTACK (Expanded box + re-aligned sprite) --- */
 #linkSubstack {
-  left: 113.02px;
-  top: 404.12px;
-  width: 68.77px;      /* Unchanged hit area */
-  height: 76.36px;     /* Unchanged hit area */
+  left: 98px;          /* Shifted slightly left to compensate for wider box */
+  top: 388px;          /* Shifted slightly up to compensate for taller box */
+  width: 98px;         /* Larger view box */
+  height: 108px;       /* Larger view box */
 }
 #linkSubstack img {
-  width: 968.3px;
+  width: 1355px;       /* Scaled image */
   height: auto;
-  left: -285px;        /* Re-aligned */
-  top: -415px;         /* Re-aligned */
-  transform: scale(1.25);
-  transform-origin: top left;
+  left: -398px;        /* Positioned precisely inside new view box */
+  top: -558px;
 }
 
-/* --- THESIS (Four-Leaf Clover) --- */
+/* --- THESIS (Expanded box + re-aligned sprite) --- */
 #linkThesis {
-  left: 539.81px;
-  top: 136.6px;
-  width: 157.78px;     /* Unchanged hit area */
-  height: 122.59px;    /* Unchanged hit area */
+  left: 518px;         /* Shifted slightly left */
+  top: 110px;          /* Shifted slightly up */
+  width: 220px;        /* Larger view box */
+  height: 171px;       /* Larger view box */
 }
 #linkThesis img {
-  width: 826.85px;
+  width: 1157px;       /* Scaled image */
   height: auto;
-  left: -655px;        /* Re-aligned */
-  top: -120px;         /* Re-aligned */
-  transform: scale(1.25);
-  transform-origin: top left;
+  left: -757px;        /* Positioned precisely inside new view box */
+  top: -151px;
 }
 
-/* --- PLATFORM (Daffodils) --- */
+/* --- PLATFORM (Expanded box + re-aligned sprite) --- */
 #linkPlatform {
   position: absolute;
-  left: 216.8px;       /* Unchanged frame position */
-  top: 279px;          /* Unchanged frame position */
-  width: 374.4px;      /* Unchanged frame size */
-  height: 182px;       /* Unchanged frame size */
+  left: 170px;         /* Shifted slightly left */
+  top: 235px;          /* Shifted slightly up */
+  width: 524px;        /* Larger view box */
+  height: 254px;       /* Larger view box */
   overflow: hidden;
   pointer-events: none;
 }
@@ -134,22 +131,20 @@
   position: absolute;
   display: block;
   max-width: none;
-  width: 624px;
+  width: 873px;        /* Scaled image */
   height: auto;
-  left: -100px;        /* Re-aligned */
-  top: -100px;         /* Re-aligned */
-  transform: scale(1.25);
-  transform-origin: top left;
+  left: -122px;        /* Positioned precisely inside new view box */
+  top: -123px;
 }
 #linkPlatform .platform-hit {
   position: absolute;
   display: block;
   cursor: pointer;
   pointer-events: auto;
-  left: 15px;          /* Unchanged hit area */
-  top: 15px;           /* Unchanged hit area */
-  width: 344.4px;      /* Unchanged hit area */
-  height: 152px;       /* Unchanged hit area */
+  left: 62px;          /* Re-centered hit box inside the larger frame */
+  top: 59px;
+  width: 344.4px;      /* Unchanged hit area width */
+  height: 152px;       /* Unchanged hit area height */
 }
     .hl-thesis {
       text-decoration: underline;
