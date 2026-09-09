@@ -6,6 +6,20 @@
   <title>Livro: Povos Originários do Brasil</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    @font-face {
+      font-family: 'Handwriting2';
+      src: url('../fonts/Handwriting2-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Handwriting2Extra';
+      src: url('../fonts/Handwriting2-extra-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
     html, body {
       min-height: auto;
     }
@@ -39,6 +53,11 @@
       margin: 0;
       text-align: center;
       opacity: 80%;
+    }
+    .project-body,
+    #bubble1,
+    #bubble3 {
+      font-family: 'Handwriting2', 'Handwriting2Extra', cursive;
     }
     #bubble1 {
       position: absolute;
@@ -124,6 +143,7 @@
     body.adjust-mode .back-flag a,
     body.adjust-mode .link-button {
       cursor: move;
+      touch-action: none; /* stop the page from scrolling/zooming while dragging on touch */
     }
     body.adjust-mode .back-flag a::after,
     body.adjust-mode .link-button::after {
@@ -301,25 +321,32 @@
 
     function wireDrag(name) {
       const { el, imgEl, unit } = targets[name];
-      let mode = null; // 'move' | 'resize-box' | 'resize-img' via alt-drag on image not needed; img uses number inputs
-      let startX, startY, startLeft, startTop, startW, startH;
+      let mode = null; // 'move' | 'resize'
+      let startX, startY, startLeft, startTop, startW, startH, activePointerId;
 
-      el.addEventListener('mousedown', (e) => {
+      // Prevent the hotspot's real link from firing while we're repositioning it.
+      el.addEventListener('click', (e) => {
+        if (adjustOn) e.preventDefault();
+      });
+
+      el.addEventListener('pointerdown', (e) => {
         if (!adjustOn) return;
         const rect = el.getBoundingClientRect();
-        const nearCorner = (e.clientX > rect.right - 14) && (e.clientY > rect.bottom - 14);
+        const nearCorner = (e.clientX > rect.right - 18) && (e.clientY > rect.bottom - 18);
         mode = nearCorner ? 'resize' : 'move';
         startX = e.clientX; startY = e.clientY;
         startLeft = currentPx(el, 'left');
         startTop = currentPx(el, 'top');
         startW = currentPx(el, 'width');
         startH = currentPx(el, 'height');
+        activePointerId = e.pointerId;
+        el.setPointerCapture(activePointerId);
         e.preventDefault();
         e.stopPropagation();
       });
 
-      document.addEventListener('mousemove', (e) => {
-        if (!adjustOn || !mode) return;
+      el.addEventListener('pointermove', (e) => {
+        if (!adjustOn || !mode || e.pointerId !== activePointerId) return;
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
         if (mode === 'move') {
@@ -331,9 +358,18 @@
         }
         refreshOut(name);
         refreshFullOutput();
+        e.preventDefault();
       });
 
-      document.addEventListener('mouseup', () => { mode = null; });
+      function endDrag(e) {
+        if (activePointerId !== undefined && el.hasPointerCapture && el.hasPointerCapture(activePointerId)) {
+          el.releasePointerCapture(activePointerId);
+        }
+        mode = null;
+        activePointerId = undefined;
+      }
+      el.addEventListener('pointerup', endDrag);
+      el.addEventListener('pointercancel', endDrag);
     }
 
     function refreshOut(name) {
