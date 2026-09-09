@@ -89,58 +89,67 @@
       display: block;
       max-width: none;
     }
-    #linkSubstack {
-      left: 113.02px;
-      top: 404.12px;
-      width: 68.77px;
-      height: 76.36px;
-    }
-    #linkSubstack img {
-      width: 968.3px;
-      height: auto;
-      left: -248.97px;
-      top: -349.71px;
-    }
-    #linkThesis {
-      left: 539.81px;
-      top: 136.6px;
-      width: 157.78px;
-      height: 122.59px;
-    }
-    #linkThesis img {
-      width: 826.85px;
-      height: auto;
-      left: -541.19px;
-      top: -108.21px;
-    }
-    #linkPlatform {
-      position: absolute;
-      left: 216.8px;
-      top: 279px;
-      width: 374.4px;
-      height: 182px;
-      overflow: hidden;
-      pointer-events: none;
-    }
-    #linkPlatform img {
-      position: absolute;
-      display: block;
-      max-width: none;
-      width: 624px;
-      height: auto;
-      left: -87.1px;
-      top: -88.4px;
-    }
-    #linkPlatform .platform-hit {
-      position: absolute;
-      display: block;
-      cursor: pointer;
-      pointer-events: auto;
-      left: 15px;
-      top: 15px;
-      width: 344.4px;
-      height: 152px;
-    }
+/* --- SUBSTACK (Image enlarged, hit area unchanged) --- */
+#linkSubstack {
+  left: 113.02px;
+  top: 404.12px;
+  width: 68.77px;      /* Original hit area width */
+  height: 76.36px;     /* Original hit area height */
+}
+#linkSubstack img {
+  width: 968.3px;
+  height: auto;
+  left: -248.97px;
+  top: -349.71px;
+  transform: scale(1.25); /* Makes image 25% larger visually */
+  transform-origin: center;
+}
+
+/* --- THESIS (Image enlarged, hit area unchanged) --- */
+#linkThesis {
+  left: 539.81px;
+  top: 136.6px;
+  width: 157.78px;     /* Original hit area width */
+  height: 122.59px;    /* Original hit area height */
+}
+#linkThesis img {
+  width: 826.85px;
+  height: auto;
+  left: -541.19px;
+  top: -108.21px;
+  transform: scale(1.25); /* Makes image 25% larger visually */
+  transform-origin: center;
+}
+
+/* --- PLATFORM (Container & image enlarged, hit area strictly original) --- */
+#linkPlatform {
+  position: absolute;
+  left: 190px;
+  top: 265px;
+  width: 449px;        /* Enlarged visual frame */
+  height: 218px;       /* Enlarged visual frame */
+  overflow: hidden;
+  pointer-events: none;
+}
+#linkPlatform img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 749px;        /* Enlarged image sprite */
+  height: auto;
+  left: -104px;
+  top: -106px;
+}
+#linkPlatform .platform-hit {
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  pointer-events: auto;
+  left: 27px;          /* Adjusted to center original box in expanded frame */
+  top: 33px;
+  width: 344.4px;     
+  height: 152px;      
+}
     .hl-thesis {
       text-decoration: underline;
       text-decoration-color: rgb(135, 189, 42);
