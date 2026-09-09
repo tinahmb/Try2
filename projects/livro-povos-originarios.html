@@ -14,6 +14,7 @@
       min-height: 850px;
     }
     .back-flag {
+      position: relative;
       height: 22vw;
       overflow: hidden;
     }
@@ -41,7 +42,7 @@
     }
     #bubble1 {
       position: absolute;
-      left: -80px;
+      left: 0px;
       top: 108px;
       width: 466px;
       font-size: 27px;
@@ -70,7 +71,7 @@
       display: block;
       max-width: none;
     }
-
+    /* Tulips, positioned toward the base of bubble3's text, scaled down from the page1 reference */
     #linkSubstack {
       left: 400px;
       top: 560px;
@@ -92,21 +93,27 @@
       text-decoration-thickness: 2px;
       text-underline-offset: 3px;
     }
+    .hl-book {
+      text-decoration: underline;
+      text-decoration-color: rgba(0, 91, 172, 0.85);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    /* Document link (tree icon), enlarged and cropped in on just the tree, moved further left and down */
     #linkDocument2 {
-      left: 560px;
-      top: 140px;
-      width: 150px;
-      height: 150px;
+      left: 480px;
+      top: 220px;
+      width: 260px;
+      height: 260px;
       overflow: hidden;
     }
     #linkDocument2 img {
       position: absolute;
       max-width: none;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      left: 0;
-      top: 0;
+      width: 900px;
+      height: auto;
+      left: -600px;
+      top: -20px;
     }
 
   </style>
@@ -119,14 +126,14 @@
   <div class="page" id="pageContainer">
     <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
     <div class="project-body" id="projectBody">
-      <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a book chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
+      <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a <span class="hl-book">book</span> chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
       <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my <span class="hl-substack">Substack newsletter</span>.)</div>
     </div>
     <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
-      <img src="../images/page1-sub-logo.PNG" alt="Substack article">
+      <img src="../images/page1-sub-logo.png" alt="Substack article">
     </a>
     <a class="link-button" id="linkDocument2" href="https://www.labjor.unicamp.br/wp-content/uploads/2024/07/POVOS-ORIGINARIOS-DO-BRASIL-25-03-1.pdf" target="_blank" rel="noopener noreferrer" aria-label="Read the full chapter PDF">
-      <img src="../images/page2-document2.PNG" alt="Book chapter PDF">
+      <img src="../images/page2-document2.png" alt="Book chapter PDF">
     </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
