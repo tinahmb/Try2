@@ -139,7 +139,7 @@
     }
     #adjustToggle {
       position: fixed;
-      top: 10px;
+      bottom: 10px;
       right: 10px;
       z-index: 1000;
       padding: 8px 12px;
@@ -149,28 +149,51 @@
       color: #fff;
       border: none;
       border-radius: 4px;
+      opacity: 0.9;
     }
+    /* Panel now lives in a slim strip pinned to the bottom of the viewport,
+       collapsed by default to a single summary line so it never covers the
+       page art. Click any element's line (or the toggle) to expand details
+       for that element only. */
     #adjustPanel {
       position: fixed;
-      top: 50px;
-      right: 10px;
-      width: 320px;
-      max-height: 80vh;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 34vh;
       overflow-y: auto;
-      background: #1e1e1e;
+      background: rgba(20, 20, 20, 0.92);
       color: #b5f4b5;
       font-family: monospace;
       font-size: 11px;
-      padding: 10px;
-      border-radius: 4px;
-      z-index: 1000;
+      padding: 8px 10px 46px;
+      z-index: 999; /* below adjustToggle, and never overlaps mid-page content */
       white-space: pre-wrap;
       word-break: break-all;
       display: none;
     }
     #adjustPanel.open { display: block; }
-    #adjustPanel h3 { color: #fff; font-size: 12px; margin: 8px 0 2px; }
+    #adjustPanel h3 {
+      color: #fff;
+      font-size: 12px;
+      margin: 6px 0 2px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #adjustPanel h3::before { content: '▸ '; }
+    #adjustPanel h3.expanded::before { content: '▾ '; }
+    #adjustPanel .details { display: none; }
+    #adjustPanel .details.open { display: block; }
     #adjustPanel .hint { color: #888; }
+    #adjustPanel .minimize {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      cursor: pointer;
+      color: #888;
+      font-size: 11px;
+    }
+    #adjustPanel.minimized { max-height: 22px; overflow: hidden; padding-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -246,16 +269,32 @@
     toggleBtn.addEventListener('click', toggleAdjust);
 
     function buildPanel() {
-      panel.innerHTML = '<div class="hint">Drag a hotspot to move it, drag its bottom-right corner to resize. Inner image crop (left/top/width) is editable below for boxes that have a zoomed image. Values update live; copy the CSS at the bottom into your stylesheet when done.</div>';
+      panel.innerHTML = '<span class="minimize" id="minimizeBtn">minimize ▾</span>' +
+        '<div class="hint">Panel is pinned to the bottom strip so it never covers the page art. Click a name below to expand its controls. Drag a hotspot to move it, drag its bottom-right corner to resize.</div>';
       Object.keys(targets).forEach(name => {
         const box = document.createElement('div');
-        box.innerHTML = `<h3>#${name}</h3><div id="out-${name}"></div>`;
+        box.innerHTML = `<h3 data-target="${name}">#${name}</h3><div class="details" id="out-${name}"></div>`;
         panel.appendChild(box);
         wireDrag(name);
       });
-      const outputAll = document.createElement('pre');
-      outputAll.id = 'fullOutput';
-      panel.appendChild(outputAll);
+      const outputWrap = document.createElement('div');
+      outputWrap.innerHTML = '<h3 data-target="css">Full CSS output</h3><pre class="details" id="fullOutput"></pre>';
+      panel.appendChild(outputWrap);
+
+      panel.querySelectorAll('h3').forEach(h => {
+        h.addEventListener('click', () => {
+          h.classList.toggle('expanded');
+          const details = h.nextElementSibling;
+          if (details) details.classList.toggle('open');
+        });
+      });
+
+      document.getElementById('minimizeBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        panel.classList.toggle('minimized');
+        e.target.textContent = panel.classList.contains('minimized') ? 'expand ▸' : 'minimize ▾';
+      });
+
       Object.keys(targets).forEach(refreshOut);
       refreshFullOutput();
     }
