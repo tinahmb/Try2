@@ -53,15 +53,19 @@
     }
 
     #bubble2 {
-      position: absolute;
-      left: -40px;                        /* matched to bubble1 */
-      top: 454px;                         /* ← adjust this manually */
-      width: 466px;
-      font-size: 27px;                    /* matched to bubble1 */
-      text-align: justify;
-      letter-spacing: -3px;               /* matched to bubble1 */
-      word-spacing: 3px;                  /* matched to bubble1 */
-      color: rgba(0, 91, 172, 0.85);      /* matched to bubble1 */
+  position: absolute;
+  left: -40px;
+  top: 620px;   /* raised from 454px — was overlapping bubble1 */
+  width: 466px;
+  font-size: 27px;
+  text-align: justify;
+  letter-spacing: -3px;
+  word-spacing: 3px;
+  color: rgba(0, 91, 172, 0.85);
+
+  outline: 2px dashed red;
+  background: rgba(255, 0, 0, 0.08);
+}
 
       /* ===== TEMPORARY — remove after adjusting ===== */
       outline: 2px dashed red;
@@ -173,20 +177,17 @@
       document.body.classList.add('spiral-right');
     }
   </script>
-
-  <!-- ===== TEMPORARY — remove after adjusting ===== -->
-  <div id="debugSize" style="position:fixed; bottom:10px; left:10px; background:#000; color:#0f0; font:12px monospace; padding:6px 10px; z-index:9999; white-space:pre;"></div>
-  <script>
-    function updateDebugSize() {
-      const el = document.getElementById('bubble2');
-      const r = el.getBoundingClientRect();
-      document.getElementById('debugSize').textContent =
-        `bubble2 → w: ${r.width.toFixed(1)}px  h: ${r.height.toFixed(1)}px  top: ${r.top.toFixed(1)}px  left: ${r.left.toFixed(1)}px`;
-    }
-    updateDebugSize();
-    window.addEventListener('resize', updateDebugSize);
-    setTimeout(updateDebugSize, 300);
-  </script>
-  <!-- ===== END TEMPORARY ===== -->
+<div id="debugSize" style="position:fixed; top:10px; left:10px; background:#000; color:#0f0; font:12px monospace; padding:6px 10px; z-index:99999; white-space:pre; max-width:90vw;"></div>
+<script>
+  function updateDebugSize() {
+    const el = document.getElementById('bubble2');
+    const r = el.getBoundingClientRect();
+    document.getElementById('debugSize').textContent =
+      `bubble2 → w: ${r.width.toFixed(1)}px  h: ${r.height.toFixed(1)}px  top: ${r.top.toFixed(1)}px  left: ${r.left.toFixed(1)}px`;
+  }
+  updateDebugSize();
+  window.addEventListener('resize', updateDebugSize);
+  setTimeout(updateDebugSize, 300);
+</script>
 </body>
 </html>
