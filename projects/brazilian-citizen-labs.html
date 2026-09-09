@@ -89,21 +89,24 @@
       display: block;
       max-width: none;
     }
-/* --- SUBSTACK (Tulips - moved up and further right) --- */
+/* --- SUBSTACK (Tulips - widened container to reveal both tulips) --- */
 #linkSubstack {
-  left: 120px;         /* Shifted further right from 95px */
-  top: 360px;          /* Shifted up from 385px */
-  width: 98px;
-  height: 108px;
+  left: 95px;          /* Position on notebook */
+  top: 380px;          /* Vertical alignment */
+  width: 140px;        /* Widened container so right tulip isn't cropped */
+  height: 120px;       /* Taller frame */
+  overflow: hidden;
 }
 #linkSubstack img {
-  width: 1355px;
+  position: absolute;
+  max-width: none;
+  width: 1355px;       /* Scaled sprite sheet */
   height: auto;
-  left: -398px;
-  top: -490px;
+  left: -330px;        /* Shifted left to reveal BOTH tulips */
+  top: -480px;         /* Vertical sprite adjustment */
 }
 
-/* --- THESIS (Clover - UNCHANGED) --- */
+/* --- THESIS (Clover - KEPT EXACT) --- */
 #linkThesis {
   left: 518px;
   top: 110px;
@@ -117,10 +120,10 @@
   top: -151px;
 }
 
-/* --- PLATFORM (Daffodils - moved further left) --- */
+/* --- PLATFORM (Daffodils - KEPT EXACT) --- */
 #linkPlatform {
   position: absolute;
-  left: 40px;          /* Shifted further left from 80px */
+  left: 40px;
   top: 200px;
   width: 524px;
   height: 254px;
@@ -146,6 +149,7 @@
   width: 344.4px;
   height: 152px;
 }
+    
     .hl-thesis {
       text-decoration: underline;
       text-decoration-color: rgb(135, 189, 42);
