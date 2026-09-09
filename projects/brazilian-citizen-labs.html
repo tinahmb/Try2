@@ -91,8 +91,8 @@
     }
 /* --- SUBSTACK (Tulips - widened container to reveal both tulips) --- */
 #linkSubstack {
-  left: 95px;          /* Position on notebook */
-  top: 380px;          /* Vertical alignment */
+  left: 67px;           /* Position on notebook */
+  top: 593px;           /* Vertical alignment */
   width: 140px;        /* Widened container so right tulip isn't cropped */
   height: 120px;       /* Taller frame */
   overflow: hidden;
@@ -144,10 +144,10 @@
   display: block;
   cursor: pointer;
   pointer-events: auto;
-  left: 62px;
-  top: 59px;
-  width: 344.4px;
-  height: 152px;
+  left: 320.4px;
+  top: 157.6px;
+  width: 202.4px;
+  height: 92.6px;
 }
     
     .hl-thesis {
@@ -168,6 +168,122 @@
       text-decoration-thickness: 2px;
       text-underline-offset: 3px;
     }
+
+    /* ============================================================
+       TEMP DEBUG: outlines every clickable hit area so you can see
+       exactly where it sits over the artwork. Delete this whole
+       block once everything lines up.
+       ============================================================ */
+    .back-flag a {
+      outline: 2px dashed rgba(0, 91, 172, 0.85);
+      background: rgba(0, 91, 172, 0.15);
+    }
+    #linkThesis {
+      outline: 2px dashed rgb(135, 189, 42);
+      background: rgba(135, 189, 42, 0.15);
+    }
+    #linkSubstack {
+      outline: 2px dashed rgb(255, 89, 0);
+      background: rgba(255, 89, 0, 0.15);
+      touch-action: none;
+    }
+    #linkSubstack.pos-mode-image img { cursor: grab; }
+    #linkSubstack.pos-mode-image img:active { cursor: grabbing; }
+    #linkSubstack.pos-mode-frame { cursor: move; }
+    #linkSubstack img { touch-action: none; }
+    #linkPlatform .platform-hit {
+      outline: 2px dashed rgb(255, 234, 4);
+      background: rgba(255, 234, 4, 0.15);
+    }
+    /* ============================================================ */
+
+    /* ============================================================
+       TEMP: live position tool for the tulip logo. Delete this
+       whole block (and the <script> block at the bottom tagged the
+       same way) once you're done placing it.
+       ============================================================ */
+    #tulipHandle {
+      position: absolute;
+      right: -7px;
+      bottom: -7px;
+      width: 14px;
+      height: 14px;
+      background: rgb(255, 89, 0);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      cursor: nwse-resize;
+      touch-action: none;
+      z-index: 50;
+    }
+    #tulipPanel {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      width: 260px;
+      max-width: calc(100vw - 24px);
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 12px;
+      color: #222;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+    #tulipPanel h3 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #888;
+    }
+    #tulipPanel .row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    #tulipPanel .row button {
+      flex: 1;
+      padding: 6px 4px;
+      border: 1px solid #ccc;
+      background: #f7f7f5;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    #tulipPanel .row button.active {
+      background: rgb(255, 89, 0);
+      color: #fff;
+      border-color: rgb(255, 89, 0);
+    }
+    #tulipPanel input[type="range"] {
+      width: 100%;
+      margin-bottom: 6px;
+    }
+    #tulipPanel pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 10.5px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      max-height: 160px;
+      overflow: auto;
+      margin: 0 0 6px;
+    }
+    #tulipPanel button.copy {
+      width: 100%;
+      padding: 6px;
+      border: none;
+      border-radius: 5px;
+      background: #222;
+      color: #fff;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    /* ============================================================ */
   </style>
 </head>
 <body>
@@ -185,6 +301,7 @@
     </div>
     <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
       <img src="../images/page1-sub-logo.png" alt="Substack article">
+      <div id="tulipHandle"></div>
     </a>
     <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
       <img src="../images/page1-document1.png" alt="Full thesis document">
@@ -197,6 +314,22 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+
+  <!-- ============================================================
+       TEMP: live position tool panel for the tulip logo.
+       Delete this whole <div id="tulipPanel">...</div> block once done.
+       ============================================================ -->
+  <div id="tulipPanel">
+    <h3>Tulip logo position</h3>
+    <div class="row">
+      <button id="tulipModeFrame" class="active">Move frame</button>
+      <button id="tulipModeImage">Move image</button>
+    </div>
+    <input type="range" id="tulipScale" min="300" max="3000" step="1" value="1355">
+    <pre id="tulipCss"></pre>
+    <button class="copy" id="tulipCopy">Copy CSS</button>
+  </div>
+
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -210,6 +343,120 @@
     } else {
       document.body.classList.add('spiral-right');
     }
+  </script>
+
+  <!-- ============================================================
+       TEMP: live position tool logic for the tulip logo.
+       Delete this whole <script> block once you're done placing it.
+       ============================================================ -->
+  <script>
+    (function () {
+      const NATURAL_W = 634, NATURAL_H = 863, RATIO = NATURAL_H / NATURAL_W;
+
+      const frame = document.getElementById('linkSubstack');
+      const img = frame.querySelector('img');
+      const handle = document.getElementById('tulipHandle');
+      const cssOut = document.getElementById('tulipCss');
+      const modeFrameBtn = document.getElementById('tulipModeFrame');
+      const modeImageBtn = document.getElementById('tulipModeImage');
+      const scaleSlider = document.getElementById('tulipScale');
+      const copyBtn = document.getElementById('tulipCopy');
+
+      let state = { frameLeft: 67, frameTop: 593, frameWidth: 140, frameHeight: 120,
+                     imgWidth: 1355, imgLeft: -330, imgTop: -480 };
+
+      function render() {
+        frame.style.left = state.frameLeft + 'px';
+        frame.style.top = state.frameTop + 'px';
+        frame.style.width = state.frameWidth + 'px';
+        frame.style.height = state.frameHeight + 'px';
+        img.style.width = state.imgWidth + 'px';
+        img.style.height = (state.imgWidth * RATIO) + 'px';
+        img.style.left = state.imgLeft + 'px';
+        img.style.top = state.imgTop + 'px';
+        scaleSlider.value = Math.round(state.imgWidth);
+        cssOut.textContent =
+`#linkSubstack {
+  left: ${Math.round(state.frameLeft)}px;
+  top: ${Math.round(state.frameTop)}px;
+  width: ${Math.round(state.frameWidth)}px;
+  height: ${Math.round(state.frameHeight)}px;
+  overflow: hidden;
+}
+#linkSubstack img {
+  width: ${Math.round(state.imgWidth)}px;
+  height: auto;
+  left: ${Math.round(state.imgLeft)}px;
+  top: ${Math.round(state.imgTop)}px;
+}`;
+      }
+
+      // never let a drag turn into an actual navigation while positioning
+      frame.addEventListener('click', (e) => e.preventDefault());
+
+      let mode = 'frame';
+      function setMode(m) {
+        mode = m;
+        modeFrameBtn.classList.toggle('active', m === 'frame');
+        modeImageBtn.classList.toggle('active', m === 'image');
+        frame.classList.toggle('pos-mode-frame', m === 'frame');
+        frame.classList.toggle('pos-mode-image', m === 'image');
+      }
+      modeFrameBtn.addEventListener('click', () => setMode('frame'));
+      modeImageBtn.addEventListener('click', () => setMode('image'));
+      setMode('frame');
+
+      scaleSlider.addEventListener('input', (e) => {
+        state.imgWidth = +e.target.value;
+        render();
+      });
+
+      let dragging = null, startX = 0, startY = 0, startState = null;
+      function onDown(e, target) {
+        dragging = target;
+        startX = e.clientX;
+        startY = e.clientY;
+        startState = { ...state };
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      frame.addEventListener('pointerdown', (e) => {
+        if (e.target === handle) return;
+        if (mode === 'frame') onDown(e, 'frame');
+      });
+      img.addEventListener('pointerdown', (e) => {
+        if (mode === 'image') onDown(e, 'image');
+      });
+      handle.addEventListener('pointerdown', (e) => onDown(e, 'resize'));
+
+      window.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (dragging === 'frame') {
+          state.frameLeft = startState.frameLeft + dx;
+          state.frameTop = startState.frameTop + dy;
+        } else if (dragging === 'image') {
+          state.imgLeft = startState.imgLeft + dx;
+          state.imgTop = startState.imgTop + dy;
+        } else if (dragging === 'resize') {
+          state.frameWidth = Math.max(10, startState.frameWidth + dx);
+          state.frameHeight = Math.max(10, startState.frameHeight + dy);
+        }
+        render();
+      });
+      window.addEventListener('pointerup', () => { dragging = null; });
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(cssOut.textContent).then(() => {
+          const old = copyBtn.textContent;
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => copyBtn.textContent = old, 1200);
+        });
+      });
+
+      render();
+    })();
   </script>
 </body>
 </html>
