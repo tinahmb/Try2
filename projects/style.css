@@ -10,6 +10,107 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'BoldMoldHandwriting';
+  src: url('../fonts/BoldMoldHandwriting-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Handwriting2';
+  src: url('../fonts/Handwriting2-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: calc(100vw * (863 / 634)); 
+}
+body {
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: scroll; 
+  font-family: 'Handwriting2', sans-serif;
+  color: #2a2a2a;
+}
+/* Default / Right Spiral */
+body, body.spiral-right {
+  background-image: url('../images/notebook-spiral-right.png');
+}
+/* Left Spiral */
+body.spiral-left {
+  background-image: url('../images/notebook-spiral-left.png');
+}
+.body-bubble {
+  margin: 0 0 24px 0;
+}
+.body-bubble:last-child {
+  margin-bottom: 0;
+}
+a {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 90px 40px 60px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+/* Back-to-board flag: full-page-ratio decorative overlay + a
+   precisely-positioned invisible hit area, same pattern as the
+   corkboard's pins/arrows on the main index. */
+.back-flag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vw * 863 / 634);
+  pointer-events: none;
+  z-index: 10;
+}
+.back-flag img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.back-flag a {
+  position: absolute;
+  display: block;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.project-title {
+  font-family: 'BoldMoldHandwriting', sans-serif;
+  font-size: 44px;
+  margin-bottom: 8px;
+  color: #222;
+}
+.project-subtitle {
+  font-size: 20px;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
+.project-body {
+  font-size: 18px;
+  line-height: 1.6;
+}
+.project-links {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.project-links a {
+  color: #2a2a2a;
+  font-size: 17px;
+}
 html, body {
   margin: 0;
   padding: 0;
