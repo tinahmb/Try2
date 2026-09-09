@@ -41,7 +41,7 @@
     }
     #bubble1 {
       position: absolute;
-      left: 55px;
+      left: -80px;
       top: 108px;
       width: 466px;
       font-size: 27px;
@@ -51,13 +51,40 @@
     }
     #bubble3 {
       position: absolute;
-      left: 55px;
-      top: 406px;
+      left: 512px;
+      top: 486px;
       width: 150px;
       font-size: 20px;
       text-align: justify;
       letter-spacing: -2px;
       line-height: 2.2;
+    }
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      max-width: none;
+    }
+    /* Tulips, positioned left of bubble3, scaled down from the page1 reference */
+    #linkSubstack {
+      left: 400px;
+      top: 470px;
+      width: 90px;
+      height: 80px;
+      overflow: hidden;
+    }
+    #linkSubstack img {
+      position: absolute;
+      max-width: none;
+      width: 921px;
+      height: auto;
+      left: -224px;
+      top: -326px;
     }
     .body-bubble.editable {
       cursor: move;
@@ -108,6 +135,9 @@
       <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a book chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
       <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my Substack newsletter.)</div>
     </div>
+    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+      <img src="../images/page1-sub-logo.png" alt="Substack article">
+    </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
