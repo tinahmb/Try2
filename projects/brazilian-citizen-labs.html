@@ -6,9 +6,12 @@
   <title>Brazilian Citizen Labs</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      min-height: auto;
+    }
     .page {
       position: relative;
-      min-height: 700px;
+      min-height: 950px;
     }
     #titleEl {
       position: absolute;
@@ -94,31 +97,17 @@
       left: -470.6px;
       top: -94.1px;
     }
-    .link-platform {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: calc(100vw * 863 / 634);
-      pointer-events: none;
-      z-index: 5;
+    #linkPlatform {
+      left: 260px;
+      top: 388px;
+      width: 190px;
+      height: 92.5px;
     }
-    .link-platform img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    .link-platform a {
-      position: absolute;
-      display: block;
-      pointer-events: auto;
-      cursor: pointer;
-      left: 14.04%;
-      top: 16.45%;
-      width: 59.94%;
-      height: 21.44%;
+    #linkPlatform img {
+      width: 317px;
+      height: auto;
+      left: -44.5px;
+      top: -71px;
     }
   </style>
 </head>
@@ -126,10 +115,6 @@
   <div class="back-flag">
     <img src="../images/flag-brazilian-citizen-labs.png" alt="">
     <a href="../index.html#quad2" aria-label="Back to board" style="left:4.65%; top:2.17%; width:17.98%; height:4.00%;"></a>
-  </div>
-  <div class="link-platform">
-    <img src="../images/page1-platform.png" alt="">
-    <a href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform"></a>
   </div>
   <div class="page" id="pageContainer">
     <h1 class="project-title" id="titleEl">Brazilian Citizen Labs</h1>
@@ -144,6 +129,9 @@
     </a>
     <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
       <img src="../images/page1-document1.png" alt="Full thesis document">
+    </a>
+    <a class="link-button" id="linkPlatform" href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform">
+      <img src="../images/page1-platform.png" alt="">
     </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
