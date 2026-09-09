@@ -70,10 +70,10 @@
       display: block;
       max-width: none;
     }
-    /* Tulips, positioned left of bubble3, scaled down from the page1 reference */
+    /* Tulips, positioned toward the base of bubble3's text, scaled down from the page1 reference */
     #linkSubstack {
       left: 400px;
-      top: 470px;
+      top: 560px;
       width: 90px;
       height: 80px;
       overflow: hidden;
@@ -86,42 +86,30 @@
       left: -224px;
       top: -326px;
     }
-    .body-bubble.editable {
-      cursor: move;
-      outline: 1px dashed transparent;
+    .hl-substack {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 89, 0);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
     }
-    .body-bubble.editable:hover {
-      outline: 1px dashed rgba(0,0,0,0.3);
+    /* Document link (tree icon), placed to the right of bubble1's paragraph */
+    #linkDocument2 {
+      left: 560px;
+      top: 140px;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
     }
-    #editorToggle {
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-      z-index: 999;
-      padding: 8px 14px;
-      background: #222;
-      color: #fff;
-      font-family: sans-serif;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
-      opacity: 0.85;
+    #linkDocument2 img {
+      position: absolute;
+      max-width: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      left: 0;
+      top: 0;
     }
-    #coordsPanel {
-      position: fixed;
-      bottom: 52px;
-      right: 16px;
-      z-index: 999;
-      padding: 10px 12px;
-      background: #222;
-      color: #fff;
-      font-family: monospace;
-      font-size: 12px;
-      border-radius: 6px;
-      display: none;
-      line-height: 1.6;
-      white-space: pre;
-    }
+
   </style>
 </head>
 <body>
@@ -133,18 +121,18 @@
     <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
     <div class="project-body" id="projectBody">
       <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a book chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
-      <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my Substack newsletter.)</div>
+      <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my <span class="hl-substack">Substack newsletter</span>.)</div>
     </div>
     <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
       <img src="../images/page1-sub-logo.png" alt="Substack article">
+    </a>
+    <a class="link-button" id="linkDocument2" href="https://www.labjor.unicamp.br/wp-content/uploads/2024/07/POVOS-ORIGINARIOS-DO-BRASIL-25-03-1.pdf" target="_blank" rel="noopener noreferrer" aria-label="Read the full chapter PDF">
+      <img src="../images/page2-document2.png" alt="Book chapter PDF">
     </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
-
-  <div id="coordsPanel"></div>
-  <button id="editorToggle">Enable position editor</button>
 
   <script>
     const spiralLeftPages = [
@@ -158,68 +146,6 @@
     } else {
       document.body.classList.add('spiral-right');
     }
-
-    // --- Bubble position editor (drag left/top only; width, font-size, line-height stay fixed) ---
-    let editorOn = false;
-    const toggleBtn = document.getElementById('editorToggle');
-    const coordsPanel = document.getElementById('coordsPanel');
-    const bubbles = document.querySelectorAll('.body-bubble');
-    const pageContainer = document.getElementById('pageContainer');
-
-    function refreshCoordsPanel() {
-      const pageRect = pageContainer.getBoundingClientRect();
-      let lines = [];
-      bubbles.forEach(b => {
-        const rect = b.getBoundingClientRect();
-        const left = Math.round(rect.left - pageRect.left);
-        const top = Math.round(rect.top - pageRect.top);
-        lines.push(`#${b.id}: left ${left}px, top ${top}px`);
-      });
-      coordsPanel.textContent = lines.join('\n');
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      editorOn = !editorOn;
-      toggleBtn.textContent = editorOn ? 'Disable position editor' : 'Enable position editor';
-      coordsPanel.style.display = editorOn ? 'block' : 'none';
-      bubbles.forEach(b => b.classList.toggle('editable', editorOn));
-      if (editorOn) refreshCoordsPanel();
-    });
-
-    bubbles.forEach(bubble => {
-      let dragging = false;
-      let startX, startY, startLeft, startTop;
-
-      bubble.addEventListener('pointerdown', (e) => {
-        if (!editorOn) return;
-        dragging = true;
-        bubble.setPointerCapture(e.pointerId);
-        const rect = bubble.getBoundingClientRect();
-        const pageRect = pageContainer.getBoundingClientRect();
-        startX = e.clientX;
-        startY = e.clientY;
-        startLeft = rect.left - pageRect.left;
-        startTop = rect.top - pageRect.top;
-        e.preventDefault();
-      });
-
-      bubble.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        bubble.style.left = Math.round(startLeft + dx) + 'px';
-        bubble.style.top = Math.round(startTop + dy) + 'px';
-        refreshCoordsPanel();
-      });
-
-      bubble.addEventListener('pointerup', () => {
-        dragging = false;
-        refreshCoordsPanel();
-      });
-      bubble.addEventListener('pointercancel', () => {
-        dragging = false;
-      });
-    });
   </script>
 </body>
 </html>
