@@ -94,12 +94,14 @@
       text-decoration-thickness: 2px;
       text-underline-offset: 3px;
     }
-    .hl-blue {
-      text-decoration: underline;
-      text-decoration-color: rgba(0, 91, 172, 0.85);
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-    }
+.hl-blue {
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-color: rgb(51, 91, 168);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-skip-ink: none; /* Prevents the line from breaking around letter descenders */
+}
 
     #linkDocument2 {
       left: 441px;    
