@@ -49,6 +49,50 @@
       letter-spacing: -2.5px;
       color: rgba(0, 91, 172, 0.85);
     }
+    #bubble3 {
+      position: absolute;
+      left: 55px;
+      top: 406px;
+      width: 150px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      line-height: 2.2;
+    }
+    .body-bubble.editable {
+      cursor: move;
+      outline: 1px dashed transparent;
+    }
+    .body-bubble.editable:hover {
+      outline: 1px dashed rgba(0,0,0,0.3);
+    }
+    #editorToggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 999;
+      padding: 8px 14px;
+      background: #222;
+      color: #fff;
+      font-family: sans-serif;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0.85;
+    }
+    #coordsLabel {
+      position: fixed;
+      bottom: 52px;
+      right: 16px;
+      z-index: 999;
+      padding: 6px 10px;
+      background: #222;
+      color: #fff;
+      font-family: monospace;
+      font-size: 12px;
+      border-radius: 6px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -60,11 +104,16 @@
     <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
     <div class="project-body" id="projectBody">
       <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a book chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
+      <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my Substack newsletter.)</div>
     </div>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+
+  <div id="coordsLabel"></div>
+  <button id="editorToggle">Enable position editor</button>
+
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -77,6 +126,51 @@
     } else {
       document.body.classList.add('spiral-right');
     }
+
+    // --- Bubble position editor (drag left/top only; width, font-size, line-height stay fixed) ---
+    let editorOn = false;
+    const toggleBtn = document.getElementById('editorToggle');
+    const coordsLabel = document.getElementById('coordsLabel');
+    const bubbles = document.querySelectorAll('.body-bubble');
+
+    toggleBtn.addEventListener('click', () => {
+      editorOn = !editorOn;
+      toggleBtn.textContent = editorOn ? 'Disable position editor' : 'Enable position editor';
+      coordsLabel.style.display = editorOn ? 'block' : 'none';
+      bubbles.forEach(b => b.classList.toggle('editable', editorOn));
+    });
+
+    bubbles.forEach(bubble => {
+      let dragging = false;
+      let startX, startY, startLeft, startTop;
+
+      bubble.addEventListener('mousedown', (e) => {
+        if (!editorOn) return;
+        dragging = true;
+        const rect = bubble.getBoundingClientRect();
+        const pageRect = document.getElementById('pageContainer').getBoundingClientRect();
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = rect.left - pageRect.left;
+        startTop = rect.top - pageRect.top;
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const newLeft = Math.round(startLeft + dx);
+        const newTop = Math.round(startTop + dy);
+        bubble.style.left = newLeft + 'px';
+        bubble.style.top = newTop + 'px';
+        coordsLabel.textContent = `#${bubble.id}: left ${newLeft}px, top ${newTop}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        dragging = false;
+      });
+    });
   </script>
 </body>
 </html>
