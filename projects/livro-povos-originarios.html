@@ -49,8 +49,25 @@
       text-align: justify;
       letter-spacing: -3px;
       word-spacing: 3px;
-      color: rgba(0, 91, 172, 0.85);
+      color: rgba(0, 91, 172, 0.85);    
     }
+
+    #bubble2 {
+  position: absolute;
+  left: -40px;
+  top: 454px;
+  width: 466px;
+  font-size: 27px;                    /* matched to bubble1 */
+  text-align: justify;
+  letter-spacing: -2.5px;  
+  word-spacing: 3px; /* matched to bubble1 */
+  color: rgba(0, 91, 172, 0.85);      /* matched to bubble1 */
+
+  /* ===== TEMPORARY — remove after adjusting ===== */
+  outline: 2px dashed red;
+  background: rgba(255, 0, 0, 0.08);
+  /* ===== END TEMPORARY ===== */
+}
     #bubble3 {
       position: absolute;
       left: 512px;
@@ -129,6 +146,7 @@
     <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
     <div class="project-body" id="projectBody">
       <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a <span class="hl-blue">book chapter</span> (p. 161) examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
+      <div class="body-bubble" id="bubble2">The first section maps UN activities in the Legal Amazon, uncovering how Indigenous groups are largely excluded from core SDG targets and limited to short-term emergency projects. The second section applies a human rights framework to Indigenous self-determination, critiquing societal tendencies to view native communities through static traditionalism, forced economic integration, or outright policy omission.</div>
       <div class="body-bubble" id="bubble3">(I also wrote about this analysis and thoughts on my <span class="hl-substack">Substack newsletter</span>.)</div>
     </div>
     <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
