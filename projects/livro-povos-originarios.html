@@ -119,6 +119,58 @@
       outline-offset: -2px;
       background: rgba(255, 0, 0, 0.08);
     }
+
+    /* ---------- Adjuster tool (remove this whole block + script before publishing) ---------- */
+    body.adjust-mode .back-flag a,
+    body.adjust-mode .link-button {
+      cursor: move;
+    }
+    body.adjust-mode .back-flag a::after,
+    body.adjust-mode .link-button::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 12px;
+      height: 12px;
+      background: red;
+      cursor: nwse-resize;
+      pointer-events: auto;
+    }
+    #adjustToggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+    #adjustPanel {
+      position: fixed;
+      top: 50px;
+      right: 10px;
+      width: 320px;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: #1e1e1e;
+      color: #b5f4b5;
+      font-family: monospace;
+      font-size: 11px;
+      padding: 10px;
+      border-radius: 4px;
+      z-index: 1000;
+      white-space: pre-wrap;
+      word-break: break-all;
+      display: none;
+    }
+    #adjustPanel.open { display: block; }
+    #adjustPanel h3 { color: #fff; font-size: 12px; margin: 8px 0 2px; }
+    #adjustPanel .hint { color: #888; }
   </style>
 </head>
 <body>
@@ -143,6 +195,9 @@
     </div>
   </div>
 
+  <button id="adjustToggle">Adjust mode: OFF</button>
+  <div id="adjustPanel"></div>
+
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -155,6 +210,164 @@
     } else {
       document.body.classList.add('spiral-right');
     }
+  </script>
+
+  <script>
+  // ---------- Adjuster tool: drag/resize the real hotspots + crop their inner images ----------
+  // Remove this entire <script> block (and the #adjustToggle/#adjustPanel elements and their CSS)
+  // once positioning is finalized.
+  (function () {
+    const toggleBtn = document.getElementById('adjustToggle');
+    const panel = document.getElementById('adjustPanel');
+    let adjustOn = false;
+
+    // Targets: id -> { el, imgEl (or null), unit: 'px' | '%' }
+    const targets = {};
+    document.querySelectorAll('.back-flag a').forEach((el, i) => {
+      targets['back-flag-link' + (i || '')] = { el, imgEl: null, unit: '%' };
+    });
+    ['linkSubstack', 'linkDocument2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) targets[id] = { el, imgEl: el.querySelector('img'), unit: 'px' };
+    });
+
+    function currentPx(el, prop) {
+      const cs = getComputedStyle(el);
+      return parseFloat(cs[prop]) || 0;
+    }
+
+    function toggleAdjust() {
+      adjustOn = !adjustOn;
+      document.body.classList.toggle('adjust-mode', adjustOn);
+      panel.classList.toggle('open', adjustOn);
+      toggleBtn.textContent = 'Adjust mode: ' + (adjustOn ? 'ON' : 'OFF');
+      if (adjustOn) buildPanel();
+    }
+    toggleBtn.addEventListener('click', toggleAdjust);
+
+    function buildPanel() {
+      panel.innerHTML = '<div class="hint">Drag a hotspot to move it, drag its bottom-right corner to resize. Inner image crop (left/top/width) is editable below for boxes that have a zoomed image. Values update live; copy the CSS at the bottom into your stylesheet when done.</div>';
+      Object.keys(targets).forEach(name => {
+        const box = document.createElement('div');
+        box.innerHTML = `<h3>#${name}</h3><div id="out-${name}"></div>`;
+        panel.appendChild(box);
+        wireDrag(name);
+      });
+      const outputAll = document.createElement('pre');
+      outputAll.id = 'fullOutput';
+      panel.appendChild(outputAll);
+      Object.keys(targets).forEach(refreshOut);
+      refreshFullOutput();
+    }
+
+    function wireDrag(name) {
+      const { el, imgEl, unit } = targets[name];
+      let mode = null; // 'move' | 'resize-box' | 'resize-img' via alt-drag on image not needed; img uses number inputs
+      let startX, startY, startLeft, startTop, startW, startH;
+
+      el.addEventListener('mousedown', (e) => {
+        if (!adjustOn) return;
+        const rect = el.getBoundingClientRect();
+        const nearCorner = (e.clientX > rect.right - 14) && (e.clientY > rect.bottom - 14);
+        mode = nearCorner ? 'resize' : 'move';
+        startX = e.clientX; startY = e.clientY;
+        startLeft = currentPx(el, 'left');
+        startTop = currentPx(el, 'top');
+        startW = currentPx(el, 'width');
+        startH = currentPx(el, 'height');
+        e.preventDefault();
+        e.stopPropagation();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!adjustOn || !mode) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (mode === 'move') {
+          el.style.left = (startLeft + dx) + 'px';
+          el.style.top = (startTop + dy) + 'px';
+        } else {
+          el.style.width = Math.max(10, startW + dx) + 'px';
+          el.style.height = Math.max(10, startH + dy) + 'px';
+        }
+        refreshOut(name);
+        refreshFullOutput();
+      });
+
+      document.addEventListener('mouseup', () => { mode = null; });
+    }
+
+    function refreshOut(name) {
+      const { el, imgEl, unit } = targets[name];
+      const out = document.getElementById('out-' + name);
+      if (!out) return;
+      const parentW = el.offsetParent ? el.offsetParent.clientWidth : window.innerWidth;
+      const parentH = el.offsetParent ? el.offsetParent.clientHeight : window.innerHeight;
+      const l = currentPx(el, 'left'), t = currentPx(el, 'top');
+      const w = currentPx(el, 'width'), h = currentPx(el, 'height');
+
+      let html = '';
+      if (unit === '%') {
+        html += `left: ${(l/parentW*100).toFixed(2)}%  top: ${(t/parentH*100).toFixed(2)}%  `;
+        html += `width: ${(w/parentW*100).toFixed(2)}%  height: ${(h/parentH*100).toFixed(2)}%<br>`;
+      } else {
+        html += `left: ${l.toFixed(0)}px  top: ${t.toFixed(0)}px  width: ${w.toFixed(0)}px  height: ${h.toFixed(0)}px<br>`;
+      }
+
+      if (imgEl) {
+        const il = currentPx(imgEl, 'left'), it = currentPx(imgEl, 'top'), iw = currentPx(imgEl, 'width');
+        html += `<label>img left <input type="number" value="${il.toFixed(0)}" data-name="${name}" data-k="imgLeft" style="width:60px"></label> `;
+        html += `<label>img top <input type="number" value="${it.toFixed(0)}" data-name="${name}" data-k="imgTop" style="width:60px"></label> `;
+        html += `<label>img width <input type="number" value="${iw.toFixed(0)}" data-name="${name}" data-k="imgWidth" style="width:60px"></label>`;
+      }
+      out.innerHTML = html;
+
+      out.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const k = inp.dataset.k;
+          const v = inp.value + 'px';
+          if (k === 'imgLeft') imgEl.style.left = v;
+          if (k === 'imgTop') imgEl.style.top = v;
+          if (k === 'imgWidth') imgEl.style.width = v;
+          refreshFullOutput();
+        });
+      });
+    }
+
+    function refreshFullOutput() {
+      let css = '';
+      Object.keys(targets).forEach(name => {
+        const { el, imgEl, unit } = targets[name];
+        const parentW = el.offsetParent ? el.offsetParent.clientWidth : window.innerWidth;
+        const parentH = el.offsetParent ? el.offsetParent.clientHeight : window.innerHeight;
+        const l = currentPx(el, 'left'), t = currentPx(el, 'top');
+        const w = currentPx(el, 'width'), h = currentPx(el, 'height');
+        css += `#${name} {\n`;
+        if (unit === '%') {
+          css += `  left: ${(l/parentW*100).toFixed(2)}%;\n`;
+          css += `  top: ${(t/parentH*100).toFixed(2)}%;\n`;
+          css += `  width: ${(w/parentW*100).toFixed(2)}%;\n`;
+          css += `  height: ${(h/parentH*100).toFixed(2)}%;\n`;
+        } else {
+          css += `  left: ${l.toFixed(0)}px;\n`;
+          css += `  top: ${t.toFixed(0)}px;\n`;
+          css += `  width: ${w.toFixed(0)}px;\n`;
+          css += `  height: ${h.toFixed(0)}px;\n`;
+        }
+        css += `}\n`;
+        if (imgEl) {
+          css += `#${name} img {\n`;
+          css += `  left: ${currentPx(imgEl,'left').toFixed(0)}px;\n`;
+          css += `  top: ${currentPx(imgEl,'top').toFixed(0)}px;\n`;
+          css += `  width: ${currentPx(imgEl,'width').toFixed(0)}px;\n`;
+          css += `}\n`;
+        }
+        css += '\n';
+      });
+      const outEl = document.getElementById('fullOutput');
+      if (outEl) outEl.textContent = css;
+    }
+  })();
   </script>
 </body>
 </html>
