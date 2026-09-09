@@ -3,10 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Electoral Observation Project</title>
+  <title>Livro: Povos Originários do Brasil</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .project-title {
+    html, body {
+      min-height: auto;
+    }
+    .page {
+      position: relative;
+      min-height: 850px;
+    }
+    .back-flag {
+      height: 22vw;
+      overflow: hidden;
+    }
+    .back-flag img {
+      width: 100vw;
+      height: auto;
+    }
+    .back-flag a {
+      position: absolute;
+      left: 79.93%;
+      top: 7%;        /* a bit higher than the reference page's 10.72% */
+      width: 17.98%;
+      height: 3.97%;  /* back to the original — height wasn't the problem */
+    }
+    #titleEl {
       position: absolute;
       top: 34.5px;
       left: 50%;
@@ -17,27 +39,114 @@
       margin: 0;
       text-align: center;
     }
+    #bubble1 {
+      position: absolute;
+      left: -40px;
+      top: 108px;
+      width: 466px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -2.5px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble3 {
+      position: absolute;
+      left: 512px;
+      top: 486px;
+      width: 150px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      line-height: 2.2;
+    }
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      max-width: none;
+    }
+    /* Tulips, positioned toward the base of bubble3's text, scaled down from the page1 reference */
+    #linkSubstack {
+      left: 400px;
+      top: 560px;
+      width: 90px;
+      height: 80px;
+      overflow: hidden;
+    }
+    #linkSubstack img {
+      position: absolute;
+      max-width: none;
+      width: 921px;
+      height: auto;
+      left: -224px;
+      top: -326px;
+    }
+    .hl-substack {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 89, 0);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+  
+    #linkDocument2 {
+      left: 420px;    /* shifted left so it clears the flag */
+      top: 200px;     /* shifted down so it clears the flag */
+      width: 300px;
+      height: 300px;
+      overflow: hidden;
+    }
+    #linkDocument2 img {
+      position: absolute;
+      max-width: none;
+      /* Cropped/zoomed onto just the tree instead of the whole padded canvas.
+         Estimated from the screenshot — if the tree isn't centered once you
+         view it live, nudge only "left" and "top" below (small px changes),
+         the width/height zoom level should already be close. */
+      width: 1393px;
+      height: 1393px;
+      left: -888px;
+      top: -60px;
+    }
+
+    /* TEMP DEBUG: outlines to visualize clickable hit areas — remove when done positioning */
+    .back-flag a,
+    .link-button {
+      outline: 2px dashed rgba(255, 0, 0, 0.7);
+      outline-offset: -2px;
+      background: rgba(255, 0, 0, 0.08);
+    }
   </style>
 </head>
 <body>
   <div class="back-flag">
-    <img src="../images/flag-electoral-observation-project.png" alt="">
-    <a href="../index.html#quad3" aria-label="Back to board" style="left:79.93%; top:10.72%; width:17.98%; height:3.97%;"></a>
+    <img src="../images/flag-book-participation.png" alt="">
+    <a href="../index.html#quad2" aria-label="Back to board"></a>
   </div>
-  <div class="page">
-    <h1 class="project-title">Electoral Observation Project</h1>
-    <p class="project-subtitle">Project overview</p>
-    <div class="project-body">
-      <p>Placeholder text for Electoral Observation Project. Replace with the real project description.</p>
+  <div class="page" id="pageContainer">
+    <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
+    <div class="project-body" id="projectBody">
+      <div class="body-bubble" id="bubble1">As part of my coursework at Labjor, I collaborated with two classmates on a book chapter examining the absence of Indigenous peoples within the Sustainable Development Goals and the 2030 Agenda, in the Brazilian context. My contribution focused on bridging the human rights perspective with the country's contextual realities, developing two sections: "A Agenda 2030 e a causa indígena" and "Paradigma dos direitos humanos."</div>
+      <div class="body-bubble" id="bubble3">(I also wrote about this analysis and its findings on my <span class="hl-substack">Substack newsletter</span>.)</div>
     </div>
+    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+      <img src="../images/page1-sub-logo.PNG" alt="Substack article">
+    </a>
+    <a class="link-button" id="linkDocument2" href="https://www.labjor.unicamp.br/wp-content/uploads/2024/07/POVOS-ORIGINARIOS-DO-BRASIL-25-03-1.pdf" target="_blank" rel="noopener noreferrer" aria-label="Read the full chapter PDF">
+      <img src="../images/page2-document2.PNG" alt="Book chapter PDF">
+    </a>
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
-      'book-participation.html',
       'electoral-observation-project.html',
       'myooz-inc.html'
     ];
