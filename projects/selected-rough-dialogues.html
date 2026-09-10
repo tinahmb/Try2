@@ -1,4 +1,320 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selected Rough Dialogues</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body {
+      min-height: auto;
+    }
+    .page {
+      position: relative;
+      min-height: 850px;
+    }
+    .back-flag {
+      height: 22vw;
+      overflow: hidden;
+    }
+    .back-flag img {
+      width: 100vw;
+      height: auto;
+    }
+    .project-title {
+      position: absolute;
+      top: 34.5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      white-space: nowrap;
+      font-size: 40px;
+      margin: 0;
+      text-align: center;
+      opacity: 80%;
+    }
+    #bubble1 {
+      position: absolute;
+      left: 55px;
+      top: 108px;
+      width: 703px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -2.5px;
+      word-spacing: 2px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble2 {
+      position: absolute;
+      left: 55px;
+      top: 538px;
+      width: 447px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -2.5px;
+      word-spacing: 2px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble3 {
+      position: absolute;
+      left: 55px;
+      top: 365px;
+      width: 324px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+    #bubble4 {
+      position: absolute;
+      left: 518px;
+      top: 540px;
+      width: 233px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 85%;
+    }
+    #linkSub1 {
+      left: 55px;
+      top: 800px;
+      width: 100px;
+      height: 100px;
+    }
+    #linkSub2 {
+      left: 175px;
+      top: 800px;
+      width: 100px;
+      height: 100px;
+    }
+    #linkSub3 {
+      left: 295px;
+      top: 800px;
+      width: 100px;
+      height: 100px;
+    }
+    #linkUvl1 {
+      left: 415px;
+      top: 800px;
+      width: 100px;
+      height: 100px;
+    }
+    #linkUvl2 {
+      left: 535px;
+      top: 800px;
+      width: 100px;
+      height: 100px;
+    }
+
+    /* ===== TEMPORARY — placement tool, remove when done ===== */
+    .draggable {
+      cursor: move;
+      outline: 2px dashed red;
+      background: rgba(255, 0, 0, 0.08);
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .resize-handle {
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 14px;
+      height: 14px;
+      background: red;
+      cursor: nwse-resize;
+      z-index: 10;
+    }
+    #placementReadout {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: #000;
+      color: #0f0;
+      font: 12px monospace;
+      padding: 8px 10px;
+      z-index: 99999;
+      white-space: pre;
+      max-width: 90vw;
+      line-height: 1.5;
+    }
+    /* ===== END TEMPORARY ===== */
+  </style>
+</head>
+<body>
+  <div class="back-flag">
+    <img src="../images/flag-selected-rough-dialogues.png" alt="">
+    <a href="../index.html#quad3" aria-label="Back to board" style="left:4.65%; top:9.04%; width:17.98%; height:4.00%;"></a>
+  </div>
+  <div class="page">
+    <h1 class="project-title">Selected Rough Dialogues</h1>
+    <div class="project-body">
+      <div class="body-bubble draggable" id="bubble1">Selected Rough Dialogues is a weekly newsletter for anyone drawn to the diffuse, often complex conversations at the intersection of human rights, civic tech, and digital governance. I write from my own perspective, reflecting on the cultural nuances that emerge where technology meets the public interest, unpacking policy shifts and exploring ethical tensions in design and infrastructure.
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble2">Unvoiced Lyrics is a column within Rough Dialogues, a self-appointed creative residency where I share lyric-poems alongside their stories, exploring creative processes in collaboration with AI.
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble3">(Here's an assortment of selected entries.)
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble4">(And from Unvoiced Lyrics.)
+        <div class="resize-handle"></div>
+      </div>
+    </div>
+
+    <a class="link-button draggable" id="linkSub1" href="https://tinahmb.substack.com/p/on-collaboration-online-encounters?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="On Collaboration">
+      <img src="../images/page4-sub1.png" alt="On Collaboration">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkSub2" href="https://tinahmb.substack.com/p/right-constructions-in-the-digital?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Right(s) Constructions in the Digital">
+      <img src="../images/page4-sub2.png" alt="Right(s) Constructions in the Digital">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkSub3" href="https://tinahmb.substack.com/p/technoculture-designing-participation" target="_blank" rel="noopener noreferrer" aria-label="Technoculture: Designing Participation">
+      <img src="../images/page4-sub3.png" alt="Technoculture: Designing Participation">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkUvl1" href="https://tinahmb.substack.com/p/unvoiced-lyrics-lbs" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: LBs">
+      <img src="../images/page4-uvl1.png" alt="Unvoiced Lyrics: LBs">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkUvl2" href="https://tinahmb.substack.com/p/unvoiced-lyrics-restless" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: Restless">
+      <img src="../images/page4-uvl2.png" alt="Unvoiced Lyrics: Restless">
+      <div class="resize-handle"></div>
+    </a>
+
+    <div class="project-links">
+      <!-- <a href="#">Further reading link</a> -->
+    </div>
+  </div>
+
+  <!-- ===== TEMPORARY — placement tool, remove when done ===== -->
+  <div id="placementReadout"></div>
+  <script>
+    function makeDraggable(el) {
+      let offsetX = 0, offsetY = 0, dragging = false;
+      let resizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
+      const handle = el.querySelector('.resize-handle');
+
+      function startDrag(clientX, clientY) {
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
+      }
+      function moveDrag(clientX, clientY) {
+        if (!dragging) return;
+        const parentRect = el.offsetParent.getBoundingClientRect();
+        const newLeft = clientX - offsetX - parentRect.left;
+        const newTop = clientY - offsetY - parentRect.top;
+        el.style.left = `${Math.round(newLeft)}px`;
+        el.style.top = `${Math.round(newTop)}px`;
+        updateReadout();
+      }
+      function endDrag() { dragging = false; }
+
+      function startResize(clientX, clientY) {
+        resizing = true;
+        startW = el.offsetWidth;
+        startH = el.offsetHeight;
+        startX = clientX;
+        startY = clientY;
+      }
+      function moveResize(clientX, clientY) {
+        if (!resizing) return;
+        const newW = startW + (clientX - startX);
+        const newH = startH + (clientY - startY);
+        el.style.width = `${Math.max(20, Math.round(newW))}px`;
+        el.style.height = `${Math.max(20, Math.round(newH))}px`;
+        updateReadout();
+      }
+      function endResize() { resizing = false; }
+
+      el.addEventListener('mousedown', e => {
+        if (e.target === handle) return;
+        if (el.tagName === 'A') e.preventDefault();
+        startDrag(e.clientX, e.clientY);
+      });
+      document.addEventListener('mousemove', e => {
+        moveDrag(e.clientX, e.clientY);
+        moveResize(e.clientX, e.clientY);
+      });
+      document.addEventListener('mouseup', () => { endDrag(); endResize(); });
+
+      el.addEventListener('touchstart', e => {
+        if (e.target === handle) return;
+        const t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+        moveResize(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchend', () => { endDrag(); endResize(); });
+
+      if (handle) {
+        handle.addEventListener('mousedown', e => {
+          startResize(e.clientX, e.clientY);
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        handle.addEventListener('touchstart', e => {
+          const t = e.touches[0];
+          startResize(t.clientX, t.clientY);
+          e.stopPropagation();
+        }, { passive: true });
+      }
+    }
+
+    function updateReadout() {
+      const ids = ['bubble1', 'bubble2', 'bubble3', 'bubble4', 'linkSub1', 'linkSub2', 'linkSub3', 'linkUvl1', 'linkUvl2'];
+      let out = '';
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        out += `${id} → top: ${el.style.top || el.offsetTop + 'px'}  left: ${el.style.left || el.offsetLeft + 'px'}  w: ${el.offsetWidth}px  h: ${el.offsetHeight}px\n`;
+      });
+      document.getElementById('placementReadout').textContent = out;
+    }
+
+    document.querySelectorAll('.draggable').forEach(makeDraggable);
+    updateReadout();
+  </script>
+  <!-- ===== END TEMPORARY ===== -->
+
+  <script>
+    const spiralLeftPages = [
+      'livro-povos-originarios.html',
+      'book-participation.html',
+      'electoral-observation-project.html',
+      'myooz-inc.html'
+    ];
+    const currentPage = window.location.pathname.split('/').pop();
+    if (spiralLeftPages.includes(currentPage)) {
+      document.body.classList.add('spiral-left');
+    } else {
+      document.body.classList.add('spiral-right');
+    }
+  </script>
+</body>
+</html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
