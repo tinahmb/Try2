@@ -6,6 +6,21 @@
   <title>HR Index</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    html, body {
+      min-height: auto;
+    }
+    .page {
+      position: relative;
+      min-height: 850px;
+    }
+    .back-flag {
+      height: 22vw;
+      overflow: hidden;
+    }
+    .back-flag img {
+      width: 100vw;
+      height: auto;
+    }
     .project-title {
       position: absolute;
       top: 34.5px;
@@ -18,6 +33,109 @@
       text-align: center;
       opacity: 80%;
     }
+    #bubble1 {
+      position: absolute;
+      left: 55px;
+      top: 108px;
+      width: 466px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -2.5px;
+      word-spacing: 2px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble2 {
+      position: absolute;
+      left: 55px;
+      top: 320px;
+      width: 300px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+    #bubble3 {
+      position: absolute;
+      left: 55px;
+      top: 460px;
+      width: 300px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      max-width: none;
+    }
+    #linkTool {
+      left: 55px;
+      top: 600px;
+      width: 150px;
+      height: 100px;
+    }
+    #linkSubstack {
+      left: 220px;
+      top: 600px;
+      width: 150px;
+      height: 100px;
+    }
+
+    .hl-tool {
+      text-decoration: underline;
+      text-decoration-color: rgb(135, 189, 42);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-substack {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 89, 0);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
+    /* ===== TEMPORARY — placement tool, remove when done ===== */
+    .draggable {
+      cursor: move;
+      outline: 2px dashed red;
+      background: rgba(255, 0, 0, 0.08);
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .resize-handle {
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 14px;
+      height: 14px;
+      background: red;
+      cursor: nwse-resize;
+      z-index: 10;
+    }
+    #placementReadout {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: #000;
+      color: #0f0;
+      font: 12px monospace;
+      padding: 8px 10px;
+      z-index: 99999;
+      white-space: pre;
+      max-width: 90vw;
+      line-height: 1.5;
+    }
+    /* ===== END TEMPORARY ===== */
   </style>
 </head>
 <body>
@@ -27,14 +145,124 @@
   </div>
   <div class="page">
     <h1 class="project-title">HR Index</h1>
-    <p class="project-subtitle">Project overview</p>
     <div class="project-body">
-      <p>Placeholder text for HR Index. Replace with the real project description.</p>
+      <div class="body-bubble draggable" id="bubble1">HRIndex is a <span class="hl-tool">web-grounded information retrieval tool</span> for human rights research, designed to surface article-level sources rather than generic summaries.
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble2">(I wrote about it on my <span class="hl-substack">Substack newsletter</span>.)
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble3">(The tool is temporarily disabled.)
+        <div class="resize-handle"></div>
+      </div>
     </div>
+
+    <a class="link-button draggable" id="linkTool" href="https://hrindex.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open HRIndex tool">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkSubstack" href="https://tinahmb.substack.com/p/access-beyond-use-technology-markets?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+      <div class="resize-handle"></div>
+    </a>
+
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
+
+  <!-- ===== TEMPORARY — placement tool, remove when done ===== -->
+  <div id="placementReadout"></div>
+  <script>
+    function makeDraggable(el) {
+      let offsetX = 0, offsetY = 0, dragging = false;
+      let resizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
+      const handle = el.querySelector('.resize-handle');
+
+      function startDrag(clientX, clientY) {
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
+      }
+      function moveDrag(clientX, clientY) {
+        if (!dragging) return;
+        const parentRect = el.offsetParent.getBoundingClientRect();
+        const newLeft = clientX - offsetX - parentRect.left;
+        const newTop = clientY - offsetY - parentRect.top;
+        el.style.left = `${Math.round(newLeft)}px`;
+        el.style.top = `${Math.round(newTop)}px`;
+        updateReadout();
+      }
+      function endDrag() { dragging = false; }
+
+      function startResize(clientX, clientY) {
+        resizing = true;
+        startW = el.offsetWidth;
+        startH = el.offsetHeight;
+        startX = clientX;
+        startY = clientY;
+      }
+      function moveResize(clientX, clientY) {
+        if (!resizing) return;
+        const newW = startW + (clientX - startX);
+        const newH = startH + (clientY - startY);
+        el.style.width = `${Math.max(40, Math.round(newW))}px`;
+        el.style.height = `${Math.max(20, Math.round(newH))}px`;
+        updateReadout();
+      }
+      function endResize() { resizing = false; }
+
+      el.addEventListener('mousedown', e => {
+        if (e.target === handle) return;
+        if (el.tagName === 'A') e.preventDefault();
+        startDrag(e.clientX, e.clientY);
+      });
+      document.addEventListener('mousemove', e => {
+        moveDrag(e.clientX, e.clientY);
+        moveResize(e.clientX, e.clientY);
+      });
+      document.addEventListener('mouseup', () => { endDrag(); endResize(); });
+
+      el.addEventListener('touchstart', e => {
+        if (e.target === handle) return;
+        const t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+        moveResize(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchend', () => { endDrag(); endResize(); });
+
+      if (handle) {
+        handle.addEventListener('mousedown', e => {
+          startResize(e.clientX, e.clientY);
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        handle.addEventListener('touchstart', e => {
+          const t = e.touches[0];
+          startResize(t.clientX, t.clientY);
+          e.stopPropagation();
+        }, { passive: true });
+      }
+    }
+
+    function updateReadout() {
+      const ids = ['bubble1', 'bubble2', 'bubble3', 'linkTool', 'linkSubstack'];
+      let out = '';
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        out += `${id} → top: ${el.style.top || el.offsetTop + 'px'}  left: ${el.style.left || el.offsetLeft + 'px'}  w: ${el.offsetWidth}px  h: ${el.offsetHeight}px\n`;
+      });
+      document.getElementById('placementReadout').textContent = out;
+    }
+
+    document.querySelectorAll('.draggable').forEach(makeDraggable);
+    updateReadout();
+  </script>
+  <!-- ===== END TEMPORARY ===== -->
+
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
