@@ -189,6 +189,11 @@
     <a class="link-button draggable" id="linkForbes" href="https://forbes.com.mx/tag/rucd/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on Forbes México">
       <div class="resize-handle"></div>
     </a>
+    <a class="link-button draggable" id="linkAristegui" href="https://aristeguinoticias.com/2003/mexico/la-rucd-busca-que-se-respete-la-voluntad-popular-en-las-elecciones-2018-john-ackerman/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on Aristegui Noticias">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkJornada" href="https://www.jornada.com.mx/2018/05/17/politica/006n1pol" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on La Jornada">
+      <div class="resize-handle"></div>
     <a class="link-button draggable" id="linkNation" href="https://www.thenation.com/article/archive/heroes-story-notes-mexican-election/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on The Nation">
       <div class="resize-handle"></div>
     </a>
@@ -278,7 +283,7 @@
     }
 
     function updateReadout() {
-      const ids = ['bubble1', 'bubble2', 'bubble3', 'bubble4', 'linkReport', 'linkForbes', 'linkNation'];
+      const ids = ['bubble1', 'bubble2', 'bubble3', 'bubble4', 'linkReport', 'linkForbes', 'linkNation', 'linkAristegui', 'linkJornada'];
       let out = '';
       ids.forEach(id => {
         const el = document.getElementById(id);
