@@ -69,21 +69,81 @@
     #bubble4 {
       position: absolute;
       left: -55px;
-      top:665px;
+      top: 665px;
       width: 550px;
       font-size: 20px;
       text-align: justify;
       letter-spacing: -2px;
       word-spacing: 2px;
       line-height: 2.2;
-    
     }
+
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      max-width: none;
+    }
+    #linkReport {
+      left: 55px;
+      top: 850px;
+      width: 150px;
+      height: 100px;
+    }
+    #linkForbes {
+      left: 220px;
+      top: 850px;
+      width: 150px;
+      height: 100px;
+    }
+    #linkNation {
+      left: 385px;
+      top: 850px;
+      width: 150px;
+      height: 100px;
+    }
+
+    .hl-report {
+      text-decoration: underline;
+      text-decoration-color: rgb(135, 189, 42);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-forbes {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 89, 0);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-nation {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 234, 4);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
     /* ===== TEMPORARY — placement tool, remove when done ===== */
     .draggable {
       cursor: move;
       outline: 2px dashed red;
       background: rgba(255, 0, 0, 0.08);
       user-select: none;
+      box-sizing: border-box;
+    }
+    .resize-handle {
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 14px;
+      height: 14px;
+      background: red;
+      cursor: nwse-resize;
+      z-index: 10;
     }
     #placementReadout {
       position: fixed;
@@ -109,11 +169,30 @@
   <div class="page">
     <h1 class="project-title">Electoral Observation Project</h1>
     <div class="project-body">
-      <div class="body-bubble draggable" id="bubble1">In 2018, while at the Fray Francisco de Vitoria Human Rights Center, I served as operational coordinator for a national observation project during Mexico's presidential election, driven by the Red Universitaria y Ciudadana por la Democracia (RUCD), a Mexican civil society network working in defense of democracy.</div>
-      <div class="body-bubble draggable" id="bubble2">We received UNDP funding and managed communications and security monitoring for 303 observers deployed across 7 states, coordinating a distributed network of 170+ institutional partners from 77 universities and 12 civil society organizations spanning 13 countries. We also organized certification workshops and oversaw logistics for 100+ international observers.</div>
-      <div class="body-bubble draggable" id="bubble3">(Part of this experience and its results were captured in the RUCD's official 2018 report.)</div>
-      <div class="body-bubble draggable" id="bubble4">(Our work was also picked up by national and international media outlets.)</div>
+      <div class="body-bubble draggable" id="bubble1">In 2018, while at the Fray Francisco de Vitoria Human Rights Center, I served as operational coordinator for a national observation project during Mexico's presidential election, driven by the Red Universitaria y Ciudadana por la Democracia (RUCD), a Mexican civil society network working in defense of democracy.
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble2">We received UNDP funding and managed communications and security monitoring for 303 observers deployed across 7 states, coordinating a distributed network of 170+ institutional partners from 77 universities and 12 civil society organizations spanning 13 countries. We also organized certification workshops and oversaw logistics for 100+ international observers.
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble3">(Part of this experience and its results were captured in the RUCD's <span class="hl-report">official 2018 report</span>.)
+        <div class="resize-handle"></div>
+      </div>
+      <div class="body-bubble draggable" id="bubble4">(Our work was also picked up by outlets like <span class="hl-forbes">Forbes México</span> and <span class="hl-nation">The Nation</span>.)
+        <div class="resize-handle"></div>
+      </div>
     </div>
+
+    <a class="link-button draggable" id="linkReport" href="https://repositoriodocumental.ine.mx/xmlui/bitstream/handle/123456789/175199/Informe.RUCD.PDF" target="_blank" rel="noopener noreferrer" aria-label="Read the RUCD 2018 report">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkForbes" href="https://forbes.com.mx/tag/rucd/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on Forbes México">
+      <div class="resize-handle"></div>
+    </a>
+    <a class="link-button draggable" id="linkNation" href="https://www.thenation.com/article/archive/heroes-story-notes-mexican-election/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on The Nation">
+      <div class="resize-handle"></div>
+    </a>
+
     <div class="project-links">
       <!-- <a href="#">Further reading link</a> -->
     </div>
@@ -124,14 +203,16 @@
   <script>
     function makeDraggable(el) {
       let offsetX = 0, offsetY = 0, dragging = false;
+      let resizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
+      const handle = el.querySelector('.resize-handle');
 
-      function start(clientX, clientY) {
+      function startDrag(clientX, clientY) {
         dragging = true;
         const rect = el.getBoundingClientRect();
         offsetX = clientX - rect.left;
         offsetY = clientY - rect.top;
       }
-      function move(clientX, clientY) {
+      function moveDrag(clientX, clientY) {
         if (!dragging) return;
         const parentRect = el.offsetParent.getBoundingClientRect();
         const newLeft = clientX - offsetX - parentRect.left;
@@ -140,25 +221,64 @@
         el.style.top = `${Math.round(newTop)}px`;
         updateReadout();
       }
-      function end() { dragging = false; }
+      function endDrag() { dragging = false; }
 
-      el.addEventListener('mousedown', e => { start(e.clientX, e.clientY); e.preventDefault(); });
-      document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-      document.addEventListener('mouseup', end);
+      function startResize(clientX, clientY) {
+        resizing = true;
+        startW = el.offsetWidth;
+        startH = el.offsetHeight;
+        startX = clientX;
+        startY = clientY;
+      }
+      function moveResize(clientX, clientY) {
+        if (!resizing) return;
+        const newW = startW + (clientX - startX);
+        const newH = startH + (clientY - startY);
+        el.style.width = `${Math.max(40, Math.round(newW))}px`;
+        el.style.height = `${Math.max(20, Math.round(newH))}px`;
+        updateReadout();
+      }
+      function endResize() { resizing = false; }
+
+      el.addEventListener('mousedown', e => {
+        if (e.target === handle) return;
+        if (el.tagName === 'A') e.preventDefault();
+        startDrag(e.clientX, e.clientY);
+      });
+      document.addEventListener('mousemove', e => {
+        moveDrag(e.clientX, e.clientY);
+        moveResize(e.clientX, e.clientY);
+      });
+      document.addEventListener('mouseup', () => { endDrag(); endResize(); });
 
       el.addEventListener('touchstart', e => {
+        if (e.target === handle) return;
         const t = e.touches[0];
-        start(t.clientX, t.clientY);
+        startDrag(t.clientX, t.clientY);
       }, { passive: true });
       document.addEventListener('touchmove', e => {
         const t = e.touches[0];
-        move(t.clientX, t.clientY);
+        moveDrag(t.clientX, t.clientY);
+        moveResize(t.clientX, t.clientY);
       }, { passive: true });
-      document.addEventListener('touchend', end);
+      document.addEventListener('touchend', () => { endDrag(); endResize(); });
+
+      if (handle) {
+        handle.addEventListener('mousedown', e => {
+          startResize(e.clientX, e.clientY);
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        handle.addEventListener('touchstart', e => {
+          const t = e.touches[0];
+          startResize(t.clientX, t.clientY);
+          e.stopPropagation();
+        }, { passive: true });
+      }
     }
 
     function updateReadout() {
-      const ids = ['bubble1', 'bubble2', 'bubble3', 'bubble4'];
+      const ids = ['bubble1', 'bubble2', 'bubble3', 'bubble4', 'linkReport', 'linkForbes', 'linkNation'];
       let out = '';
       ids.forEach(id => {
         const el = document.getElementById(id);
