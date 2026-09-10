@@ -143,46 +143,12 @@
       top: -60px;
       opacity: 80%;
     }
-
-    /* ===== TEMPORARY — placement tool, remove when done ===== */
-    .draggable {
-      cursor: move;
-      outline: 2px dashed red;
-      user-select: none;
-      box-sizing: border-box;
-    }
-    .resize-handle {
-      position: absolute;
-      right: -6px;
-      bottom: -6px;
-      width: 14px;
-      height: 14px;
-      background: red;
-      cursor: nwse-resize;
-      z-index: 10;
-    }
-    #placementReadout {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: #000;
-      color: #0f0;
-      font: 12px monospace;
-      padding: 8px 10px;
-      z-index: 99999;
-      white-space: pre;
-      max-width: 90vw;
-      line-height: 1.5;
-    }
-    /* ===== END TEMPORARY ===== */
   </style>
 </head>
 <body>
   <div class="back-flag">
     <img src="../images/flag-book-participation.png" alt="">
-    <a class="draggable" href="../index.html#quad2" aria-label="Back to board">
-      <div class="resize-handle"></div>
-    </a>
+    <a href="../index.html#quad2" aria-label="Back to board"></a>
   </div>
   <div class="page" id="pageContainer">
     <h1 class="project-title" id="titleEl">Livro: Povos Originários do Brasil</h1>
@@ -192,9 +158,8 @@
       <div class="body-bubble" id="bubble3">(I also wrote about this analysis and thoughts on my <span class="hl-substack">Substack newsletter</span>.)</div>
       <div class="body-bubble" id="bubble4">The second section applies a human rights framework to Indigenous self-determination, critiquing societal tendencies to view native communities through static traditionalism, forced economic integration, or outright policy omission.</div>
     </div>
-    <a class="link-button draggable" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/indigenous-voices-in-global-agendas" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
       <img src="../images/page1-sub-logo.PNG" alt="Substack article">
-      <div class="resize-handle"></div>
     </a>
     <a class="link-button" id="linkDocument2" href="https://www.labjor.unicamp.br/wp-content/uploads/2024/07/POVOS-ORIGINARIOS-DO-BRASIL-25-03-1.pdf" target="_blank" rel="noopener noreferrer" aria-label="Read the full chapter PDF">
       <img src="../images/page2-document2.PNG" alt="Book chapter PDF">
@@ -203,113 +168,6 @@
       <!-- <a href="#">Further reading link</a> -->
     </div>
   </div>
-
-  <!-- ===== TEMPORARY — placement tool, remove when done ===== -->
-  <div id="placementReadout"></div>
-  <script>
-    function makeDraggable(el, isPercent) {
-      let offsetX = 0, offsetY = 0, dragging = false;
-      let resizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
-      const handle = el.querySelector('.resize-handle');
-
-      function startDrag(clientX, clientY) {
-        dragging = true;
-        const rect = el.getBoundingClientRect();
-        offsetX = clientX - rect.left;
-        offsetY = clientY - rect.top;
-      }
-      function moveDrag(clientX, clientY) {
-        if (!dragging) return;
-        const parentRect = el.offsetParent.getBoundingClientRect();
-        const newLeft = clientX - offsetX - parentRect.left;
-        const newTop = clientY - offsetY - parentRect.top;
-        if (isPercent) {
-          el.style.left = `${((newLeft / parentRect.width) * 100).toFixed(2)}%`;
-          el.style.top = `${((newTop / parentRect.height) * 100).toFixed(2)}%`;
-        } else {
-          el.style.left = `${Math.round(newLeft)}px`;
-          el.style.top = `${Math.round(newTop)}px`;
-        }
-        updateReadout();
-      }
-      function endDrag() { dragging = false; }
-
-      function startResize(clientX, clientY) {
-        resizing = true;
-        startW = el.offsetWidth;
-        startH = el.offsetHeight;
-        startX = clientX;
-        startY = clientY;
-      }
-      function moveResize(clientX, clientY) {
-        if (!resizing) return;
-        const parentRect = el.offsetParent.getBoundingClientRect();
-        const newW = startW + (clientX - startX);
-        const newH = startH + (clientY - startY);
-        if (isPercent) {
-          el.style.width = `${((Math.max(20, newW) / parentRect.width) * 100).toFixed(2)}%`;
-          el.style.height = `${((Math.max(10, newH) / parentRect.height) * 100).toFixed(2)}%`;
-        } else {
-          el.style.width = `${Math.max(20, Math.round(newW))}px`;
-          el.style.height = `${Math.max(10, Math.round(newH))}px`;
-        }
-        updateReadout();
-      }
-      function endResize() { resizing = false; }
-
-      el.addEventListener('mousedown', e => {
-        if (e.target === handle) return;
-        e.preventDefault();
-        startDrag(e.clientX, e.clientY);
-      });
-      document.addEventListener('mousemove', e => {
-        moveDrag(e.clientX, e.clientY);
-        moveResize(e.clientX, e.clientY);
-      });
-      document.addEventListener('mouseup', () => { endDrag(); endResize(); });
-
-      el.addEventListener('touchstart', e => {
-        if (e.target === handle) return;
-        const t = e.touches[0];
-        startDrag(t.clientX, t.clientY);
-      }, { passive: true });
-      document.addEventListener('touchmove', e => {
-        const t = e.touches[0];
-        moveDrag(t.clientX, t.clientY);
-        moveResize(t.clientX, t.clientY);
-      }, { passive: true });
-      document.addEventListener('touchend', () => { endDrag(); endResize(); });
-
-      if (handle) {
-        handle.addEventListener('mousedown', e => {
-          startResize(e.clientX, e.clientY);
-          e.stopPropagation();
-          e.preventDefault();
-        });
-        handle.addEventListener('touchstart', e => {
-          const t = e.touches[0];
-          startResize(t.clientX, t.clientY);
-          e.stopPropagation();
-        }, { passive: true });
-      }
-    }
-
-    function updateReadout() {
-      const backLink = document.querySelector('.back-flag a');
-      const substack = document.getElementById('linkSubstack');
-      let out = '';
-      out += `back-flag link → top: ${backLink.style.top || 'default'}  left: ${backLink.style.left || 'default'}  w: ${backLink.style.width || 'default'}  h: ${backLink.style.height || 'default'}\n`;
-      out += `linkSubstack → top: ${substack.style.top || substack.offsetTop + 'px'}  left: ${substack.style.left || substack.offsetLeft + 'px'}  w: ${substack.offsetWidth}px  h: ${substack.offsetHeight}px`;
-      document.getElementById('placementReadout').textContent = out;
-    }
-
-    // Back-flag link uses percentage-based positioning (matches its CSS rule)
-    makeDraggable(document.querySelector('.back-flag a'), true);
-    // Substack link uses pixel-based positioning (matches its CSS rule)
-    makeDraggable(document.getElementById('linkSubstack'), false);
-    updateReadout();
-  </script>
-  <!-- ===== END TEMPORARY ===== -->
 
   <script>
     const spiralLeftPages = [
