@@ -78,6 +78,37 @@
       line-height: 2.2;
     }
 
+    .hl-entry1 {
+      text-decoration: underline;
+      text-decoration-color: rgb(135, 189, 42);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-entry2 {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 89, 0);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-entry3 {
+      text-decoration: underline;
+      text-decoration-color: rgb(255, 234, 4);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-uvl1 {
+      text-decoration: underline;
+      text-decoration-color: rgb(214, 43, 130);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .hl-uvl2 {
+      text-decoration: underline;
+      text-decoration-color: rgb(51, 91, 168);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
     /* ===== TEMPORARY — placement tool, remove when done ===== */
     .draggable {
       cursor: move;
@@ -126,10 +157,10 @@
       <div class="body-bubble draggable" id="bubble2">Unvoiced Lyrics is a column within Rough Dialogues, a self-appointed creative residency where I share lyric-poems alongside their stories, exploring creative processes in collaboration with AI.
         <div class="resize-handle"></div>
       </div>
-      <div class="body-bubble draggable" id="bubble3">(Here's an assortment of selected entries: "On Collaboration," "Right(s) Constructions in the Digital," and "Technoculture: Designing Participation.")
+      <div class="body-bubble draggable" id="bubble3">(Here's an assortment of selected entries: <a class="hl-entry1" href="https://tinahmb.substack.com/p/on-collaboration-online-encounters?r=5b3vel" target="_blank" rel="noopener noreferrer">"On Collaboration"</a>, <a class="hl-entry2" href="https://tinahmb.substack.com/p/right-constructions-in-the-digital?r=5b3vel" target="_blank" rel="noopener noreferrer">"Right(s) Constructions in the Digital"</a>, and <a class="hl-entry3" href="https://tinahmb.substack.com/p/technoculture-designing-participation" target="_blank" rel="noopener noreferrer">"Technoculture: Designing Participation."</a>)
         <div class="resize-handle"></div>
       </div>
-      <div class="body-bubble draggable" id="bubble4">(And from Unvoiced Lyrics: "LBs" and "Restless.")
+      <div class="body-bubble draggable" id="bubble4">(And from Unvoiced Lyrics: <a class="hl-uvl1" href="https://tinahmb.substack.com/p/unvoiced-lyrics-lbs" target="_blank" rel="noopener noreferrer">"LBs"</a> and <a class="hl-uvl2" href="https://tinahmb.substack.com/p/unvoiced-lyrics-restless" target="_blank" rel="noopener noreferrer">"Restless."</a>)
         <div class="resize-handle"></div>
       </div>
     </div>
@@ -182,6 +213,7 @@
 
       el.addEventListener('mousedown', e => {
         if (e.target === handle) return;
+        if (e.target.tagName === 'A') return;
         startDrag(e.clientX, e.clientY);
         e.preventDefault();
       });
@@ -193,6 +225,7 @@
 
       el.addEventListener('touchstart', e => {
         if (e.target === handle) return;
+        if (e.target.tagName === 'A') return;
         const t = e.touches[0];
         startDrag(t.clientX, t.clientY);
       }, { passive: true });
