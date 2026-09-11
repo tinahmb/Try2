@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electoral Observation Project</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page {
+      position: relative;
+      min-height: 850px;
+    }
+    .back-flag {
+      height: 139.48px; /* was 22vw, converted to px on 634 design width */
+      overflow: hidden;
+    }
+    .back-flag img {
+      width: 100%; /* was 100vw */
+      height: auto;
+    }
+    .project-title {
+      position: absolute;
+      top: 34.5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      white-space: nowrap;
+      font-size: 40px;
+      margin: 0;
+      text-align: center;
+      opacity: 0.8;
+    }
+    #bubble1 {
+      position: absolute;
+      left: -55px;
+      top: 108px;
+      width: 680px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -3px;
+      word-spacing: 3px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble2 {
+      position: absolute;
+      left: -55px;
+      top: 320px;
+      width: 550px;
+      font-size: 27px;
+      text-align: justify;
+      letter-spacing: -3px;
+      word-spacing: 3px;
+      color: rgba(0, 91, 172, 0.85);
+    }
+    #bubble3 {
+      position: absolute;
+      left: 538px;
+      top: 449px;
+      width: 200px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+    #bubble4 {
+      position: absolute;
+      left: -55px;
+      top: 665px;
+      width: 550px;
+      font-size: 20px;
+      text-align: justify;
+      letter-spacing: -2px;
+      word-spacing: 2px;
+      line-height: 2.2;
+    }
+
+    .link-button {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .link-button img {
+      position: absolute;
+      display: block;
+      max-width: none;
+    }
+    #linkReport {
+      top: 298px;
+      left: 567px;
+      width: 139px;
+      height: 137px;
+    }
+  #linkReport img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 1136px;
+  height: auto;
+  left: -790px;
+  top: -600px;
+  opacity: 85%;
+}
+    #linkForbes {
+      top: 715px; 
+      left: 262px;
+      width: 76px; 
+      height: 86px;
+    }
+    #linkForbes img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 800px;
+  height: auto;
+  left: -320px;
+  top: -520px;
+  opacity: 85%;
+}
+    #linkNation {
+      top: 747px;
+      left: 74px;
+      width: 88px;
+      height: 93px;
+    }
+#linkNation img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 800px;
+  height: auto;
+  left: -185px;
+  top: -532px;
+  opacity: 85%;
+}
+    #linkAristegui {
+      top: 716px;
+      left: 375px;  
+      width: 91px;
+      height: 104px;
+    }
+  #linkAristegui img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 800px;
+  height: auto;
+  left: -410px;
+  top: -510px;
+  opacity: 85%;
+}
+
+ #linkJornada {
+      top: 750px;
+      left: -48px;
+      width: 94px;
+      height: 95px;
+    }
+  #linkJornada img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: 800px;
+  height: auto;
+  left: -70px;
+  top: -532px;
+  opacity: 85%;
+}
+    .hl-report {
+      text-decoration: none;
+      border-bottom: 2px solid rgb(226, 26, 84);
+      padding-bottom: 3px;
+    }
+    .hl-forbes {
+      text-decoration: none;
+      border-bottom: 2px solid rgb(0, 91, 172);
+      padding-bottom: 3px;
+    }
+    .hl-national {
+      text-decoration: none;
+      border-bottom: 2px solid rgb(255, 0, 17);
+      padding-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="canvas" id="canvasRoot" data-width="634" data-height="863" data-fit="width">
+    <div class="back-flag">
+      <img src="../images/flag-electoral-observation-project.png" alt="">
+      <a href="../index.html#quad3" aria-label="Back to board" style="top: 75.75%; left: 80.16%; width: 16.67%; height: 11.7%;"></a>
+    </div>
+    <div class="page">
+      <h1 class="project-title">Electoral Observation Project</h1>
+      <div class="project-body">
+        <div class="body-bubble" id="bubble1">In 2018, while at the Fray Francisco de Vitoria Human Rights Center, I served as operational coordinator for a national observation project during Mexico's presidential election, driven by the Red Universitaria y Ciudadana por la Democracia (RUCD), a Mexican civil society network working in defense of democracy.
+        </div>
+        <div class="body-bubble" id="bubble2">We received UNDP funding and managed communications and security monitoring for 303 observers deployed across 7 states, coordinating a distributed network of 170+ institutional partners from 77 universities and 12 civil society organizations spanning 13 countries. We also organized certification workshops and oversaw logistics for 100+ international observers.
+        </div>
+        <div class="body-bubble" id="bubble3">(Part of this experience and its results were captured in the RUCD's <span class="hl-report">official 2018 report</span>.)
+        </div>
+        <div class="body-bubble" id="bubble4">(Our work was also picked up by outlets like <span class="hl-forbes">Forbes México</span>, <span class="hl-forbes">Aristegui Noticias</span>, <span class="hl-forbes">La Jornada</span>, and <span class="hl-national">The Nation</span>.)
+        </div>
+      </div>
+
+      <a class="link-button" id="linkReport" href="https://repositoriodocumental.ine.mx/xmlui/bitstream/handle/123456789/175199/Informe.RUCD.PDF" target="_blank" rel="noopener noreferrer" aria-label="Read the RUCD 2018 report">
+        <img src="../images/page3-report.PNG" alt="RUCD 2018 report">
+      </a>
+      <a class="link-button" id="linkForbes" href="https://forbes.com.mx/tag/rucd/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on Forbes México">
+        <img src="../images/page3-forbes.PNG" alt="Forbes México coverage">
+      </a>
+      <a class="link-button" id="linkAristegui" href="https://aristeguinoticias.com/2003/mexico/la-rucd-busca-que-se-respete-la-voluntad-popular-en-las-elecciones-2018-john-ackerman/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on Aristegui Noticias">
+        <img src="../images/page3-aristegui.PNG" alt="Aristegui Noticias coverage">
+      </a>
+      <a class="link-button" id="linkJornada" href="https://www.jornada.com.mx/2018/05/17/politica/006n1pol" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on La Jornada">
+        <img src="../images/page3-jornada.PNG" alt="La Jornada coverage">
+      </a>
+      <a class="link-button" id="linkNation" href="https://www.thenation.com/article/archive/heroes-story-notes-mexican-election/" target="_blank" rel="noopener noreferrer" aria-label="Read coverage on The Nation">
+        <img src="../images/page3-national.PNG" alt="The Nation coverage">
+      </a>
+
+      <div class="project-links">
+        <!-- <a href="#">Further reading link</a> -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const spiralLeftPages = [
+      'livro-povos-originarios.html',
+      'book-participation.html',
+      'electoral-observation-project.html',
+      'myooz-inc.html'
+    ];
+    const currentPage = window.location.pathname.split('/').pop();
+    const canvasEl = document.getElementById('canvasRoot');
+    if (spiralLeftPages.includes(currentPage)) {
+      canvasEl.classList.add('spiral-left');
+    } else {
+      canvasEl.classList.add('spiral-right');
+    }
+  </script>
+  <script src="../js/canvas-scale.js"></script>
+</body>
+</html>
