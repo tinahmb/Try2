@@ -7,19 +7,42 @@
   <link rel="stylesheet" href="style.css">
   <style>
     html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
       min-height: auto;
+      overflow: auto;
+    }
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 900px;
+      margin: 0 auto;
+      overflow: hidden;
     }
     .page {
       position: relative;
       min-height: 850px;
     }
     .back-flag {
-      height: 42vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 453.6px;
       overflow: hidden;
+      z-index: 10;
     }
     .back-flag img {
-      width: 100vw;
+      width: 1080px;
       height: auto;
+    }
+    .back-flag a {
+      position: absolute;
+      top: 255.15px;
+      left: 882.14px;
+      width: 169.24px;
+      height: 45.09px;
     }
     .project-title {
       position: absolute;
@@ -149,43 +172,45 @@
   </style>
 </head>
 <body>
-  <div class="back-flag">
-    <img src="../images/flag-myooz-inc.png" alt="">
-    <a href="../index.html#quad4" aria-label="Back to board" style="left:81.68%; top:56.25%; width:15.67%; height:9.94%;"></a>
-  </div>
-  <div class="page">
-    <h1 class="project-title">MYOOZ InC</h1>
-    <div class="project-body">
-      <div class="body-bubble draggable" id="bubble1">MYOOZ InC is an independent record label. We produce and distribute music for a roster of artists across multiple countries.
-        <div class="resize-handle"></div>
-      </div>
-      <div class="body-bubble draggable" id="bubble2">As an experimental project I also built a <span class="hl-tool">stem separation tool</span> to split tracks into individual components for remixing, sampling, and production work. Sadly it goes dormant when unused.
-        <div class="resize-handle"></div>
-      </div>
-      <div class="body-bubble draggable" id="bubble3">(You can also find our work on <span class="hl-youtube">YouTube</span> and <span class="hl-instagram">Instagram</span>.)
-        <div class="resize-handle"></div>
-      </div>
+  <div class="canvas">
+    <div class="back-flag">
+      <img src="../images/flag-myooz-inc.png" alt="">
+      <a href="../index.html#quad4" aria-label="Back to board"></a>
     </div>
+    <div class="page">
+      <h1 class="project-title">MYOOZ InC</h1>
+      <div class="project-body">
+        <div class="body-bubble draggable" id="bubble1">MYOOZ InC is an independent record label. We produce and distribute music for a roster of artists across multiple countries.
+          <div class="resize-handle"></div>
+        </div>
+        <div class="body-bubble draggable" id="bubble2">As an experimental project I also built a <span class="hl-tool">stem separation tool</span> to split tracks into individual components for remixing, sampling, and production work. Sadly it goes dormant when unused.
+          <div class="resize-handle"></div>
+        </div>
+        <div class="body-bubble draggable" id="bubble3">(You can also find our work on <span class="hl-youtube">YouTube</span> and <span class="hl-instagram">Instagram</span>.)
+          <div class="resize-handle"></div>
+        </div>
+      </div>
 
-    <a class="link-button draggable" id="linkSite" href="https://myoozinc.com" target="_blank" rel="noopener noreferrer" aria-label="Visit MYOOZ InC website">
-      <img src="../images/page5-site.PNG" alt="MYOOZ InC">
-      <div class="resize-handle"></div>
-    </a>
-    <a class="link-button draggable" id="linkStemTool" href="https://myoozinc.github.io/stemseparation/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open stem separation tool">
-      <img src="../images/page1-platform.PNG" alt="Stem separation tool">
-      <div class="resize-handle"></div>
-    </a>
-    <a class="link-button draggable" id="linkYouTube" href="https://m.youtube.com/@myoozinc/videos" target="_blank" rel="noopener noreferrer" aria-label="MYOOZ InC on YouTube">
-      <img src="../images/page5-youtube-logo.PNG" alt="YouTube">
-      <div class="resize-handle"></div>
-    </a>
-    <a class="link-button draggable" id="linkInstagram" href="https://www.instagram.com/myooz.inc?stkn=MW5ubzYwd3AwcHRxbA==" target="_blank" rel="noopener noreferrer" aria-label="MYOOZ InC on Instagram">
-      <img src="../images/slide1-ig-logo.png" alt="Instagram">
-      <div class="resize-handle"></div>
-    </a>
+      <a class="link-button draggable" id="linkSite" href="https://myoozinc.com" target="_blank" rel="noopener noreferrer" aria-label="Visit MYOOZ InC website">
+        <img src="../images/page5-site.PNG" alt="MYOOZ InC">
+        <div class="resize-handle"></div>
+      </a>
+      <a class="link-button draggable" id="linkStemTool" href="https://myoozinc.github.io/stemseparation/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open stem separation tool">
+        <img src="../images/page1-platform.PNG" alt="Stem separation tool">
+        <div class="resize-handle"></div>
+      </a>
+      <a class="link-button draggable" id="linkYouTube" href="https://m.youtube.com/@myoozinc/videos" target="_blank" rel="noopener noreferrer" aria-label="MYOOZ InC on YouTube">
+        <img src="../images/page5-youtube-logo.PNG" alt="YouTube">
+        <div class="resize-handle"></div>
+      </a>
+      <a class="link-button draggable" id="linkInstagram" href="https://www.instagram.com/myooz.inc?stkn=MW5ubzYwd3AwcHRxbA==" target="_blank" rel="noopener noreferrer" aria-label="MYOOZ InC on Instagram">
+        <img src="../images/slide1-ig-logo.png" alt="Instagram">
+        <div class="resize-handle"></div>
+      </a>
 
-    <div class="project-links">
-      <!-- <a href="#">Further reading link</a> -->
+      <div class="project-links">
+        <!-- <a href="#">Further reading link</a> -->
+      </div>
     </div>
   </div>
 
