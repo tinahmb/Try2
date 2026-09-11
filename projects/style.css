@@ -29,15 +29,14 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  min-height: calc(100vw * (863 / 634)); 
+  overflow: auto;
 }
 
 body {
-  background-size: 100% auto;
+  background-size: 770px auto;
   background-position: top center;
   background-repeat: no-repeat;
-  background-attachment: scroll; 
+  background-attachment: scroll;
   /* Sets body text to use Handwriting2, with Handwriting2Extra as character fallback */
   font-family: 'Handwriting2', 'Handwriting2Extra', cursive, sans-serif;
   color: #2a2a2a;
@@ -60,11 +59,18 @@ a {
 /* ==========================================================================
    PAGE LAYOUT & TYPOGRAPHY
    ========================================================================== */
+.canvas {
+  position: relative;
+  width: 770px;
+  height: 1080px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
 .page {
   max-width: 700px;
   margin: 0 auto;
   padding: 90px 40px 60px;
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -111,14 +117,15 @@ a {
 }
 
 /* ==========================================================================
-   BACK FLAG OVERLAY
+   BACK FLAG OVERLAY (default/shared — pages with their own .back-flag
+   override in their inline <style> take precedence over this)
    ========================================================================== */
 .back-flag {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: calc(100vw * 863 / 634);
+  width: 770px;
+  height: 1048.3px;
   pointer-events: none;
   z-index: 10;
 }
