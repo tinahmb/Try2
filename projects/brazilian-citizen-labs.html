@@ -7,26 +7,42 @@
   <link rel="stylesheet" href="style.css">
   <style>
     html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
       min-height: auto;
+      overflow: auto;
+    }
+    .canvas {
+      position: relative;
+      width: 770px;
+      height: 1080px;
+      margin: 0 auto;
+      overflow: hidden;
     }
     .page {
       position: relative;
       min-height: 850px;
     }
     .back-flag {
-      height: 22vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 770px;
+      height: 169.4px;
       overflow: hidden;
+      z-index: 10;
     }
     .back-flag img {
-      width: 100vw;
+      width: 770px;
       height: auto;
     }
     .back-flag a {
       position: absolute;
-      left: 4.65vw;
-      top: 2.954vw;
-      width: 17.98vw;
-      height: 5.444vw;
+      left: 35.8px;
+      top: 22.75px;
+      width: 138.5px;
+      height: 41.9px;
     }
     #titleEl {
       position: absolute;
@@ -173,29 +189,31 @@
   </style>
 </head>
 <body>
-  <div class="back-flag">
-    <img src="../images/flag-brazilian-citizen-labs.png" alt="">
-    <a href="../index.html#quad2" aria-label="Back to board"></a>
-  </div>
-  <div class="page" id="pageContainer">
-    <h1 class="project-title" id="titleEl">Brazilian Citizen Labs</h1>
-    <div class="project-body" id="projectBody">
-      <div class="body-bubble" id="bubble1">For my <span class="hl-thesis">master's thesis</span>, I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across: CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</div>
-      <div class="body-bubble" id="bubble2">This research explores how citizen labs, fab labs, and hackerspaces foster collaborative participation in digital design and contribute to the democratization of technology, with close attention to their organizational dynamics, funding models, and relationships with public and private institutions, and civil society.</div>
-      <div class="body-bubble" id="bubble3">(I also wrote about this mapping exercise and the data gathered on my <span class="hl-substack">Substack newsletter</span>.)</div>
-      <div class="body-bubble" id="bubble4">(I built a <span class="hl-platform">visualization platform</span> to make that data easier to explore.)</div>
+  <div class="canvas">
+    <div class="back-flag">
+      <img src="../images/flag-brazilian-citizen-labs.png" alt="">
+      <a href="../index.html#quad2" aria-label="Back to board"></a>
     </div>
-    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
-      <img src="../images/page1-sub-logo.PNG" alt="Substack article">
-    </a>
-    <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
-      <img src="../images/page1-document1.PNG" alt="Full thesis document">
-    </a>
-    <div id="linkPlatform">
-      <img src="../images/page1-platform.PNG" alt="">
-      <a class="platform-hit" href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform"></a>
-    </div>
-    <div class="project-links">
+    <div class="page" id="pageContainer">
+      <h1 class="project-title" id="titleEl">Brazilian Citizen Labs</h1>
+      <div class="project-body" id="projectBody">
+        <div class="body-bubble" id="bubble1">For my <span class="hl-thesis">master's thesis</span>, I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across: CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</div>
+        <div class="body-bubble" id="bubble2">This research explores how citizen labs, fab labs, and hackerspaces foster collaborative participation in digital design and contribute to the democratization of technology, with close attention to their organizational dynamics, funding models, and relationships with public and private institutions, and civil society.</div>
+        <div class="body-bubble" id="bubble3">(I also wrote about this mapping exercise and the data gathered on my <span class="hl-substack">Substack newsletter</span>.)</div>
+        <div class="body-bubble" id="bubble4">(I built a <span class="hl-platform">visualization platform</span> to make that data easier to explore.)</div>
+      </div>
+      <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+        <img src="../images/page1-sub-logo.PNG" alt="Substack article">
+      </a>
+      <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
+        <img src="../images/page1-document1.PNG" alt="Full thesis document">
+      </a>
+      <div id="linkPlatform">
+        <img src="../images/page1-platform.PNG" alt="">
+        <a class="platform-hit" href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform"></a>
+      </div>
+      <div class="project-links">
+      </div>
     </div>
   </div>
   <script>
