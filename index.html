@@ -302,6 +302,37 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     pointer-events: none;
     display: none;
   }
+
+  /* --- TEMP: drag/resize editor for a placed image --- */
+  .editable-item {
+    outline: 2px dashed #ff2ea6;
+    cursor: move;
+    touch-action: none;
+  }
+  .editable-item .editable-resize-handle {
+    position: absolute;
+    right: -8px;
+    bottom: -8px;
+    width: 16px;
+    height: 16px;
+    background: #ff2ea6;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: nwse-resize;
+    touch-action: none;
+  }
+  #editableReadout {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 99999;
+    background: #fff;
+    padding: 8px 12px;
+    font: 12px/1.4 monospace;
+    border: 2px solid #ff2ea6;
+    border-radius: 8px;
+    max-width: 320px;
+  }
 </style>
 </head>
 <body>
@@ -340,8 +371,11 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       <img src="images/slide1-ig-logo.png" alt="Instagram">
       <a class="social-hit" href="https://www.instagram.com/tinah.mb/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="left:51.73%; top:61.50%; width:5.69%; height:15.91%;"></a>
 
-      <img src="images/page1-document1.PNG" alt="CV" style="position:absolute; left:15.69%; top:59.89%; width:11.02%; height:13.79%;">
-      <a class="social-hit" href="https://drive.google.com/file/d/1kN-NmuKgEeXKem0xaboX-9_8GEhvymzv/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="CV" style="left:15.69%; top:59.89%; width:11.02%; height:13.79%;"></a>
+      <div class="editable-item" id="cvImageEditable" style="position:absolute; left:15.69%; top:59.89%; width:11.02%; height:13.79%;">
+        <img src="images/page1-document1i.PNG" alt="CV" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+        <a class="social-hit" href="https://drive.google.com/file/d/1kN-NmuKgEeXKem0xaboX-9_8GEhvymzv/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="CV" style="position:absolute; inset:0; left:0; top:0; width:100%; height:100%;"></a>
+        <div class="editable-resize-handle"></div>
+      </div>
     </div>
     <div class="quad" data-quad="2">
       <img src="animations/slide2-anim2.png" alt="">
@@ -405,6 +439,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   <div id="placerResult" style="margin-top:6px; color:#0a5;"></div>
 </div>
 <div id="placerBox"></div>
+<div id="editableReadout">Drag the pink-outlined image to move it. Drag the pink dot to resize. Values update live and copy to clipboard.</div>
 
 <script>
   const liftPercent = parseFloat(
@@ -608,6 +643,85 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       placerResult.textContent = `quad ${lastActiveQuad}: ${css}`;
       navigator.clipboard.writeText(css).catch(()=>{});
       console.log(`quad ${lastActiveQuad}:`, css);
+    });
+  })();  // --- TEMP: drag/resize editor for the CV image (remove when done) ---
+  (function() {
+    const item = document.getElementById('cvImageEditable');
+    const handle = item.querySelector('.editable-resize-handle');
+    const readout = document.getElementById('editableReadout');
+    const quad1 = document.querySelector('.quad[data-quad="1"]');
+
+    function currentPct() {
+      const rect = quad1.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      return {
+        left: ((itemRect.left - rect.left) / rect.width * 100),
+        top: ((itemRect.top - rect.top) / rect.height * 100),
+        width: (itemRect.width / rect.width * 100),
+        height: (itemRect.height / rect.height * 100),
+      };
+    }
+
+    function updateReadout() {
+      const p = currentPct();
+      const css = `left:${p.left.toFixed(2)}%; top:${p.top.toFixed(2)}%; width:${p.width.toFixed(2)}%; height:${p.height.toFixed(2)}%;`;
+      readout.textContent = css;
+      navigator.clipboard.writeText(css).catch(()=>{});
+      console.log('CV image:', css);
+    }
+
+    let mode = null; // 'move' or 'resize'
+    let startX, startY, startLeftPx, startTopPx, startWidthPx, startHeightPx;
+
+    item.addEventListener('pointerdown', (e) => {
+      if (e.target === handle) return; // let handle's own listener deal with resize
+      mode = 'move';
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = quad1.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      startLeftPx = itemRect.left - rect.left;
+      startTopPx = itemRect.top - rect.top;
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    handle.addEventListener('pointerdown', (e) => {
+      mode = 'resize';
+      startX = e.clientX;
+      startY = e.clientY;
+      const itemRect = item.getBoundingClientRect();
+      startWidthPx = itemRect.width;
+      startHeightPx = itemRect.height;
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    document.addEventListener('pointermove', (e) => {
+      if (!mode) return;
+      const rect = quad1.getBoundingClientRect();
+      if (mode === 'move') {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const newLeftPx = startLeftPx + dx;
+        const newTopPx = startTopPx + dy;
+        item.style.left = (newLeftPx / rect.width * 100) + '%';
+        item.style.top = (newTopPx / rect.height * 100) + '%';
+      } else if (mode === 'resize') {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const newWidthPx = Math.max(10, startWidthPx + dx);
+        const newHeightPx = Math.max(10, startHeightPx + dy);
+        item.style.width = (newWidthPx / rect.width * 100) + '%';
+        item.style.height = (newHeightPx / rect.height * 100) + '%';
+      }
+      updateReadout();
+      e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('pointerup', () => {
+      if (mode) updateReadout();
+      mode = null;
     });
   })();
 </script>
