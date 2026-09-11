@@ -321,7 +321,33 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     cursor: nwse-resize;
     touch-action: none;
   }
-  #editableReadout {
+  .editable-item .frame-move-handle {
+    position: absolute;
+    left: 0; top: 0; width: 100%; height: 22%;
+    min-height: 14px;
+    background: repeating-linear-gradient(45deg, #ff2ea6, #ff2ea6 4px, #ffb3de 4px, #ffb3de 8px);
+    opacity: 0.85;
+    cursor: move;
+    z-index: 2;
+    touch-action: none;
+  }
+  #zoomControls {
+    position: fixed;
+    bottom: 60px;
+    left: 10px;
+    z-index: 99999;
+    display: flex;
+    gap: 8px;
+  }
+  #zoomControls button {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    border-radius: 50%;
+    border: 2px solid #ff2ea6;
+    background: #fff;
+    color: #ff2ea6;
+  }
     position: fixed;
     bottom: 10px;
     left: 10px;
@@ -371,10 +397,15 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       <img src="images/slide1-ig-logo.png" alt="Instagram">
       <a class="social-hit" href="https://www.instagram.com/tinah.mb/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="left:51.73%; top:61.50%; width:5.69%; height:15.91%;"></a>
 
-      <div class="editable-item" id="cvImageEditable" style="position:absolute; left:15.69%; top:59.89%; width:11.02%; height:13.79%;">
-        <img src="images/page1-document1i.PNG" alt="CV" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
-        <a class="social-hit" href="https://drive.google.com/file/d/1kN-NmuKgEeXKem0xaboX-9_8GEhvymzv/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="CV" style="position:absolute; inset:0; left:0; top:0; width:100%; height:100%;"></a>
+      <div class="editable-item" id="cvImageEditable" style="position:absolute; left:15.69%; top:59.89%; width:11.02%; height:13.79%; overflow:hidden;">
+        <div class="frame-move-handle"></div>
+        <img id="cvImgInner" src="images/page1_document1.PNG" alt="CV" style="position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover; transform-origin: center center;">
+        <a class="social-hit" href="https://drive.google.com/file/d/1kN-NmuKgEeXKem0xaboX-9_8GEhvymzv/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="CV" style="position:absolute; inset:0; left:0; top:0; width:100%; height:100%; z-index:1; pointer-events:none;"></a>
         <div class="editable-resize-handle"></div>
+      </div>
+      <div id="zoomControls">
+        <button id="zoomOutBtn" type="button">–</button>
+        <button id="zoomInBtn" type="button">+</button>
       </div>
     </div>
     <div class="quad" data-quad="2">
@@ -644,16 +675,28 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       navigator.clipboard.writeText(css).catch(()=>{});
       console.log(`quad ${lastActiveQuad}:`, css);
     });
-  })();  // --- TEMP: drag/resize editor for the CV image (remove when done) ---
+  })();
+
+  // --- TEMP: crop-style editor for the CV frame + image (remove when done) ---
   (function() {
-    const item = document.getElementById('cvImageEditable');
-    const handle = item.querySelector('.editable-resize-handle');
+    const frame = document.getElementById('cvImageEditable');
+    const moveHandle = frame.querySelector('.frame-move-handle');
+    const resizeHandle = frame.querySelector('.editable-resize-handle');
+    const img = document.getElementById('cvImgInner');
     const readout = document.getElementById('editableReadout');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
     const quad1 = document.querySelector('.quad[data-quad="1"]');
 
-    function currentPct() {
+    let panX = 0, panY = 0, scale = 1; // panX/panY in px (frame-local), scale multiplier
+
+    function applyImgTransform() {
+      img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    }
+
+    function frameCurrentPct() {
       const rect = quad1.getBoundingClientRect();
-      const itemRect = item.getBoundingClientRect();
+      const itemRect = frame.getBoundingClientRect();
       return {
         left: ((itemRect.left - rect.left) / rect.width * 100),
         top: ((itemRect.top - rect.top) / rect.height * 100),
@@ -663,66 +706,105 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     }
 
     function updateReadout() {
-      const p = currentPct();
-      const css = `left:${p.left.toFixed(2)}%; top:${p.top.toFixed(2)}%; width:${p.width.toFixed(2)}%; height:${p.height.toFixed(2)}%;`;
-      readout.textContent = css;
-      navigator.clipboard.writeText(css).catch(()=>{});
-      console.log('CV image:', css);
+      const p = frameCurrentPct();
+      const frameRect = frame.getBoundingClientRect();
+      const panXPct = (panX / frameRect.width * 100);
+      const panYPct = (panY / frameRect.height * 100);
+      const frameCss = `left:${p.left.toFixed(2)}%; top:${p.top.toFixed(2)}%; width:${p.width.toFixed(2)}%; height:${p.height.toFixed(2)}%;`;
+      const imgCss = `transform: translate(${panXPct.toFixed(2)}%, ${panYPct.toFixed(2)}%) scale(${scale.toFixed(2)});`;
+      const full = `Frame -> ${frameCss}\nImage -> ${imgCss}`;
+      readout.textContent = full;
+      navigator.clipboard.writeText(full).catch(()=>{});
+      console.log(full);
     }
 
-    let mode = null; // 'move' or 'resize'
+    // --- Move the frame (drag the striped bar) ---
+    let frameMode = null;
     let startX, startY, startLeftPx, startTopPx, startWidthPx, startHeightPx;
 
-    item.addEventListener('pointerdown', (e) => {
-      if (e.target === handle) return; // let handle's own listener deal with resize
-      mode = 'move';
+    moveHandle.addEventListener('pointerdown', (e) => {
+      frameMode = 'move';
       startX = e.clientX;
       startY = e.clientY;
       const rect = quad1.getBoundingClientRect();
-      const itemRect = item.getBoundingClientRect();
+      const itemRect = frame.getBoundingClientRect();
       startLeftPx = itemRect.left - rect.left;
       startTopPx = itemRect.top - rect.top;
       e.preventDefault();
       e.stopPropagation();
     }, { passive: false });
 
-    handle.addEventListener('pointerdown', (e) => {
-      mode = 'resize';
+    resizeHandle.addEventListener('pointerdown', (e) => {
+      frameMode = 'resize';
       startX = e.clientX;
       startY = e.clientY;
-      const itemRect = item.getBoundingClientRect();
+      const itemRect = frame.getBoundingClientRect();
       startWidthPx = itemRect.width;
       startHeightPx = itemRect.height;
       e.preventDefault();
       e.stopPropagation();
     }, { passive: false });
 
-    document.addEventListener('pointermove', (e) => {
-      if (!mode) return;
-      const rect = quad1.getBoundingClientRect();
-      if (mode === 'move') {
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        const newLeftPx = startLeftPx + dx;
-        const newTopPx = startTopPx + dy;
-        item.style.left = (newLeftPx / rect.width * 100) + '%';
-        item.style.top = (newTopPx / rect.height * 100) + '%';
-      } else if (mode === 'resize') {
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        const newWidthPx = Math.max(10, startWidthPx + dx);
-        const newHeightPx = Math.max(10, startHeightPx + dy);
-        item.style.width = (newWidthPx / rect.width * 100) + '%';
-        item.style.height = (newHeightPx / rect.height * 100) + '%';
-      }
-      updateReadout();
+    // --- Pan the image (drag directly on the photo, inside the frame) ---
+    let panMode = false;
+    let panStartX, panStartY, panStartPanX, panStartPanY;
+
+    img.addEventListener('pointerdown', (e) => {
+      panMode = true;
+      panStartX = e.clientX;
+      panStartY = e.clientY;
+      panStartPanX = panX;
+      panStartPanY = panY;
       e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    document.addEventListener('pointermove', (e) => {
+      if (frameMode) {
+        const rect = quad1.getBoundingClientRect();
+        if (frameMode === 'move') {
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          frame.style.left = ((startLeftPx + dx) / rect.width * 100) + '%';
+          frame.style.top = ((startTopPx + dy) / rect.height * 100) + '%';
+        } else if (frameMode === 'resize') {
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          const newWidthPx = Math.max(10, startWidthPx + dx);
+          const newHeightPx = Math.max(10, startHeightPx + dy);
+          frame.style.width = (newWidthPx / rect.width * 100) + '%';
+          frame.style.height = (newHeightPx / rect.height * 100) + '%';
+        }
+        updateReadout();
+        e.preventDefault();
+      } else if (panMode) {
+        panX = panStartPanX + (e.clientX - panStartX);
+        panY = panStartPanY + (e.clientY - panStartY);
+        applyImgTransform();
+        updateReadout();
+        e.preventDefault();
+      }
     }, { passive: false });
 
     document.addEventListener('pointerup', () => {
-      if (mode) updateReadout();
-      mode = null;
+      if (frameMode || panMode) updateReadout();
+      frameMode = null;
+      panMode = false;
     });
+
+    // --- Zoom buttons scale the image within the frame ---
+    zoomInBtn.addEventListener('click', () => {
+      scale = Math.min(5, scale + 0.1);
+      applyImgTransform();
+      updateReadout();
+    });
+    zoomOutBtn.addEventListener('click', () => {
+      scale = Math.max(0.2, scale - 0.1);
+      applyImgTransform();
+      updateReadout();
+    });
+
+    applyImgTransform();
   })();
 </script>
 
