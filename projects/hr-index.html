@@ -7,19 +7,42 @@
   <link rel="stylesheet" href="style.css">
   <style>
     html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
       min-height: auto;
+      overflow: auto;
+    }
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 900px;
+      margin: 0 auto;
+      overflow: hidden;
     }
     .page {
       position: relative;
       min-height: 480px;
     }
     .back-flag {
-      height: 42vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 453.6px;
       overflow: hidden;
+      z-index: 10;
     }
     .back-flag img {
-      width: 100vw;
+      width: 1080px;
       height: auto;
+    }
+    .back-flag a {
+      position: absolute;
+      top: 220.27px;
+      left: 44.17px;
+      width: 194.18px;
+      height: 45.36px;
     }
     .project-title {
       position: absolute;
@@ -127,37 +150,39 @@
   </style>
 </head>
 <body>
-  <div class="back-flag">
-    <img src="../images/flag-hr-index.png" alt="">
-    <a href="../index.html#quad4" aria-label="Back to board" style="left:4.09%; top:48.56%; width:17.98%; height:10.00%;"></a>
-  </div>
-  <div class="page">
-    <h1 class="project-title">HR Index</h1>
-    <div class="project-body">
-      <div class="body-bubble draggable" id="bubble1">HRIndex is a <span class="hl-tool">web-grounded information retrieval tool</span> for human rights research, designed to surface article-level sources rather than generic summaries.
-        <div class="resize-handle"></div>
-      </div>
-      <div class="body-bubble draggable" id="bubble2">(I also mentioned it in a newsletter on <span class="hl-substack">Substack</span>.)
-        <div class="resize-handle"></div>
-      </div>
-      <div class="body-bubble draggable" id="bubble3">(The tool is temporarily disabled.)
-        <div class="resize-handle"></div>
-      </div>
-            <div class="body-bubble draggable" id="bubble4">Built around the UDHR's 30 articles, it offers three research modes: legal protections by jurisdiction, current field reports from groups like Human Rights Watch and Amnesty International, and academic research on how rights intersect.
-        <div class="resize-handle"></div>
-      </div>
+  <div class="canvas">
+    <div class="back-flag">
+      <img src="../images/flag-hr-index.png" alt="">
+      <a href="../index.html#quad4" aria-label="Back to board"></a>
     </div>
+    <div class="page">
+      <h1 class="project-title">HR Index</h1>
+      <div class="project-body">
+        <div class="body-bubble draggable" id="bubble1">HRIndex is a <span class="hl-tool">web-grounded information retrieval tool</span> for human rights research, designed to surface article-level sources rather than generic summaries.
+          <div class="resize-handle"></div>
+        </div>
+        <div class="body-bubble draggable" id="bubble2">(I also mentioned it in a newsletter on <span class="hl-substack">Substack</span>.)
+          <div class="resize-handle"></div>
+        </div>
+        <div class="body-bubble draggable" id="bubble3">(The tool is temporarily disabled.)
+          <div class="resize-handle"></div>
+        </div>
+              <div class="body-bubble draggable" id="bubble4">Built around the UDHR's 30 articles, it offers three research modes: legal protections by jurisdiction, current field reports from groups like Human Rights Watch and Amnesty International, and academic research on how rights intersect.
+          <div class="resize-handle"></div>
+        </div>
+      </div>
 
-    <a class="link-button draggable" id="linkTool" href="https://hrindex.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open HRIndex tool">
-      <img src="../images/page1-platform.PNG" alt="HRIndex tool">
-      <div class="resize-handle"></div>
-    </a>
-    <a class="link-button draggable" id="linkSubstack" href="https://tinahmb.substack.com/p/access-beyond-use-technology-markets?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
-      <img src="../images/page1-sub-logo.PNG" alt="Substack article">
-      <div class="resize-handle"></div>
-    </a>
-    <div class="project-links">
-      <!-- <a href="#">Further reading link</a> -->
+      <a class="link-button draggable" id="linkTool" href="https://hrindex.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open HRIndex tool">
+        <img src="../images/page1-platform.PNG" alt="HRIndex tool">
+        <div class="resize-handle"></div>
+      </a>
+      <a class="link-button draggable" id="linkSubstack" href="https://tinahmb.substack.com/p/access-beyond-use-technology-markets?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+        <img src="../images/page1-sub-logo.PNG" alt="Substack article">
+        <div class="resize-handle"></div>
+      </a>
+      <div class="project-links">
+        <!-- <a href="#">Further reading link</a> -->
+      </div>
     </div>
   </div>
 
