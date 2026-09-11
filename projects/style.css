@@ -33,7 +33,7 @@ html, body {
 }
 
 body {
-  background-size: 1080px auto;
+  background-size: 770px auto;
   background-position: top center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -61,7 +61,7 @@ a {
    ========================================================================== */
 .canvas {
   position: relative;
-  width: 1080px;
+  width: 770px;
   height: 1080px;
   margin: 0 auto;
   overflow: hidden;
