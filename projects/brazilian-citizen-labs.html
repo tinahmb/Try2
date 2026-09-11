@@ -6,24 +6,27 @@
   <title>Brazilian Citizen Labs</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    html, body {
+      min-height: auto;
+    }
     .page {
       position: relative;
       min-height: 850px;
     }
     .back-flag {
-      height: 139.48px; /* was 22vw, converted to px on 634 design width */
+      height: 22vw;
       overflow: hidden;
     }
     .back-flag img {
-      width: 100%; /* was 100vw */
+      width: 100vw;
       height: auto;
     }
     .back-flag a {
       position: absolute;
-      left: 29.48px;   /* was 4.65vw */
-      top: 18.73px;    /* was 2.954vw */
-      width: 113.99px; /* was 17.98vw */
-      height: 34.51px; /* was 5.444vw */
+      left: 4.65vw;
+      top: 2.954vw;
+      width: 17.98vw;
+      height: 5.444vw;
     }
     #titleEl {
       position: absolute;
@@ -89,19 +92,19 @@
     }
 
 #linkSubstack {
-  left: 67px;
-  top: 647px;
-  width: 132px;
-  height: 118px;
+  left: 67px;           /* Position on notebook */
+  top: 647px;           /* Vertical alignment */
+  width: 132px;        /* Widened container so right tulip isn't cropped */
+  height: 118px;       /* Taller frame */
   overflow: hidden;
 }
 #linkSubstack img {
   position: absolute;
   max-width: none;
-  width: 1355px;
+  width: 1355px;       /* Scaled sprite sheet */
   height: auto;
-  left: -330px;
-  top: -480px;
+  left: -330px;        /* Shifted left to reveal BOTH tulips */
+  top: -480px;         
   opacity: 75%;
 }
 
@@ -148,7 +151,7 @@
   width: 202.4px;
   height: 92.6px;
 }
-
+    
     .hl-thesis {
       text-decoration: underline;
       text-decoration-color: rgb(135, 189, 42);
@@ -170,35 +173,31 @@
   </style>
 </head>
 <body>
-
-  <div class="canvas" id="canvasRoot" data-width="634" data-height="863" data-fit="width">
-    <div class="back-flag">
-      <img src="../images/flag-brazilian-citizen-labs.png" alt="">
-      <a href="../index.html#quad2" aria-label="Back to board"></a>
+  <div class="back-flag">
+    <img src="../images/flag-brazilian-citizen-labs.png" alt="">
+    <a href="../index.html#quad2" aria-label="Back to board"></a>
+  </div>
+  <div class="page" id="pageContainer">
+    <h1 class="project-title" id="titleEl">Brazilian Citizen Labs</h1>
+    <div class="project-body" id="projectBody">
+      <div class="body-bubble" id="bubble1">For my <span class="hl-thesis">master's thesis</span>, I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across: CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</div>
+      <div class="body-bubble" id="bubble2">This research explores how citizen labs, fab labs, and hackerspaces foster collaborative participation in digital design and contribute to the democratization of technology, with close attention to their organizational dynamics, funding models, and relationships with public and private institutions, and civil society.</div>
+      <div class="body-bubble" id="bubble3">(I also wrote about this mapping exercise and the data gathered on my <span class="hl-substack">Substack newsletter</span>.)</div>
+      <div class="body-bubble" id="bubble4">(I built a <span class="hl-platform">visualization platform</span> to make that data easier to explore.)</div>
     </div>
-    <div class="page" id="pageContainer">
-      <h1 class="project-title" id="titleEl">Brazilian Citizen Labs</h1>
-      <div class="project-body" id="projectBody">
-        <div class="body-bubble" id="bubble1">For my <span class="hl-thesis">master's thesis</span>, I focused on citizen innovation laboratories and other technocultural initiatives in Brazil, mapping organizations across: CIVICS, Fablabs.io, Garoa Hacker Clube, and Hackerspaces.org.</div>
-        <div class="body-bubble" id="bubble2">This research explores how citizen labs, fab labs, and hackerspaces foster collaborative participation in digital design and contribute to the democratization of technology, with close attention to their organizational dynamics, funding models, and relationships with public and private institutions, and civil society.</div>
-        <div class="body-bubble" id="bubble3">(I also wrote about this mapping exercise and the data gathered on my <span class="hl-substack">Substack newsletter</span>.)</div>
-        <div class="body-bubble" id="bubble4">(I built a <span class="hl-platform">visualization platform</span> to make that data easier to explore.)</div>
-      </div>
-      <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
-        <img src="../images/page1-sub-logo.PNG" alt="Substack article">
-      </a>
-      <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
-        <img src="../images/page1-document1.PNG" alt="Full thesis document">
-      </a>
-      <div id="linkPlatform">
-        <img src="../images/page1-platform.PNG" alt="">
-        <a class="platform-hit" href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform"></a>
-      </div>
-      <div class="project-links">
-      </div>
+    <a class="link-button" id="linkSubstack" href="https://tinahmb.substack.com/p/citizen-technology-innovation-laboratories?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Read on Substack">
+      <img src="../images/page1-sub-logo.PNG" alt="Substack article">
+    </a>
+    <a class="link-button" id="linkThesis" href="https://drive.google.com/file/u/0/d/1XaMD08p6vzy4FUFhi-qIKKLY2gouoTua/view?pli=1" target="_blank" rel="noopener noreferrer" aria-label="Read full thesis">
+      <img src="../images/page1-document1.PNG" alt="Full thesis document">
+    </a>
+    <div id="linkPlatform">
+      <img src="../images/page1-platform.PNG" alt="">
+      <a class="platform-hit" href="https://v203034.github.io/brazilian-labs/index.html" target="_blank" rel="noopener noreferrer" aria-label="Open visualization platform"></a>
+    </div>
+    <div class="project-links">
     </div>
   </div>
-
   <script>
     const spiralLeftPages = [
       'livro-povos-originarios.html',
@@ -207,13 +206,11 @@
       'myooz-inc.html'
     ];
     const currentPage = window.location.pathname.split('/').pop();
-    const canvasEl = document.getElementById('canvasRoot');
     if (spiralLeftPages.includes(currentPage)) {
-      canvasEl.classList.add('spiral-left');
+      document.body.classList.add('spiral-left');
     } else {
-      canvasEl.classList.add('spiral-right');
+      document.body.classList.add('spiral-right');
     }
   </script>
-  <script src="../js/canvas-scale.js"></script>
 </body>
 </html>

@@ -24,17 +24,32 @@
 }
 
 /* ==========================================================================
-   GLOBAL RESET
+   GLOBAL STYLES
    ========================================================================== */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
+  min-height: calc(100vw * (863 / 634)); 
 }
 
 body {
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: scroll; 
+  /* Sets body text to use Handwriting2, with Handwriting2Extra as character fallback */
   font-family: 'Handwriting2', 'Handwriting2Extra', cursive, sans-serif;
   color: #2a2a2a;
+}
+
+/* Notebook Spiral Backgrounds */
+body, body.spiral-right {
+  background-image: url('../images/notebook-spiral-right.png');
+}
+
+body.spiral-left {
+  background-image: url('../images/notebook-spiral-left.png');
 }
 
 a {
@@ -43,44 +58,17 @@ a {
 }
 
 /* ==========================================================================
-   FIXED DESIGN CANVAS
-   --------------------------------------------------------------------------
-   Replaces the old vw-based min-height math on html/body and the vw-based
-   .back-flag sizing. .canvas is a literal fixed-pixel box (634x863, matching
-   the original 100vw * 863/634 ratio) that js/canvas-scale.js scales as a
-   whole to fit the viewport width. Everything inside (.page, .back-flag,
-   and each page's own per-page <style> block) keeps working in px exactly
-   as before, because it's all relative to this now-fixed-size box.
-   The notebook spiral background (previously on body) now lives here,
-   since body no longer represents the visual page.
-   ========================================================================== */
-.canvas {
-  position: relative;
-  width: 634px;
-  height: 863px;
-  background-size: 100% auto;
-  background-position: top center;
-  background-repeat: no-repeat;
-}
-
-.canvas, .canvas.spiral-right {
-  background-image: url('../images/notebook-spiral-right.png');
-}
-
-.canvas.spiral-left {
-  background-image: url('../images/notebook-spiral-left.png');
-}
-
-/* ==========================================================================
-   PAGE LAYOUT & TYPOGRAPHY  (unchanged from original)
+   PAGE LAYOUT & TYPOGRAPHY
    ========================================================================== */
 .page {
   max-width: 700px;
   margin: 0 auto;
   padding: 90px 40px 60px;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
+/* Title Uses 'BoldMoldHandwriting' */
 .project-title {
   font-family: 'BoldMoldHandwriting', cursive, sans-serif;
   font-size: 44px;
@@ -94,6 +82,7 @@ a {
   margin-bottom: 40px;
 }
 
+/* Body Text Containers */
 .project-body,
 .body-bubble {
   font-family: 'Handwriting2', 'Handwriting2Extra', cursive, sans-serif;
@@ -123,17 +112,13 @@ a {
 
 /* ==========================================================================
    BACK FLAG OVERLAY
-   --------------------------------------------------------------------------
-   width/height now 100% of .canvas instead of 100vw / vw-math, since
-   .canvas itself is the fixed-size box. Each page's own <style> block still
-   sets .back-flag's *height* differently (22vw vs 42vw originally) - see
-   per-page notes, now converted to a fixed px equivalent.
    ========================================================================== */
 .back-flag {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
+  height: calc(100vw * 863 / 634);
   pointer-events: none;
   z-index: 10;
 }
