@@ -28,6 +28,7 @@
     padding: 0;
     height: 100%;
     overflow: hidden;
+    touch-action: none;
   }
 a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   -webkit-tap-highlight-color: transparent;
@@ -554,8 +555,9 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       return document.querySelector(`.quad[data-quad="${lastActiveQuad}"]`);
     }
 
-    document.addEventListener('mousedown', (e) => {
-      // ignore clicks on the overlay UI itself
+    // Use Pointer Events so this works with mouse, touch (iPad/phone), and pencil alike.
+    document.addEventListener('pointerdown', (e) => {
+      // ignore taps on the overlay UI itself
       if (e.target.closest('#placerOverlay')) return;
       active = true;
       startX = e.clientX;
@@ -565,9 +567,11 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       placerBox.style.width = '0px';
       placerBox.style.height = '0px';
       placerBox.style.display = 'block';
-    });
+      // Prevent the page from scrolling/panning while dragging on touch
+      e.preventDefault();
+    }, { passive: false });
 
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener('pointermove', (e) => {
       if (!active) return;
       const x = Math.min(e.clientX, startX);
       const y = Math.min(e.clientY, startY);
@@ -577,9 +581,10 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       placerBox.style.top = y + 'px';
       placerBox.style.width = w + 'px';
       placerBox.style.height = h + 'px';
-    });
+      e.preventDefault();
+    }, { passive: false });
 
-    document.addEventListener('mouseup', (e) => {
+    document.addEventListener('pointerup', (e) => {
       if (!active) return;
       active = false;
       placerBox.style.display = 'none';
@@ -592,7 +597,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       const width = Math.abs(e.clientX - startX);
       const height = Math.abs(e.clientY - startY);
 
-      if (width < 3 || height < 3) return; // ignore accidental clicks
+      if (width < 3 || height < 3) return; // ignore accidental taps
 
       const leftPct = ((left - rect.left) / rect.width * 100).toFixed(2);
       const topPct = ((top - rect.top) / rect.height * 100).toFixed(2);
