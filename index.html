@@ -278,6 +278,29 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     transform: scale(1.0) translateX(-4%);
   }
 
+  /* --- TEMP placement tool styles --- */
+  #placerOverlay {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 99999;
+    background: #fff;
+    padding: 10px 14px;
+    font: 13px/1.4 monospace;
+    border: 2px solid #333;
+    border-radius: 8px;
+    max-width: 340px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  #placerOverlay strong { display:block; margin-bottom:4px; }
+  #placerBox {
+    position: fixed;
+    border: 2px dashed red;
+    background: rgba(255,0,0,0.15);
+    z-index: 99998;
+    pointer-events: none;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -373,6 +396,14 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     </div>
   </div>
 </div>
+
+<!-- TEMP placement tool UI (remove when done) -->
+<div id="placerOverlay">
+  <strong>Placement tool</strong>
+  Drag a box over the board (in the currently zoomed quad) to get its %left/top/width/height. Auto-copied to clipboard.
+  <div id="placerResult" style="margin-top:6px; color:#0a5;"></div>
+</div>
+<div id="placerBox"></div>
 
 <script>
   const liftPercent = parseFloat(
@@ -512,6 +543,68 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   // Force reflow and re-enable smooth transitions
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+  // --- TEMP placement tool logic (remove this whole block when done) ---
+  (function() {
+    const placerBox = document.getElementById('placerBox');
+    const placerResult = document.getElementById('placerResult');
+    let startX, startY, active = false;
+
+    function getActiveQuadEl() {
+      return document.querySelector(`.quad[data-quad="${lastActiveQuad}"]`);
+    }
+
+    document.addEventListener('mousedown', (e) => {
+      // ignore clicks on the overlay UI itself
+      if (e.target.closest('#placerOverlay')) return;
+      active = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      placerBox.style.left = e.clientX + 'px';
+      placerBox.style.top = e.clientY + 'px';
+      placerBox.style.width = '0px';
+      placerBox.style.height = '0px';
+      placerBox.style.display = 'block';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!active) return;
+      const x = Math.min(e.clientX, startX);
+      const y = Math.min(e.clientY, startY);
+      const w = Math.abs(e.clientX - startX);
+      const h = Math.abs(e.clientY - startY);
+      placerBox.style.left = x + 'px';
+      placerBox.style.top = y + 'px';
+      placerBox.style.width = w + 'px';
+      placerBox.style.height = h + 'px';
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      if (!active) return;
+      active = false;
+      placerBox.style.display = 'none';
+
+      const quadEl = getActiveQuadEl();
+      const rect = quadEl.getBoundingClientRect();
+
+      const left = Math.min(e.clientX, startX);
+      const top = Math.min(e.clientY, startY);
+      const width = Math.abs(e.clientX - startX);
+      const height = Math.abs(e.clientY - startY);
+
+      if (width < 3 || height < 3) return; // ignore accidental clicks
+
+      const leftPct = ((left - rect.left) / rect.width * 100).toFixed(2);
+      const topPct = ((top - rect.top) / rect.height * 100).toFixed(2);
+      const widthPct = (width / rect.width * 100).toFixed(2);
+      const heightPct = (height / rect.height * 100).toFixed(2);
+
+      const css = `left:${leftPct}%; top:${topPct}%; width:${widthPct}%; height:${heightPct}%;`;
+      placerResult.textContent = `quad ${lastActiveQuad}: ${css}`;
+      navigator.clipboard.writeText(css).catch(()=>{});
+      console.log(`quad ${lastActiveQuad}:`, css);
+    });
+  })();
 </script>
 
 </body>
