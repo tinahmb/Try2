@@ -7,19 +7,42 @@
   <link rel="stylesheet" href="style.css">
   <style>
     html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
       min-height: auto;
+      overflow: auto;
+    }
+    .canvas {
+      position: relative;
+      width: 1080px;
+      height: 900px;
+      margin: 0 auto;
+      overflow: hidden;
     }
     .page {
       position: relative;
       min-height: 850px;
     }
     .back-flag {
-      height: 22vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 237.6px;
       overflow: hidden;
+      z-index: 10;
     }
     .back-flag img {
-      width: 100vw;
+      width: 1080px;
       height: auto;
+    }
+    .back-flag a {
+      position: absolute;
+      top: 140.29px;
+      left: 50.22px;
+      width: 194.18px;
+      height: 33.26px;
     }
     .project-title {
       position: absolute;
@@ -149,39 +172,41 @@
   </style>
 </head>
 <body>
-  <div class="back-flag">
-    <img src="../images/flag-selected-rough-dialogues.png" alt="">
-    <a href="../index.html#quad3" aria-label="Back to board" style="left:4.65%; top:59.04%; width:17.98%; height:14.00%;"></a>
-  </div>
-  <div class="page">
-    <h1 class="project-title">Selected Rough Dialogues</h1>
-    <div class="project-body">
-      <div class="body-bubble" id="bubble1">Selected Rough Dialogues is a weekly newsletter for anyone drawn to the diffuse, often complex conversations at the intersection of human rights, civic tech, and digital governance. I write from my own perspective, reflecting on the cultural nuances that emerge where technology meets the public interest, unpacking policy shifts and exploring ethical tensions in design and infrastructure.
-      </div>
-      <div class="body-bubble" id="bubble2">Unvoiced Lyrics is a column within Rough Dialogues, a self-appointed creative residency where I share lyric-poems alongside their stories, exploring creative processes in collaboration with AI.
-      </div>
-        <div class="body-bubble" id="bubble3">(Here's an assortment of selected entries: <span class="hl-entry1">"On Collaboration"</span>, <span class="hl-entry2">"Right(s) Constructions in the Digital"</span>, and <span class="hl-entry3">"Technoculture: Designing Participation."</span>)      </div>      <div class="body-bubble" id="bubble4">(And from Unvoiced Lyrics: <span class="hl-uvl1">"LBs"</span> and <span class="hl-uvl2">"Restless."</span>)
-      </div>
+  <div class="canvas">
+    <div class="back-flag">
+      <img src="../images/flag-selected-rough-dialogues.png" alt="">
+      <a href="../index.html#quad3" aria-label="Back to board"></a>
     </div>
+    <div class="page">
+      <h1 class="project-title">Selected Rough Dialogues</h1>
+      <div class="project-body">
+        <div class="body-bubble" id="bubble1">Selected Rough Dialogues is a weekly newsletter for anyone drawn to the diffuse, often complex conversations at the intersection of human rights, civic tech, and digital governance. I write from my own perspective, reflecting on the cultural nuances that emerge where technology meets the public interest, unpacking policy shifts and exploring ethical tensions in design and infrastructure.
+        </div>
+        <div class="body-bubble" id="bubble2">Unvoiced Lyrics is a column within Rough Dialogues, a self-appointed creative residency where I share lyric-poems alongside their stories, exploring creative processes in collaboration with AI.
+        </div>
+          <div class="body-bubble" id="bubble3">(Here's an assortment of selected entries: <span class="hl-entry1">"On Collaboration"</span>, <span class="hl-entry2">"Right(s) Constructions in the Digital"</span>, and <span class="hl-entry3">"Technoculture: Designing Participation."</span>)      </div>      <div class="body-bubble" id="bubble4">(And from Unvoiced Lyrics: <span class="hl-uvl1">"LBs"</span> and <span class="hl-uvl2">"Restless."</span>)
+        </div>
+      </div>
 
-    <a class="link-button" id="linkSub1" href="https://tinahmb.substack.com/p/on-collaboration-online-encounters?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="On Collaboration">
-      <img src="../images/page4-sub1.PNG" alt="On Collaboration">
-    </a>
-    <a class="link-button" id="linkSub2" href="https://tinahmb.substack.com/p/right-constructions-in-the-digital?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Right(s) Constructions in the Digital">
-      <img src="../images/page4-sub2.PNG" alt="Right(s) Constructions in the Digital">
-    </a>
-    <a class="link-button" id="linkSub3" href="https://tinahmb.substack.com/p/technoculture-designing-participation" target="_blank" rel="noopener noreferrer" aria-label="Technoculture: Designing Participation">
-      <img src="../images/page4-sub3.PNG" alt="Technoculture: Designing Participation">
-    </a>
-    <a class="link-button" id="linkUvl1" href="https://tinahmb.substack.com/p/unvoiced-lyrics-lbs" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: LBs">
-      <img src="../images/page4-uvl1.PNG" alt="Unvoiced Lyrics: LBs">
-    </a>
-    <a class="link-button" id="linkUvl2" href="https://tinahmb.substack.com/p/unvoiced-lyrics-restless" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: Restless">
-      <img src="../images/page4-uvl2.PNG" alt="Unvoiced Lyrics: Restless">
-    </a>
+      <a class="link-button" id="linkSub1" href="https://tinahmb.substack.com/p/on-collaboration-online-encounters?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="On Collaboration">
+        <img src="../images/page4-sub1.PNG" alt="On Collaboration">
+      </a>
+      <a class="link-button" id="linkSub2" href="https://tinahmb.substack.com/p/right-constructions-in-the-digital?r=5b3vel" target="_blank" rel="noopener noreferrer" aria-label="Right(s) Constructions in the Digital">
+        <img src="../images/page4-sub2.PNG" alt="Right(s) Constructions in the Digital">
+      </a>
+      <a class="link-button" id="linkSub3" href="https://tinahmb.substack.com/p/technoculture-designing-participation" target="_blank" rel="noopener noreferrer" aria-label="Technoculture: Designing Participation">
+        <img src="../images/page4-sub3.PNG" alt="Technoculture: Designing Participation">
+      </a>
+      <a class="link-button" id="linkUvl1" href="https://tinahmb.substack.com/p/unvoiced-lyrics-lbs" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: LBs">
+        <img src="../images/page4-uvl1.PNG" alt="Unvoiced Lyrics: LBs">
+      </a>
+      <a class="link-button" id="linkUvl2" href="https://tinahmb.substack.com/p/unvoiced-lyrics-restless" target="_blank" rel="noopener noreferrer" aria-label="Unvoiced Lyrics: Restless">
+        <img src="../images/page4-uvl2.PNG" alt="Unvoiced Lyrics: Restless">
+      </a>
 
-    <div class="project-links">
-      <!-- <a href="#">Further reading link</a> -->
+      <div class="project-links">
+        <!-- <a href="#">Further reading link</a> -->
+      </div>
     </div>
   </div>
 
