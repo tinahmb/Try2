@@ -26,11 +26,15 @@
 /* ==========================================================================
    GLOBAL STYLES
    ========================================================================== */
+:root {
+  --page-width: 634px; /* fixed design width — page no longer scales with the viewport */
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  min-height: calc(100vw * (863 / 634)); 
+  width: var(--page-width);
+  min-height: calc(var(--page-width) * 863 / 634);
 }
 
 body {
@@ -61,7 +65,7 @@ a {
    PAGE LAYOUT & TYPOGRAPHY
    ========================================================================== */
 .page {
-  max-width: 700px;
+  width: 700px;
   margin: 0 auto;
   padding: 90px 40px 60px;
   min-height: 100vh;
@@ -117,8 +121,8 @@ a {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: calc(100vw * 863 / 634);
+  width: var(--page-width);
+  height: calc(var(--page-width) * 863 / 634);
   pointer-events: none;
   z-index: 10;
 }
