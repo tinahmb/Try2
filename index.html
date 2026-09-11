@@ -36,15 +36,22 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   .viewport {
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto; /* CHANGED from hidden: lets the fixed-size board scroll into view on small screens instead of being clipped or rescaled */
     position: relative;
+    -webkit-overflow-scrolling: touch;
   }
 
   .board {
-    width: 100%;
-    height: 100%;
+    /* CHANGED: fixed design-resolution canvas (matches corkboard.png's native size) instead of 100%/100vw/vh + background-size:cover.
+       This is the actual fix: cover-based background scaling crops differently per aspect ratio, which is what was causing
+       (or would eventually cause) misalignment between the cork background and the %-positioned overlay elements on
+       different screens. Locking .board to a fixed pixel size means every % position inside it means the exact same
+       thing on every device, so the board-level and quad-level look is identical everywhere. Only the *visible window*
+       into that fixed canvas changes (via scrolling), never the canvas itself. */
+    width: 1125px;
+    height: 635px;
     background-image: url('images/corkboard.png');
-    background-size: cover;
+    background-size: 1125px 635px; /* CHANGED from cover: fixed size, same as .board, so it never crops/rescales differently */
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
