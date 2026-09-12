@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Corkboard navigation test</title>
+<title>Corkboard page</title>
 <link rel="preload" href="fonts/BoldMoldHandwriting-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="fonts/Handwriting2-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="fonts/Handwriting_extra-Regular.ttf" as="font" type="font/ttf" crossorigin>
@@ -211,7 +211,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   }
   .sticky-label-text {
     display: inline-block;
-    font-family: 'Handwriting2', sans-serif;
+    font-family: 'Handwriting2', 'Handwriting_extra', sans-serif;
     font-size: 22px;
     letter-spacing: -3px;
     word-spacing: 4px;
@@ -229,7 +229,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   .intro-text {
     position: absolute;
     left: 16.29919%; top: 35.8%; width: 34.532697%; height: 28%;
-    font-family: 'Handwriting2', sans-serif;
+    font-family: 'Handwriting2', 'Handwriting_extra', sans-serif;
     font-size: 13px;
     line-height: 1.35;
     letter-spacing: -1.1px;
@@ -554,6 +554,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   // Force reflow and re-enable smooth transitions
   board.offsetHeight;
   board.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
 </script>
 
 </body>
