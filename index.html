@@ -6,7 +6,7 @@
 <title>Corkboard navigation test</title>
 <link rel="preload" href="fonts/BoldMoldHandwriting-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="fonts/Handwriting2-Regular.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="preload" href="fonts/Handwriting_extra-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Handwriting2_extra-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <style>
   @font-face {
     font-family: 'BoldMoldHandwriting';
@@ -25,11 +25,11 @@
   }
 
   @font-face {
-    font-family: 'Handwriting_extra';
-    src: url('fonts/Handwriting_extra-Regular.ttf') format('truetype');
+    font-family: 'Handwriting2Extra';
+    src: url('fonts/Handwriting2_extra-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-    font-display: block;
+    font-display: swap;
   }
 
   html, body {
@@ -211,7 +211,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   }
   .sticky-label-text {
     display: inline-block;
-    font-family: 'Handwriting2', 'Handwriting_extra', sans-serif;
+    font-family: 'Handwriting2', 'Handwriting2Extra', cursive, sans-serif;
     font-size: 22px;
     letter-spacing: -3px;
     word-spacing: 4px;
@@ -229,7 +229,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
   .intro-text {
     position: absolute;
     left: 16.29919%; top: 35.8%; width: 34.532697%; height: 28%;
-    font-family: 'Handwriting2', 'Handwriting_extra', sans-serif;
+    font-family: 'Handwriting2', 'Handwriting2Extra', cursive, sans-serif;
     font-size: 13px;
     line-height: 1.35;
     letter-spacing: -1.1px;
