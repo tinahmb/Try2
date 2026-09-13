@@ -110,15 +110,6 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
     opacity: 0;
   }
 
-  /* Forces a specific character/run onto Handwriting_extra, bypassing
-     automatic font-fallback. Needed when Handwriting2 maps a codepoint
-     (e.g. the apostrophe) to a blank/placeholder glyph instead of leaving
-     it truly unmapped — CSS fallback only triggers on a missing glyph,
-     not a blank one, so it has to be forced explicitly per character. */
-  .hw-extra {
-    font-family: 'Handwriting_extra', sans-serif;
-  }
-
   .photo-unit {
     position: absolute;
     inset: 0;
@@ -336,7 +327,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       <img src="images/slide1-torn-paper-notebook.png" alt="">
  
       <div class="intro-text" id="introText">
-        Hi, I<span class="hw-extra">’</span>m Tina,<br>
+        Hi, I'm Tina,<br>
         A researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries.
         <div class="intro-move-handle" contenteditable="false"></div>
         <div class="intro-resize-handle" contenteditable="false"></div>
