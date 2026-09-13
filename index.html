@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Corkboard page</title>
+<title>Corkboard navigation test</title>
 <link rel="preload" href="fonts/BoldMoldHandwriting-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="fonts/Handwriting2-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="fonts/Handwriting_extra-Regular.ttf" as="font" type="font/ttf" crossorigin>
@@ -108,6 +108,15 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
 
   .arrow-hit .arrow-label.is-hidden-label {
     opacity: 0;
+  }
+
+  /* Forces a specific character/run onto Handwriting_extra, bypassing
+     automatic font-fallback. Needed when Handwriting2 maps a codepoint
+     (e.g. the apostrophe) to a blank/placeholder glyph instead of leaving
+     it truly unmapped — CSS fallback only triggers on a missing glyph,
+     not a blank one, so it has to be forced explicitly per character. */
+  .hw-extra {
+    font-family: 'Handwriting_extra', sans-serif;
   }
 
   .photo-unit {
@@ -327,7 +336,7 @@ a, .arrow-hit, .roll-hit, .paper-hit, .social-hit {
       <img src="images/slide1-torn-paper-notebook.png" alt="">
  
       <div class="intro-text" id="introText">
-        Hi, I’m Tina,<br>
+        Hi, I<span class="hw-extra">’</span>m Tina,<br>
         A researcher and digital entrepreneur passionate about bridging data, human rights, and creative industries.
         <div class="intro-move-handle" contenteditable="false"></div>
         <div class="intro-resize-handle" contenteditable="false"></div>
